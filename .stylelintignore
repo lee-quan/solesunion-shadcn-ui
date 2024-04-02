@@ -1,0 +1,4 @@
+# Stylelint Ignore File
+
+# Ignore Next.js config file
+next.config.mjs
