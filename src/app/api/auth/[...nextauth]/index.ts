@@ -30,6 +30,8 @@ export const authOptions: NextAuthOptions = {
             }),
             cache: new InMemoryCache(),
           });
+          console.log(BACKEND_URL);
+
           const { data } = await client.mutate({
             mutation: LOGIN_MUTATION,
             variables: {
