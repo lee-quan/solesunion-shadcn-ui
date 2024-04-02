@@ -18,16 +18,16 @@ const NavigationLinks = [
         href: "/",
         auth: false,
     },
-    {
-        title: "Sneakers",
-        href: "/sneakers",
-        auth: false,
-    },
-    {
-        title: "Apparels",
-        href: "/apparels",
-        auth: false,
-    },
+    // {
+    //     title: "Sneakers",
+    //     href: "/sneakers",
+    //     auth: false,
+    // },
+    // {
+    //     title: "Apparels",
+    //     href: "/apparels",
+    //     auth: false,
+    // },
     {
         title: "Profile",
         href: "/profile",

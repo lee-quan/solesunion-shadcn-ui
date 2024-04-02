@@ -41,7 +41,7 @@ function NavigationSection() {
             <Link className="text-sm text-gray-400 hover:text-white" href="#">
                 About
             </Link>
-            <Link className="text-sm text-gray-400 hover:text-white" href="#">
+            <Link className="text-sm text-gray-400 hover:text-white" href="/verification">
                 Contact
             </Link>
         </div>
