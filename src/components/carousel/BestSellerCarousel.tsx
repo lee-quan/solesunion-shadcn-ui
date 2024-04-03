@@ -47,10 +47,10 @@ export default function BestSellerCarousel({
                                     src={`${CLOUDFLARE_URL}/${product.image_file}/thumbnail`}
                                 />
                                 <div className="justify-between w-full items-center px-5 hidden md:flex">
-                                    <div>
+                                    <div className="hidden lg:block">
                                         <h2>{product.product_title}</h2>
                                     </div>
-                                    <div className="hidden lg:block pl-2 text-sm">
+                                    <div className="hidden md:block pl-2 text-sm">
                                         <p>{product.lowest_offer} MYR</p>
                                     </div>
                                 </div>
