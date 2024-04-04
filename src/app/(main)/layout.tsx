@@ -2,15 +2,18 @@ import { Footer } from "@/components/footer";
 import NavigationBar from "@/components/navigation-bar";
 
 export default function MainLayout({
-    children,
+  children,
+  test,
 }: {
-    children: React.ReactNode;
+  children: React.ReactNode;
+  test: any;
 }) {
-    return (
-        <>
-            <NavigationBar />
-            {children}
-            <Footer />
-        </>
-    );
+  return (
+    <>
+      <NavigationBar />
+      {test}
+      {children}
+      <Footer />
+    </>
+  );
 }

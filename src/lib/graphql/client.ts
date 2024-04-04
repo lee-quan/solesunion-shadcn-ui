@@ -10,10 +10,10 @@ import {
 import { onError } from "@apollo/client/link/error";
 import {
   NextSSRApolloClient,
-  NextSSRInMemoryCache,
+  // NextSSRInMemoryCache,
   SSRMultipartLink,
 } from "@apollo/experimental-nextjs-app-support/ssr";
-
+import { NextSSRInMemoryCache } from "@apollo/experimental-nextjs-app-support/ssr";
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
     graphQLErrors.forEach(({ message, locations, path }) =>
@@ -51,55 +51,6 @@ export function makeClient(session: any) {
   });
 
   const link = from([errorLink, authLink, httpLink]);
-  return new NextSSRApolloClient({
-    ssrMode: typeof window === "undefined",
-    cache: new NextSSRInMemoryCache(),
-    headers: {
-      "Content-Type": "application/json",
-    },
-    link:
-      typeof window === "undefined"
-        ? ApolloLink.from([
-            new SSRMultipartLink({
-              stripDefer: true,
-            }),
-            httpLink,
-          ])
-        : link,
-  });
-}
-
-export function makeServerApolloClient(session: any) {
-  let uri = `${BACKEND_URL}/graphql`;
-  if (session) {
-    uri += "/authenticated";
-  }
-  const httpLink = new HttpLink({
-    uri,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  const authLink = setContext((_, { headers }) => {
-    const httpLink = new HttpLink({
-      uri,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    if (session) {
-      const token = session?.user?.name?.split("-|-")[1];
-      return {
-        headers: {
-          ...headers,
-          Authorization: `Bearer ${token}`,
-        },
-      };
-    } else {
-      return { headers };
-    }
-  });
-  const link = from([authLink, httpLink]);
   return new ApolloClient({
     ssrMode: true,
     // Instead of "createHttpLink" use SchemaLink here

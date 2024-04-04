@@ -2,28 +2,13 @@
 
 import { PackageIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
+import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
-import { CLOUDFLARE_URL } from "@/lib/constants";
-import { GET_PRODUCT } from "@/lib/graphql/queries/productQueries";
 import { cn, price } from "@/lib/utils";
-import { useQuery } from "@apollo/client";
 import { MinusIcon, PlusIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
-import { useParams } from "next/navigation";
 import { useState } from "react";
 
 interface ProductSizeType {
@@ -45,8 +30,7 @@ interface ProductSizeType {
   };
 }
 
-export default function ProductDetailPage({ product }: { product: any }) {
-  const { slug } = useParams();
+export default function ProductPage({ product }: { product: any }) {
   const [selectedSize, setSelectedSize] = useState<ProductSizeType>({
     size: "",
     offer: {
@@ -66,13 +50,7 @@ export default function ProductDetailPage({ product }: { product: any }) {
     },
   });
 
-//   const { data, loading, error } = useQuery(GET_PRODUCT, {
-//     variables: {
-//       slug: slug,
-//     },
-//   });
   const isConsignment = product.consignment == 1;
-
   function createSizePanel() {
     return (
       <SizePanel
@@ -145,117 +123,97 @@ export default function ProductDetailPage({ product }: { product: any }) {
           <>
             {createConditionalButton()}
             <Button size="lg">Add to cart</Button>
-            <Link href="#" className="text-xs underline text-center">
+            <Link
+              href={`/${product.slug}/list?size=${selectedSize.size}`}
+              className="text-xs underline text-center"
+            >
               Have this product? List now.
             </Link>
           </>
         ) : (
-          <Button size="lg">Have this product? List now.</Button>
+          <Button size="lg" asChild>
+            <Link href={`/${product.slug}/list?size=${selectedSize.size}`}>
+              Have this product? List now.
+            </Link>
+          </Button>
         )}
       </div>
     );
   }
 
   return (
-    <div>
-      <div className="grid md:grid-cols-2 gap-6 lg:gap-12 items-start max-w-6xl px-4 mx-auto py-6">
-        <div className="grid gap-3 items-start">
-          {product.images.map(
-            (image: { image_file: string }, index: number) => (
-              <img
-                src={`${CLOUDFLARE_URL}/${image.image_file}/public`}
-                key={index}
-              />
-            )
-          )}
+    <div className="grid gap-4 md:gap-10 items-start">
+      <div className="grid gap-4">
+        {!isConsignment && (
+          <Link href="/verification">
+            <div className="relative flex h-[50px] w-full bg-green-600">
+              <div
+                className="bg-green-800 w-2/5 flex items-center justify-center"
+                style={{
+                  clipPath: "polygon(0 0, 100% 0, 90% 100%, 0% 100%)",
+                }}
+              >
+                <img
+                  src="/images/solesunion-removebg-preview.png"
+                  className="h-10 w-auto"
+                />
+              </div>
+              <div className="relative w-3/5 flex items-center justify-between font-normal text-white uppercase text-sm pl-4">
+                100% Authentic
+                <img src="/images/silhouette1.svg" className="hidden lg:flex" />
+                <img src="/images/silhouette2.svg" />
+              </div>
+            </div>
+          </Link>
+        )}
+        <ScrollArea className="min-h-[60px] max-h-[320px] w-full hidden md:block">
+          {createSizePanel()}
+        </ScrollArea>
+        <div>
+          <p>
+            Experience the comfort and style of Nike's latest sneaker model, the
+            Air Max 270. With a sleek design and Nike's signature air
+            cushioning, you'll be walking on air.
+          </p>
         </div>
-        <div className="grid gap-4 md:gap-10 items-start">
-          <div className="grid gap-4">
-            <div>
-              <h1 className="font-bold text-3xl lg:text-4xl">
-                {product.product_title}
-              </h1>
-              <h2>{product.product_sku}</h2>
-            </div>
-            {!isConsignment && (
-              <Link href="/verification">
-                <div className="relative flex h-[50px] w-full bg-green-600">
-                  <div
-                    className="bg-green-800 w-2/5 flex items-center justify-center"
-                    style={{
-                      clipPath: "polygon(0 0, 100% 0, 90% 100%, 0% 100%)",
-                    }}
-                  >
-                    <img
-                      src="/images/solesunion-removebg-preview.png"
-                      className="h-10 w-auto"
-                    />
-                  </div>
-                  <div className="relative w-3/5 flex items-center justify-between font-normal text-white uppercase text-sm pl-4">
-                    100% Authentic
-                    <img
-                      src="/images/silhouette1.svg"
-                      className="hidden lg:flex"
-                    />
-                    <img src="/images/silhouette2.svg" />
-                  </div>
-                </div>
-              </Link>
-            )}
-            <ScrollArea className="h-[320px] w-full hidden md:block">
-              {createSizePanel()}
-            </ScrollArea>
-            {/* <div>
-              <p>
-                Experience the comfort and style of Nike's latest sneaker model,
-                the Air Max 270. With a sleek design and Nike's signature air
-                cushioning, you'll be walking on air.
-              </p>
-            </div> */}
-            <div className="flex items-center gap-4">
-              <SizeDrawer>
-                {createSizePanel()}
-                {createButton()}
-              </SizeDrawer>
+        <div className="flex items-center gap-4">
+          <SizeDrawer>
+            {createSizePanel()}
+            {createButton()}
+          </SizeDrawer>
 
-              {/* <div className="text-4xl font-bold ml-auto">$150</div> */}
-            </div>
-            {selectedSize.size != "" && (
-              <div className="hidden md:block">{createButton()}</div>
-            )}
+          {/* <div className="text-4xl font-bold ml-auto">$150</div> */}
+        </div>
+        {selectedSize.size != "" && (
+          <div className="hidden md:block sticky bottom-0 bg-white p-4">
+            {createButton()}
           </div>
-          {/* <div className="grid gap-2">
-            <Label className="text-base" htmlFor="quantity">
-              Quantity
-            </Label>
-            <div className="flex items-center gap-2">
-              <Button size="icon" variant="outline">
-                <MinusIcon className="w-4 h-4" />
-              </Button>
-              <Input
-                className="w-16 text-center"
-                defaultValue="1"
-                id="quantity"
-                min="1"
-                type="number"
-              />
-              <Button size="icon" variant="outline">
-                <PlusIcon className="w-4 h-4" />
-              </Button>
-            </div>
-          </div> */}
-          <form className="grid gap-4 md:gap-10">
-            <div className="grid gap-2"></div>
-            <div className="grid gap-2"></div>
-            {/* <div className="flex flex-col gap-2 min-[400px]:flex-row">
-              <Button size="lg">Add to cart</Button>
-              <Button size="lg" variant="outline">
-                Buy Now
-              </Button>
-            </div> */}
-          </form>
+        )}
+      </div>
+      <div className="grid gap-2">
+        <Label className="text-base" htmlFor="quantity">
+          Quantity
+        </Label>
+        <div className="flex items-center gap-2">
+          <Button size="icon" variant="outline">
+            <MinusIcon className="w-4 h-4" />
+          </Button>
+          <Input
+            className="w-16 text-center"
+            defaultValue="1"
+            id="quantity"
+            min="1"
+            type="number"
+          />
+          <Button size="icon" variant="outline">
+            <PlusIcon className="w-4 h-4" />
+          </Button>
         </div>
       </div>
+      <form className="grid gap-4 md:gap-10">
+        <div className="grid gap-2"></div>
+        <div className="grid gap-2"></div>
+      </form>
     </div>
   );
 }

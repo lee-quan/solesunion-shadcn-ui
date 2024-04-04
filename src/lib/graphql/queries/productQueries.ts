@@ -7,6 +7,7 @@ export const GET_PRODUCT = gql`
       product_sku
       total_quantity_sold
       lowest_offer
+      slug
       consignment
       images {
         image_file

@@ -1,5 +1,5 @@
 import ProductDetailPage from "@/components/pages/ProductDetailPage";
-import { makeClient, makeServerApolloClient } from "@/lib/graphql/client";
+import { makeClient } from "@/lib/graphql/client";
 import { GET_PRODUCT } from "@/lib/graphql/queries/productQueries";
 import { getServerSession } from "next-auth";
 
@@ -10,7 +10,7 @@ export default async function ProductPage({
 }) {
   const session = await getServerSession();
   const { slug } = params;
-  const client = makeServerApolloClient(session);
+  const client = makeClient(session);
 
   const { data } = await client.query({
     query: GET_PRODUCT,
@@ -19,5 +19,5 @@ export default async function ProductPage({
     },
   });
 
-  return <ProductDetailPage product={data.product}/>;
+  return <ProductDetailPage product={data.product} />;
 }
