@@ -47,7 +47,7 @@ interface ProductSizeType {
 
 export default function ProductPage() {
   const { slug } = useParams();
-  const [selectedSize, setSelectedSize] = useState({
+  const [selectedSize, setSelectedSize] = useState<ProductSizeType>({
     size: "",
     offer: {
       id: 0,
