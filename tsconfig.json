@@ -21,6 +21,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/lib/graphql/apollo-wrapper.js", "src/hooks/useMutation.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/lib/graphql/apollo-wrapper.tsx", "src/hooks/useMutation.tsx"],
   "exclude": ["node_modules"]
 }

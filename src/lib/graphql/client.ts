@@ -1,15 +1,109 @@
-// import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
-// import { registerApolloClient } from "@apollo/experimental-nextjs-app-support/rsc";
+import { setContext } from "@apollo/client/link/context";
+import { BACKEND_URL } from "../constants";
+import {
+  ApolloClient,
+  ApolloLink,
+  HttpLink,
+  InMemoryCache,
+  from,
+} from "@apollo/client";
+import { onError } from "@apollo/client/link/error";
+import {
+  NextSSRApolloClient,
+  NextSSRInMemoryCache,
+  SSRMultipartLink,
+} from "@apollo/experimental-nextjs-app-support/ssr";
 
-// export const { getClient } = registerApolloClient(() => {
-//   return new ApolloClient({
-//     cache: new InMemoryCache(),
-//     link: new HttpLink({
-//       // https://studio.apollographql.com/public/spacex-l4uc6p/
-//       uri: "https://main--spacex-l4uc6p.apollographos.net/graphql",
-//       // you can disable result caching here if you want to
-//       // (this does not work if you are rendering your page with `export const dynamic = "force-static"`)
-//       // fetchOptions: { cache: "no-store" },
-//     }),
-//   });
-// });
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors)
+    graphQLErrors.forEach(({ message, locations, path }) =>
+      console.log(
+        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+      )
+    );
+  if (networkError) console.log(`[Network error]: ${networkError}`);
+});
+
+export function makeClient(session: any) {
+  let uri = `${BACKEND_URL}/graphql`;
+  if (session) {
+    uri += "/authenticated";
+  }
+  const authLink = setContext((_, { headers }) => {
+    if (session) {
+      const token = session?.user?.name?.split("-|-")[1];
+      return {
+        headers: {
+          ...headers,
+          Authorization: `Bearer ${token}`,
+        },
+      };
+    } else {
+      return { headers };
+    }
+  });
+
+  const httpLink = new HttpLink({
+    uri,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const link = from([errorLink, authLink, httpLink]);
+  return new NextSSRApolloClient({
+    ssrMode: typeof window === "undefined",
+    cache: new NextSSRInMemoryCache(),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    link:
+      typeof window === "undefined"
+        ? ApolloLink.from([
+            new SSRMultipartLink({
+              stripDefer: true,
+            }),
+            httpLink,
+          ])
+        : link,
+  });
+}
+
+export function makeServerApolloClient(session: any) {
+  let uri = `${BACKEND_URL}/graphql`;
+  if (session) {
+    uri += "/authenticated";
+  }
+  const httpLink = new HttpLink({
+    uri,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const authLink = setContext((_, { headers }) => {
+    const httpLink = new HttpLink({
+      uri,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (session) {
+      const token = session?.user?.name?.split("-|-")[1];
+      return {
+        headers: {
+          ...headers,
+          Authorization: `Bearer ${token}`,
+        },
+      };
+    } else {
+      return { headers };
+    }
+  });
+  const link = from([authLink, httpLink]);
+  return new ApolloClient({
+    ssrMode: true,
+    // Instead of "createHttpLink" use SchemaLink here
+    link: link,
+    cache: new InMemoryCache(),
+  });
+}
