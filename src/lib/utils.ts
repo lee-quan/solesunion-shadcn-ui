@@ -1,3 +1,5 @@
+import crypto from "crypto-js";
+
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -22,4 +24,34 @@ export function prettyDate(date: string) {
     month: "long",
     day: "numeric",
   });
+}
+
+const password = "d6F3Efeq";
+
+export function encrypt(text: string | undefined | null | number) {
+  if (text) {
+    const result = crypto.AES.encrypt(`${text}`, password);
+    var temp = result
+      .toString()
+      .replace(/\+/g, "xMl3Jk")
+      .replace(/\//g, "Por21Ld")
+      .replace(/&/g, "Por2O")
+      .replace(/=/g, "Ml32");
+
+    return temp;
+  }
+  return "";
+}
+
+export function decrypt(text: string | null | undefined) {
+  if (text) {
+    var temp = text
+      .replace(/Ml32/g, "=")
+      .replace(/Por21Ld/g, "/")
+      .replace(/xMl3Jk/g, "+");
+    const result = crypto.AES.decrypt(temp, password);
+    return result.toString(crypto.enc.Utf8);
+  } else {
+    return "/";
+  }
 }

@@ -40,7 +40,7 @@ export default function NavigationBar() {
   return (
     <>
       <NotificationBar />
-      <header className="sticky top-0 flex h-20 w-full shrink-0 items-center px-4 md:px-6 bg-white z-50">
+      <header className="sticky top-0 flex h-20 w-full shrink-0 items-center px-4 md:px-6 bg-white z-50 border-b">
         <Sheet>
           <SheetTrigger asChild>
             <Button className="lg:hidden" size="icon" variant="outline">

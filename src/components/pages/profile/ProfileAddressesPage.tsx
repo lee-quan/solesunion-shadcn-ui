@@ -10,27 +10,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import useMutation from "@/hooks/useMutation";
 import {
   UPDATE_USER_ADDRESS,
-  UPDATE_USER_PASSWORD,
-  UPDATE_USER_PROFILE,
 } from "@/lib/graphql/mutations/profileMutations";
 import {
   GET_USER_ADDRESSES,
-  GET_VACATION_MODE,
 } from "@/lib/graphql/queries/profileQueries";
 import { useQuery } from "@apollo/client";
 import {
-  ErrorMessage,
-  Field,
-  FieldHookConfig,
   Form,
   Formik,
-  useField,
 } from "formik";
 import { useState } from "react";
 import * as Yup from "yup";

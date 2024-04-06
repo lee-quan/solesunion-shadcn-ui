@@ -6,12 +6,13 @@ import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { cn, price } from "@/lib/utils";
+import { cn, encrypt, price } from "@/lib/utils";
 import { MinusIcon, PlusIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import { useState } from "react";
 
 interface ProductSizeType {
+  id: number;
   size: string;
   offer?: {
     id: number;
@@ -32,6 +33,7 @@ interface ProductSizeType {
 
 export default function ProductPage({ product }: { product: any }) {
   const [selectedSize, setSelectedSize] = useState<ProductSizeType>({
+    id: 0,
     size: "",
     offer: {
       id: 0,
@@ -69,12 +71,20 @@ export default function ProductPage({ product }: { product: any }) {
     }) {
       return (
         <Button className="flex-1 flex-col h-20">
-          <p className="uppercase text-xs font-bold">Instant Delivery</p>
-          <p className="text-lg font-bold">RM {price(offer.offer_price)}</p>
-          <span className="flex items-center text-xs">
-            <PackageIcon className="h-4 w-4 mr-2" />{" "}
-            <p className="font-light">2-3 days delivery</p>
-          </span>
+          <Link
+            href={`/checkout?q=${encrypt(
+              JSON.stringify({
+                id: offer.id,
+              })
+            )}`}
+          >
+            <p className="uppercase text-xs font-bold">Instant Delivery</p>
+            <p className="text-lg font-bold">RM {price(offer.offer_price)}</p>
+            <span className="flex items-center text-xs">
+              <PackageIcon className="h-4 w-4 mr-2" />{" "}
+              <p className="font-light">2-3 days delivery</p>
+            </span>
+          </Link>
         </Button>
       );
     }
@@ -86,12 +96,20 @@ export default function ProductPage({ product }: { product: any }) {
     }) {
       return (
         <Button className="flex-1 flex-col h-20" variant="outline">
-          <p className="uppercase text-xs font-bold">Buy Now</p>
-          <p className="text-lg font-bold">RM {price(offer.offer_price)}</p>
-          <span className="flex items-center text-xs">
-            <PackageIcon className="h-4 w-4 mr-2" />{" "}
-            <p className="font-light">5-9 days delivery</p>
-          </span>
+          <Link
+            href={`/checkout?q=${encrypt(
+              JSON.stringify({
+                id: offer.id,
+              })
+            )}`}
+          >
+            <p className="uppercase text-xs font-bold">Buy Now</p>
+            <p className="text-lg font-bold">RM {price(offer.offer_price)}</p>
+            <span className="flex items-center text-xs">
+              <PackageIcon className="h-4 w-4 mr-2" />{" "}
+              <p className="font-light">5-9 days delivery</p>
+            </span>
+          </Link>
         </Button>
       );
     }
@@ -124,7 +142,12 @@ export default function ProductPage({ product }: { product: any }) {
             {createConditionalButton()}
             <Button size="lg">Add to cart</Button>
             <Link
-              href={`/${product.slug}/list?size=${selectedSize.size}`}
+              href={`/${product.slug}/list?q=${encrypt(
+                JSON.stringify({
+                  id: selectedSize.id,
+                  size: selectedSize.size,
+                })
+              )}`}
               className="text-xs underline text-center"
             >
               Have this product? List now.
@@ -132,7 +155,14 @@ export default function ProductPage({ product }: { product: any }) {
           </>
         ) : (
           <Button size="lg" asChild>
-            <Link href={`/${product.slug}/list?size=${selectedSize.size}`}>
+            <Link
+              href={`/${product.slug}/list?q=${encrypt(
+                JSON.stringify({
+                  id: selectedSize.id,
+                  size: selectedSize.size,
+                })
+              )}`}
+            >
               Have this product? List now.
             </Link>
           </Button>

@@ -35,3 +35,17 @@ export const GET_PRODUCT = gql`
     }
   }
 `;
+
+export const GET_LOWEST_ACTIVE_OFFER_AND_LAST_SALE = gql`
+  query GetLowestActiveOfferAndLastSale($product_size_id: Int!) {
+    lowestActiveOfferAndLastSale(product_size_id: $product_size_id) {
+      lowest_offer
+      last_sale {
+        id
+        created_at
+        unit_price
+        size
+      }
+    }
+  }
+`;

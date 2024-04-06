@@ -1,19 +1,22 @@
+"use client";
+
 import { Footer } from "@/components/footer";
 import NavigationBar from "@/components/navigation-bar";
+import { usePathname } from "next/navigation";
 
 export default function MainLayout({
   children,
-  test,
 }: {
   children: React.ReactNode;
-  test: any;
 }) {
+  const pathname = usePathname();
+
+  const isCheckoutPage = pathname.includes("checkout");
   return (
     <>
       <NavigationBar />
-      {test}
       {children}
-      <Footer />
+      {!isCheckoutPage && <Footer />}
     </>
   );
 }

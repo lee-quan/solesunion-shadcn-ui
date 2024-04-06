@@ -36,6 +36,23 @@ export const GET_USER_ADDRESSES = gql`
     }
 `;
 
+export const GET_USER_DELIVERY_ADDRESS = gql`
+    query GetUserDeliveryAddress {
+        userDeliveryAddress {
+            name
+            address_type
+            id
+            address_1
+            address_2
+            pincode
+            city
+            country
+            state
+            mobile
+        }
+    }
+`;
+
 export const GET_ORDER_HISTORY = gql`
     query GetOrderHistory($limit: Int, $page: Int) {
         userOrder(limit: $limit, page: $page) {
