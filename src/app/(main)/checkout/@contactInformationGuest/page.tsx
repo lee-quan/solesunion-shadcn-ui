@@ -1,82 +1,21 @@
 "use client";
+import React, { useEffect, useState } from "react";
 
-import { FormField } from "@/components/form-field";
-import { LoaderIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import { useCheckout } from "@/lib/context/CheckoutContext";
 import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import useMutation from "@/hooks/useMutation";
-import { UPDATE_USER_ADDRESS } from "@/lib/graphql/mutations/profileMutations";
-import { GET_USER_ADDRESSES } from "@/lib/graphql/queries/profileQueries";
-import { useQuery } from "@apollo/client";
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 import { Form, Formik } from "formik";
-import { useState } from "react";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { FormField } from "@/components/form-field";
 import * as Yup from "yup";
-
-export default function ProfileAddressesPage() {
-  const { data, loading, refetch } = useQuery(GET_USER_ADDRESSES);
-  const [showAddressForm, setShowAddressForm] = useState(false);
-  const [selectedAddress, setSelectedAddress] = useState({
-    id: 0,
-    name: "",
-    address_type: "new",
-    address_1: "",
-    address_2: "",
-    pincode: "",
-    city: "",
-    country: "",
-    state: "",
-    mobile: "",
-  });
-  return (
-    <>
-      <div className="flex gap-4">
-        <h1 className="font-semibold text-lg md:text-xl">Addresses</h1>
-      </div>
-      {loading ? (
-        <LoaderIcon className="h-6 w-6" />
-      ) : showAddressForm ? (
-        <AddressForm
-          setShowAddressForm={setShowAddressForm}
-          refetch={refetch}
-          selectedAddress={selectedAddress}
-        />
-      ) : data?.userAddress.length > 0 ? (
-        <>
-          <AddressesDisplay
-            addresses={data.userAddress}
-            setShowAddressForm={setShowAddressForm}
-            setSelectedAddress={setSelectedAddress}
-          />
-        </>
-      ) : (
-        <>
-          <div className="flex flex-col items-center gap-1">
-            <h3 className="font-bold text-2xl tracking-tight">
-              You have no addresses
-            </h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              You can start adding addresses by clicking the button below.
-            </p>
-            <Button
-              className="mt-4"
-              onClick={() => {
-                setShowAddressForm(true);
-              }}
-            >
-              Add New Address
-            </Button>
-          </div>
-        </>
-      )}
-    </>
-  );
-}
+import { Input } from "@/components/ui/input";
 
 interface AddressType {
   id: number;
@@ -91,23 +30,118 @@ interface AddressType {
   mobile: string;
 }
 
+export default function CheckoutOptions() {
+  return (
+    <>
+      <EmailAddressSection />
+      <DeliveryAddressSection />
+    </>
+  );
+}
+
+function DeliveryAddressSection() {
+  const { deliveryAddress, updateDeliveryAddress } = useCheckout();
+  const [addressData, setAddressData] = useState<AddressType>({
+    id: 0,
+    name: "",
+    address_type: "new",
+    address_1: "",
+    address_2: "",
+    pincode: "",
+    city: "",
+    country: "",
+    state: "",
+    mobile: "",
+  });
+  const [showAddressForm, setShowAddressForm] = useState(false);
+
+  useEffect(() => {
+    if (addressData.address_type != "new") {
+      updateDeliveryAddress(
+        `${addressData.name}, ${addressData.address_1}, ${
+          addressData.address_2 ? `${addressData.address_2}, ` : ""
+        } ${addressData.city}, ${addressData.state}, ${addressData.pincode}, ${
+          addressData.country
+        }`
+      );
+    }
+  }, [addressData]);
+
+  return (
+    <div className="space-y-2">
+      <h2 className="text-xs font-bold">DELIVERY ADDRESS</h2>
+      <div className="flex justify-between items-center">
+        {addressData.address_type === "new" ? (
+          <p className="text-xs text-gray-500">
+            You have not added a delivery address yet.
+          </p>
+        ) : (
+          <p className="font-normal text-xs">{deliveryAddress}</p>
+        )}
+        <Drawer open={showAddressForm}>
+          <DrawerTrigger asChild className="flex items-center">
+            <Button
+              className="text-xs underline hover:bg-transparent"
+              variant="ghost"
+              onClick={() => {
+                setShowAddressForm(true);
+              }}
+            >
+              {deliveryAddress ? "Change Address" : "Add Address"}
+            </Button>
+          </DrawerTrigger>
+          <DrawerContent>
+            <DrawerHeader>
+              <DrawerTitle>Edit Address</DrawerTitle>
+              <DrawerDescription>
+                Update your delivery address.
+              </DrawerDescription>
+            </DrawerHeader>
+            <AddressForm
+              selectedAddress={{
+                ...addressData,
+              }}
+              setAddressData={setAddressData}
+              setShowAddressForm={setShowAddressForm}
+            />
+          </DrawerContent>
+        </Drawer>
+      </div>
+    </div>
+  );
+}
+
+function EmailAddressSection() {
+  const { emailAddress, updateEmailAddress } = useCheckout();
+
+  return (
+    <div className="space-y-2">
+      <h2 className="text-xs font-bold">EMAIL ADDRESS</h2>
+      <p className="text-xs">
+        To receive receipt of payment, please enter your email address below.
+      </p>
+      <div className="flex justify-between items-center">
+        <Input
+          type="email"
+          placeholder="Enter your email address"
+          value={emailAddress}
+          onChange={(e) => updateEmailAddress(e.target.value)}
+        />
+      </div>
+    </div>
+  );
+}
+
 function AddressForm({
-  refetch,
   selectedAddress,
   setShowAddressForm,
+  setAddressData,
 }: {
-  refetch: () => void;
   selectedAddress: AddressType;
   setShowAddressForm: (value: boolean) => void;
+  setAddressData: (value: AddressType) => void;
 }) {
-  const [updateUserAddress] = useMutation(UPDATE_USER_ADDRESS, {
-    onSuccess: () => {
-      refetch();
-    },
-  });
-
   const validationSchema = Yup.object().shape({
-    // address_1, address_2, name, address_type, pincode, city, country, state, mobile
     id: Yup.number(),
     address_1: Yup.string().required("Required"),
     address_2: Yup.string().nullable(),
@@ -129,24 +163,20 @@ function AddressForm({
           ...selectedAddress,
         }}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
-          await updateUserAddress({
-            variables: {
-              ...values,
-            },
-          });
           setShowAddressForm(false);
+          setAddressData({
+            ...values,
+            address_type: "added",
+          });
           resetForm();
         }}
       >
         {({ isSubmitting, errors }) => {
           return (
             <Form>
-              <Card className="py-3">
-                <CardHeader>
-                  <CardTitle>Add New Address</CardTitle>
-                </CardHeader>
+              <Card className="py-3 border-none">
                 <CardContent>
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-1">
                     <FormField
                       name="id"
                       label="id"
@@ -228,6 +258,14 @@ function AddressForm({
                   >
                     Save
                   </Button>
+                  <Button
+                    className="w-20"
+                    onClick={() => {
+                      setShowAddressForm(false);
+                    }}
+                  >
+                    Cancel
+                  </Button>
                 </CardFooter>
               </Card>
             </Form>
@@ -235,57 +273,5 @@ function AddressForm({
         }}
       </Formik>
     </>
-  );
-}
-
-function AddressesDisplay({
-  addresses,
-  setShowAddressForm,
-  setSelectedAddress,
-}: {
-  addresses: AddressType[];
-  setShowAddressForm: (value: boolean) => void;
-  setSelectedAddress: (value: AddressType) => void;
-}) {
-  return (
-    <div className="grid grid-cols-1 gap-4">
-      {addresses.map((address) => (
-        <Card key={address.id}>
-          <CardHeader>
-            <CardTitle>
-              {address.address_type === "D"
-                ? "Delivery Address"
-                : "Billing Address"}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  {address.name}
-                </p>
-                <p>{address.address_1}</p>
-                <p>{address.address_2}</p>
-                <p>
-                  {address.city}, {address.state} {address.pincode}
-                </p>
-                <p>{address.country}</p>
-                <p>{address.mobile}</p>
-              </div>
-              <div className="flex items-center">
-                <Button
-                  onClick={() => {
-                    setSelectedAddress(address);
-                    setShowAddressForm(true);
-                  }}
-                >
-                  Edit
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      ))}
-    </div>
   );
 }

@@ -30,7 +30,6 @@ export default function sellPage() {
     },
   });
 
-  console.log(data);
   return (
     <div className="h-full flex flex-col space-y-2">
       <div className="flex items-center justify-between">

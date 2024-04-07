@@ -4,13 +4,5 @@ import { getServerSession } from "next-auth";
 
 export default async function OrdersPage() {
   const session = await getServerSession();
-  // const { data } = await makeServerApolloClient(session).query({
-  //   query: GET_ORDER_HISTORY,
-  //   variables: {
-  //     limit: 10,
-  //     page: 1,
-  //   },
-  // });
-  // console.log(data);
   return <ProfileOrdersPage />;
 }

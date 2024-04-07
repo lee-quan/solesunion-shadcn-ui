@@ -13,7 +13,6 @@ export default function sellPage() {
   const searchParams = useSearchParams();
   const qParams = JSON.parse(decrypt(searchParams.get("q")) || "{}");
 
-  console.log(qParams);
   const validationSchema = yup.object().shape({
     terms: yup.boolean().oneOf([true], "Please read and agree to the terms"),
   });
@@ -64,7 +63,6 @@ export default function sellPage() {
         }}
         validationSchema={validationSchema}
         onSubmit={async (values) => {
-          console.log(values);
           await createProductOffer({
             variables: {
               ...values,

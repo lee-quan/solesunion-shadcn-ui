@@ -47,7 +47,6 @@ export default function ProfileOrderInformationPage() {
         },
     });
 
-    console.log(data);
     return (
         <>
             <div className="flex items-center gap-4">

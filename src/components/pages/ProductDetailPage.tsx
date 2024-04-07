@@ -74,7 +74,7 @@ export default function ProductPage({ product }: { product: any }) {
           <Link
             href={`/checkout?q=${encrypt(
               JSON.stringify({
-                id: offer.id,
+                cartItem: { offer_id: offer.id, quantity: 1 },
               })
             )}`}
           >
@@ -99,7 +99,7 @@ export default function ProductPage({ product }: { product: any }) {
           <Link
             href={`/checkout?q=${encrypt(
               JSON.stringify({
-                id: offer.id,
+                cartItem: { offer_id: offer.id, quantity: 1 },
               })
             )}`}
           >
@@ -220,7 +220,7 @@ export default function ProductPage({ product }: { product: any }) {
           </div>
         )}
       </div>
-      <div className="grid gap-2">
+      {/* <div className="grid gap-2">
         <Label className="text-base" htmlFor="quantity">
           Quantity
         </Label>
@@ -239,7 +239,7 @@ export default function ProductPage({ product }: { product: any }) {
             <PlusIcon className="w-4 h-4" />
           </Button>
         </div>
-      </div>
+      </div> */}
       <form className="grid gap-4 md:gap-10">
         <div className="grid gap-2"></div>
         <div className="grid gap-2"></div>
