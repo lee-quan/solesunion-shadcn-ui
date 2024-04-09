@@ -54,6 +54,8 @@ export default function ProductCarousel({
                 className="product__carousel__slide"
                 key={index}
                 href={product.slug}
+                onTouchStart={(event) => event.stopPropagation()} // Prevent propagation on touch
+                onMouseDown={(event) => event.stopPropagation()} // Prevent propagation on mouse down
               >
                 <div className="product__carousel__slide__number">
                   <div className="flex-col items-center">

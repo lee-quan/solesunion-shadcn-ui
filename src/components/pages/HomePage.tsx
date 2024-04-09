@@ -243,9 +243,3 @@ export default function HomePage({
     </div>
   );
 }
-
-// function test() {
-//   return (
-
-//   );
-// }
