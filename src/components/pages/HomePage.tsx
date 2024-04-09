@@ -5,10 +5,7 @@ import LandingPageHero from "@/components/landing-page-hero";
 import ProductCarousel from "@/components/carousel/ProductCarousel";
 import { Button } from "@/components/ui/button";
 import BestSellerCarousel from "@/components/carousel/BestSellerCarousel";
-import { useEffect, useState } from "react";
-import { useSwipeable } from "react-swipeable";
-import { useQuery } from "@apollo/client";
-import { GET_PRODUCT_FOR_HOME_PAGE } from "@/lib/graphql/queries/productQueries";
+import { useState } from "react";
 
 export default function HomePage({
   data,
@@ -84,44 +81,12 @@ export default function HomePage({
 }) {
   const [activeCategory, setActiveCategory] = useState("apparels");
 
-  const handlers = useSwipeable({
-    onSwipedLeft: () => {
-      setActiveCategory("apparels");
-      console.log("swiped left");
-    },
-    onSwipedRight: () => {
-      setActiveCategory("sneakers");
-      console.log("swiped right");
-    },
-  });
-
   const categoryContent = (category: string) => {
     switch (category) {
       case "sneakers":
         // Render sneakers content
         return (
           <>
-            <section className="w-full py-10">
-              <div className="container px-4 md:px-6">
-                <span className="text-3xl font-bold tracking-tighter md:text-4xl/tight">
-                  Shop by Category
-                </span>
-                <div className="flex gap-6 mt-6">
-                  <Button
-                    className="w-full shadow p-8 text-lg font-bold text-center"
-                    variant="secondary"
-                  >
-                    Sneakers
-                  </Button>
-                  <Button
-                    className="w-full shadow p-8 text-lg font-bold text-center"
-                    variant="secondary"
-                  >
-                    Apparels
-                  </Button>
-                </div>
-              </div>
-            </section>
             <section className="w-full py-12">
               <div className="container px-4 md:px-6">
                 <div className="flex flex-col items-center space-y-4 text-center">
@@ -165,27 +130,6 @@ export default function HomePage({
         // Render apparels content
         return (
           <>
-            <section className="w-full py-10">
-              <div className="container px-4 md:px-6">
-                <span className="text-3xl font-bold tracking-tighter md:text-4xl/tight">
-                  Shop by Category
-                </span>
-                <div className="flex gap-6 mt-6">
-                  <Button
-                    className="w-full shadow p-8 text-lg font-bold text-center"
-                    variant="secondary"
-                  >
-                    Sneakers
-                  </Button>
-                  <Button
-                    className="w-full shadow p-8 text-lg font-bold text-center"
-                    variant="secondary"
-                  >
-                    Apparels
-                  </Button>
-                </div>
-              </div>
-            </section>
             <section className="w-full py-12">
               <div className="container px-4 md:px-6">
                 <div className="flex flex-col items-center space-y-4 text-center">
@@ -231,15 +175,36 @@ export default function HomePage({
   };
 
   return (
-    <div className="swiper-container w-full" {...handlers}>
-      <div>
-        <LandingPageHero />
-        {categoryContent(activeCategory)}
-        <h2 className="text-3xl font-bold sm:text-4xl md:text-5xl lg:text-6xl/none uppercase tracking-wider text-center">
-          Our Lovely Customers
-        </h2>
-        <CustomerCarousel />
-      </div>
+    <div>
+      <LandingPageHero />
+      <section className="w-full py-10">
+        <div className="container px-4 md:px-6">
+          <span className="text-3xl font-bold tracking-tighter md:text-4xl/tight">
+            Shop by Category
+          </span>
+          <div className="flex gap-6 mt-6">
+            <Button
+              className="w-full shadow p-8 text-lg font-bold text-center"
+              variant="secondary"
+              onClick={() => setActiveCategory("sneakers")}
+            >
+              Sneakers
+            </Button>
+            <Button
+              onClick={() => setActiveCategory("apparels")}
+              className="w-full shadow p-8 text-lg font-bold text-center"
+              variant="secondary"
+            >
+              Apparels
+            </Button>
+          </div>
+        </div>
+      </section>
+      {categoryContent(activeCategory)}
+      <h2 className="text-3xl font-bold sm:text-4xl md:text-5xl lg:text-6xl/none uppercase tracking-wider text-center">
+        Our Lovely Customers
+      </h2>
+      <CustomerCarousel />
     </div>
   );
 }
