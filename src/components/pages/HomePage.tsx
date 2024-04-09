@@ -53,16 +53,16 @@ export default function HomePage({
 }) {
   const [activeCategory, setActiveCategory] = useState("sneakers");
 
-  //   const handlers = useSwipeable({
-  //     onSwipedLeft: () => {
-  //       setActiveCategory("apparels");
-  //       console.log("swiped left");
-  //     },
-  //     onSwipedRight: () => {
-  //       setActiveCategory("sneakers");
-  //       console.log("swiped right");
-  //     },
-  //   });
+  const handlers = useSwipeable({
+    onSwipedLeft: () => {
+      setActiveCategory("apparels");
+      console.log("swiped left");
+    },
+    onSwipedRight: () => {
+      setActiveCategory("sneakers");
+      console.log("swiped right");
+    },
+  });
 
   const categoryContent = (category: string) => {
     switch (category) {
@@ -78,7 +78,7 @@ export default function HomePage({
   };
 
   return (
-    <div className="swiper-container w-full">
+    <div className="swiper-container w-full bg-slate-500" {...handlers}>
       {categoryContent(activeCategory)}
     </div>
   );
