@@ -14,6 +14,7 @@ import {
   SSRMultipartLink,
 } from "@apollo/experimental-nextjs-app-support/ssr";
 import { NextSSRInMemoryCache } from "@apollo/experimental-nextjs-app-support/ssr";
+import { getServerSession } from "next-auth/next";
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
     graphQLErrors.forEach(({ message, locations, path }) =>
@@ -57,4 +58,9 @@ export function makeClient(session: any) {
     link: link,
     cache: new InMemoryCache(),
   });
+}
+
+export async function useClient() {
+  const session = await getServerSession();
+  return makeClient(session);
 }

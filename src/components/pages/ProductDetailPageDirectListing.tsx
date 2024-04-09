@@ -31,7 +31,11 @@ interface ProductSizeType {
   };
 }
 
-export default function ProductPage({ product }: { product: any }) {
+export default function ProductDetailPageDirectListing({
+  product,
+}: {
+  product: any;
+}) {
   const [selectedSize, setSelectedSize] = useState<ProductSizeType>({
     id: 0,
     size: "",
@@ -70,8 +74,9 @@ export default function ProductPage({ product }: { product: any }) {
       offer: { id: number; offer_price: number; ready_stock: number };
     }) {
       return (
-        <Button className="flex-1 flex-col h-20">
+        <Button className="flex-1 flex-col h-20 p-0" variant="outline">
           <Link
+            className="w-full"
             href={`/checkout?q=${encrypt(
               JSON.stringify({
                 cartItem: { offer_id: offer.id, quantity: 1 },
@@ -80,7 +85,7 @@ export default function ProductPage({ product }: { product: any }) {
           >
             <p className="uppercase text-xs font-bold">Instant Delivery</p>
             <p className="text-lg font-bold">RM {price(offer.offer_price)}</p>
-            <span className="flex items-center text-xs">
+            <span className="flex items-center justify-center text-xs">
               <PackageIcon className="h-4 w-4 mr-2" />{" "}
               <p className="font-light">2-3 days delivery</p>
             </span>
@@ -95,8 +100,9 @@ export default function ProductPage({ product }: { product: any }) {
       offer: { id: number; offer_price: number; ready_stock: number };
     }) {
       return (
-        <Button className="flex-1 flex-col h-20" variant="outline">
+        <Button className="flex-1 flex-col h-20 p-0" variant="outline">
           <Link
+            className="w-full"
             href={`/checkout?q=${encrypt(
               JSON.stringify({
                 cartItem: { offer_id: offer.id, quantity: 1 },
@@ -105,7 +111,7 @@ export default function ProductPage({ product }: { product: any }) {
           >
             <p className="uppercase text-xs font-bold">Buy Now</p>
             <p className="text-lg font-bold">RM {price(offer.offer_price)}</p>
-            <span className="flex items-center text-xs">
+            <span className="flex items-center justify-center text-xs">
               <PackageIcon className="h-4 w-4 mr-2" />{" "}
               <p className="font-light">5-9 days delivery</p>
             </span>
@@ -140,7 +146,7 @@ export default function ProductPage({ product }: { product: any }) {
         {createConditionalButton() ? (
           <>
             {createConditionalButton()}
-            <Button size="lg">Add to cart</Button>
+            {/* <Button size="lg">Add to cart</Button> */}
             <Link
               href={`/${product.slug}/list?q=${encrypt(
                 JSON.stringify({
@@ -156,6 +162,7 @@ export default function ProductPage({ product }: { product: any }) {
         ) : (
           <Button size="lg" asChild>
             <Link
+              className="w-full"
               href={`/${product.slug}/list?q=${encrypt(
                 JSON.stringify({
                   id: selectedSize.id,
@@ -189,8 +196,7 @@ export default function ProductPage({ product }: { product: any }) {
                 />
               </div>
               <div className="relative w-3/5 flex items-center justify-between font-normal text-white uppercase text-sm pl-4">
-                100% Authentic
-                <img src="/images/silhouette1.svg" className="hidden lg:flex" />
+                100% Authentic & Brand New
                 <img src="/images/silhouette2.svg" />
               </div>
             </div>
@@ -199,13 +205,6 @@ export default function ProductPage({ product }: { product: any }) {
         <ScrollArea className="min-h-[60px] max-h-[320px] w-full hidden md:block">
           {createSizePanel()}
         </ScrollArea>
-        <div>
-          <p>
-            Experience the comfort and style of Nike's latest sneaker model, the
-            Air Max 270. With a sleek design and Nike's signature air
-            cushioning, you'll be walking on air.
-          </p>
-        </div>
         <div className="flex items-center gap-4">
           <SizeDrawer>
             {createSizePanel()}

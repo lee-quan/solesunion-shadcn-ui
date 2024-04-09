@@ -10,15 +10,6 @@ export function ApolloWrapper({ children }: { children: React.ReactNode }) {
   const { data: session } = useSession(); // Or getSession() if outside a component
 
   const client = useMemo(() => makeClient(session), [session]);
-  // return (
 
-  //   <ApolloNextAppProvider
-  //     makeClient={() => {
-  //       return client;
-  //     }}
-  //   >
-  //     {children}
-  //   </ApolloNextAppProvider>
-  // );
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
 }

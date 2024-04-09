@@ -238,7 +238,7 @@ const paymentMethods: {
   },
   {
     id: "stripe",
-    name: "Credit/Debit Card, Online Banking",
+    name: "Credit/Debit Card",
     description: "Safe and reliable payment gateway (Stripe)",
     logo: "/images/logo-stripe.png",
     paymentGateway: "Stripe",
