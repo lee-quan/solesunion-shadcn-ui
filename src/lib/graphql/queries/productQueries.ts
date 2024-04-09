@@ -1,11 +1,23 @@
 import gql from "graphql-tag";
 
 export const GET_PRODUCT_FOR_HOME_PAGE = gql`
-  query GetProductForHomePage($category: String!) {
-    productsForHomePage(category: $category) {
-      products {
-        section_name
+  query GetProductForHomePage {
+    productsForHomePage {
+      sneakers {
         products {
+          section_name
+          products {
+            product_title
+            slug
+            image {
+              image_file
+            }
+            lowest_active_offer {
+              offer_price
+            }
+          }
+        }
+        recommended {
           product_title
           slug
           image {
@@ -15,28 +27,55 @@ export const GET_PRODUCT_FOR_HOME_PAGE = gql`
             offer_price
           }
         }
-      }
-      recommended {
-        product_title
-        slug
-        image {
+        best_seller_male {
+          product_title
+          slug
+          lowest_offer
           image_file
         }
-        lowest_active_offer {
-          offer_price
+        best_seller_female {
+          product_title
+          slug
+          lowest_offer
+          image_file
         }
       }
-      best_seller_male {
-        product_title
-        slug
-        lowest_offer
-        image_file
-      }
-      best_seller_female {
-        product_title
-        slug
-        lowest_offer
-        image_file
+      apparels {
+        brands {
+          brand_name
+          products {
+            product_title
+            slug
+            image {
+              image_file
+            }
+            lowest_active_offer {
+              offer_price
+            }
+          }
+        }
+        recommended {
+          product_title
+          slug
+          image {
+            image_file
+          }
+          lowest_active_offer {
+            offer_price
+          }
+        }
+        best_seller_male {
+          product_title
+          slug
+          lowest_offer
+          image_file
+        }
+        best_seller_female {
+          product_title
+          slug
+          lowest_offer
+          image_file
+        }
       }
     }
   }

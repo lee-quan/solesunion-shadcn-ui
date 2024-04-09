@@ -7,7 +7,6 @@ export default async function Home() {
 
   const { data } = await client.query({
     query: GET_PRODUCT_FOR_HOME_PAGE,
-    variables: { category: "sneakers" },
   });
 
   return <HomePage data={data} />;
