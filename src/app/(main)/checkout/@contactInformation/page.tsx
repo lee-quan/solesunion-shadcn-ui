@@ -2,18 +2,10 @@
 import React, { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { RadioGroupItem, RadioGroup } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
 import { useCheckout } from "@/lib/context/CheckoutContext";
 import { useQuery } from "@apollo/client";
 import { GET_USER_DELIVERY_ADDRESS } from "@/lib/graphql/queries/profileQueries";
-import {
-  ArchiveIcon,
-  LoaderIcon,
-  RocketIcon,
-  TruckIcon,
-} from "@/components/icons";
+import { LoaderIcon } from "@/components/icons";
 import {
   Drawer,
   DrawerContent,
@@ -44,68 +36,6 @@ interface AddressType {
 
 export default function CheckoutOptions() {
   return <DeliveryAddressSection />;
-  // return (
-  //   <div className="w-full md:w-1/2 space-y-6">
-  //     <div className="py-4">
-  //       <div className="space-y-2">
-  //         <h3 className="text-xl font-semibold">DELIVERY METHOD</h3>
-  //         <div className="flex items-center justify-between">
-  //           <div className="flex items-center space-x-2">
-  //             <TruckIcon className="w-6 h-6" />
-  //             <p className="text-sm">
-  //               Standard Delivery
-  //               <br />7 - 12 work days
-  //             </p>
-  //           </div>
-  //           <p className="font-semibold">59.99 MYR</p>
-  //         </div>
-  //         <div className="flex items-center justify-between">
-  //           <div className="flex items-center space-x-2">
-  //             <RocketIcon className="w-6 h-6" />
-  //             <p className="text-sm">
-  //               Express Delivery
-  //               <br />5 - 9 work days
-  //             </p>
-  //           </div>
-  //           <p className="font-semibold">128.99 MYR</p>
-  //         </div>
-  //         <div className="flex items-center justify-between">
-  //           <div className="flex items-center space-x-2">
-  //             <ArchiveIcon className="w-6 h-6" />
-  //             <p className="text-sm">
-  //               Storage
-  //               <br />
-  //               Store your purchase at Novelship storage.
-  //             </p>
-  //           </div>
-  //           <p className="font-semibold">9.00 MYR</p>
-  //         </div>
-  //         <div className="flex items-center space-x-2">
-  //           <Checkbox id="declare" />
-  //           <label className="text-sm" htmlFor="declare">
-  //             I would like to declare and protect my delivery. Learn More
-  //           </label>
-  //         </div>
-  //       </div>
-  //       <div className="space-y-2">
-  //         <h3 className="text-xl font-semibold">PAYMENT</h3>
-  //         <p className="text-sm">All transactions are secure and encrypted.</p>
-  //         <div className="flex items-center space-x-2">
-  //           <RadioGroup defaultValue="credit-card">
-  //             <div className="flex items-center space-x-2">
-  //               <RadioGroupItem id="credit-card" value="credit-card" />
-  //               <Label htmlFor="credit-card">Credit Card</Label>
-  //             </div>
-  //             <div className="flex items-center space-x-2">
-  //               <RadioGroupItem id="fpx" value="fpx" />
-  //               <Label htmlFor="fpx">FPX</Label>
-  //             </div>
-  //           </RadioGroup>
-  //         </div>
-  //       </div>
-  //     </div>
-  //   </div>
-  // );
 }
 
 function DeliveryAddressSection() {

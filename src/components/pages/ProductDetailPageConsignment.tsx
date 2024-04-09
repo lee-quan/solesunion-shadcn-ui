@@ -77,7 +77,7 @@ export default function ProductDetailPageConsignment({
       offer: { id: number; offer_price: number; ready_stock: number };
     }) {
       return (
-        <Button className="flex-1 flex-col h-20 p-0" variant="outline">
+        <Button className="flex-1 flex-col h-20 p-0 w-full" variant="outline">
           <Link
             className="w-full"
             href={`/checkout?q=${encrypt(
@@ -88,7 +88,7 @@ export default function ProductDetailPageConsignment({
           >
             <p className="uppercase text-xs font-bold">Instant Delivery</p>
             <p className="text-lg font-bold">RM {price(offer.offer_price)}</p>
-            <span className="flex items-center text-xs">
+            <span className="flex items-center text-xs justify-center">
               <PackageIcon className="h-4 w-4 mr-2" />{" "}
               <p className="font-light">2-3 days delivery</p>
             </span>

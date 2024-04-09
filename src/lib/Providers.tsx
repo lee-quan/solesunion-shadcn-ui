@@ -1,5 +1,5 @@
 import { ApolloWrapper } from "./graphql/apollo-wrapper";
-import { getServerSession } from "next-auth";
+import { getServerSession } from "next-auth/next";
 import SessionProvider from "./nextAuth/SessionProvider";
 
 export default async function Providers({

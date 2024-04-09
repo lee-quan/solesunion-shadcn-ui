@@ -24,6 +24,48 @@ interface AddressType {
   mobile: string;
 }
 
+const paymentMethods: {
+  id: "eghl" | "stripe" | "atome";
+  name: string;
+  description: string;
+  logo: string;
+  paymentGateway: "eGHL" | "Stripe" | "Atome";
+}[] = [
+  {
+    id: "eghl",
+    name: "e-Wallet, Online Banking",
+    description: "Fast and secure online payment",
+    logo: "/images/logo-eghl.png",
+    paymentGateway: "eGHL",
+  },
+  {
+    id: "stripe",
+    name: "Credit/Debit Card",
+    description: "Safe and reliable payment gateway (Stripe)",
+    logo: "/images/logo-stripe.png",
+    paymentGateway: "Stripe",
+  },
+  {
+    id: "atome",
+    name: "0% interest, Pay later in  3 Installments, due monthly",
+    description: "Flexible payment with 0% interest (Atome)",
+    logo: "/images/logo-atome.png",
+    paymentGateway: "Atome",
+  },
+];
+
+const initialAddress: AddressType = {
+  id: 0,
+  name: "",
+  address_type: "new",
+  address_1: "",
+  address_2: "",
+  pincode: "",
+  city: "",
+  country: "",
+  state: "",
+  mobile: "",
+};
 export default function OrderProcessingInformation() {
   return (
     <>
@@ -85,42 +127,9 @@ function FullfillmentMethodSection() {
 
 function PaymentMethodSection() {
   const [billingAddress, setBillingAddress] = useState({
-    eghl: {
-      id: 0,
-      name: "",
-      address_type: "new",
-      address_1: "",
-      address_2: "",
-      pincode: "",
-      city: "",
-      country: "",
-      state: "",
-      mobile: "",
-    },
-    stripe: {
-      id: 0,
-      name: "",
-      address_type: "new",
-      address_1: "",
-      address_2: "",
-      pincode: "",
-      city: "",
-      country: "",
-      state: "",
-      mobile: "",
-    },
-    atome: {
-      id: 0,
-      name: "",
-      address_type: "new",
-      address_1: "",
-      address_2: "",
-      pincode: "",
-      city: "",
-      country: "",
-      state: "",
-      mobile: "",
-    },
+    eghl: initialAddress,
+    stripe: initialAddress,
+    atome: initialAddress,
   });
   const [showBillingAddressForm, setShowBillingAddressForm] = useState<{
     eghl: boolean;
@@ -221,36 +230,6 @@ function PaymentMethodSection() {
     </div>
   );
 }
-
-const paymentMethods: {
-  id: "eghl" | "stripe" | "atome";
-  name: string;
-  description: string;
-  logo: string;
-  paymentGateway: "eGHL" | "Stripe" | "Atome";
-}[] = [
-  {
-    id: "eghl",
-    name: "e-Wallet, Online Banking",
-    description: "Fast and secure online payment",
-    logo: "/images/logo-eghl.png",
-    paymentGateway: "eGHL",
-  },
-  {
-    id: "stripe",
-    name: "Credit/Debit Card",
-    description: "Safe and reliable payment gateway (Stripe)",
-    logo: "/images/logo-stripe.png",
-    paymentGateway: "Stripe",
-  },
-  {
-    id: "atome",
-    name: "0% interest, Pay later in  3 Installments, due monthly",
-    description: "Flexible payment with 0% interest (Atome)",
-    logo: "/images/logo-atome.png",
-    paymentGateway: "Atome",
-  },
-];
 
 function AddressForm({
   address,

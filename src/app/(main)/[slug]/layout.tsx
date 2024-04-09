@@ -1,7 +1,7 @@
 import { CLOUDFLARE_URL } from "@/lib/constants";
 import { makeClient } from "@/lib/graphql/client";
 import { GET_PRODUCT } from "@/lib/graphql/queries/productQueries";
-import { getServerSession } from "next-auth";
+import { getServerSession } from "next-auth/next";
 
 export default async function ProductPageLayout({
   params,
