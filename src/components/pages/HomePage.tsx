@@ -6,6 +6,7 @@ import ProductCarousel from "@/components/carousel/ProductCarousel";
 import { Button } from "@/components/ui/button";
 import BestSellerCarousel from "@/components/carousel/BestSellerCarousel";
 import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 export default function HomePage({
   data,
@@ -79,7 +80,14 @@ export default function HomePage({
     };
   };
 }) {
-  const [activeCategory, setActiveCategory] = useState("apparels");
+  const [activeCategory, setActiveCategory] = useState(
+    localStorage.getItem("homeCategory") || "sneakers"
+  );
+
+  const handleCategoryChange = (category: string) => {
+    setActiveCategory(category);
+    localStorage.setItem("homeCategory", category);
+  };
 
   const categoryContent = (category: string) => {
     switch (category) {
@@ -175,9 +183,24 @@ export default function HomePage({
   };
 
   return (
-    <div>
+    <>
+      <div className="absolute h-full z-50">
+        <Button
+          className="sticky top-1/2 h-20 w-6 rounded-l-none md:hidden"
+          style={{
+            writingMode: "vertical-rl",
+          }}
+          onClick={() => {
+            handleCategoryChange(
+              activeCategory === "sneakers" ? "apparels" : "sneakers"
+            );
+          }}
+        >
+          {activeCategory === "sneakers" ? "Apparels" : "Sneakers"}
+        </Button>
+      </div>
       <LandingPageHero />
-      <section className="w-full py-10">
+      <section className="w-full py-10 hidden md:block">
         <div className="container px-4 md:px-6">
           <span className="text-3xl font-bold tracking-tighter md:text-4xl/tight">
             Shop by Category
@@ -186,12 +209,12 @@ export default function HomePage({
             <Button
               className="w-full shadow p-8 text-lg font-bold text-center"
               variant="secondary"
-              onClick={() => setActiveCategory("sneakers")}
+              onClick={() => handleCategoryChange("sneakers")}
             >
               Sneakers
             </Button>
             <Button
-              onClick={() => setActiveCategory("apparels")}
+              onClick={() => handleCategoryChange("apparels")}
               className="w-full shadow p-8 text-lg font-bold text-center"
               variant="secondary"
             >
@@ -205,6 +228,6 @@ export default function HomePage({
         Our Lovely Customers
       </h2>
       <CustomerCarousel />
-    </div>
+    </>
   );
 }

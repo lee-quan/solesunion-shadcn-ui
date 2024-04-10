@@ -29,6 +29,11 @@ const NavigationLinks = [
   //     auth: false,
   // },
   {
+    title: "Browse",
+    href: "/browse",
+    auth: false,
+  },
+  {
     title: "Profile",
     href: "/profile",
     auth: true,

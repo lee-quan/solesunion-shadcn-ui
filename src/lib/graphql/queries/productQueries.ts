@@ -130,3 +130,42 @@ export const GET_LOWEST_ACTIVE_OFFER_AND_LAST_SALE = gql`
     }
   }
 `;
+
+export const GET_BRANDS_AND_SIZES_FOR_BROWSE_PAGE = gql`
+  query GetBrandsAndSizesForBrowsePage($category: String) {
+    brandAndSize(category: $category) {
+      brands
+      sizes
+    }
+  }
+`;
+
+export const GET_PRODUCTS_FOR_BROWSE_PAGE = gql`
+  query GetProductsForBrowsePage(
+    $category: String
+    $brands: [String]
+    $sizes: [String]
+    $page: Int
+  ) {
+    browseProduct(
+      category: $category
+      brands: $brands
+      sizes: $sizes
+      page: $page
+    ) {
+      data {
+        product_title
+        image_file
+        slug
+        lowest_offer
+      }
+      total
+      per_page
+      current_page
+      from
+      to
+      last_page
+      has_more_pages
+    }
+  }
+`;
