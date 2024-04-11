@@ -2,7 +2,6 @@
 const nextConfig = {
   reactStrictMode: false,
   swcMinify: true,
-  output: "standalone",
   distDir: ".next",
   images: {
     remotePatterns: [
