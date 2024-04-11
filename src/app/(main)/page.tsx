@@ -9,5 +9,7 @@ export default async function Home() {
     query: GET_PRODUCT_FOR_HOME_PAGE,
   });
 
-  return <HomePage data={data} />;
+  // return <HomePage data={data} />;
+
+  return <>HomePage</>;
 }
