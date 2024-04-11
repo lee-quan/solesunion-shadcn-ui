@@ -9,7 +9,7 @@ import { decrypt, price2d } from "@/lib/utils";
 import { Form, Formik } from "formik";
 import { useSearchParams } from "next/navigation";
 import * as yup from "yup";
-export default function sellPage() {
+export default function ReviewListPage() {
   const searchParams = useSearchParams();
   const qParams = JSON.parse(decrypt(searchParams.get("q")) || "{}");
 
