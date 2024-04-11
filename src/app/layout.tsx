@@ -1,4 +1,4 @@
-import { Inter as FontSans } from "next/font/google";
+import { Inter as FontSans, Roboto_Mono } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import React from "react";
@@ -9,6 +9,11 @@ import { Toaster } from "@/components/ui/toaster";
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
+});
+
+const roboto = Roboto_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
 });
 
 export const metadata = {
@@ -28,7 +33,7 @@ export default function RootLayout({
       <body
         className={cn(
           "min-h-screen bg-background antialiased relative",
-          "font-PlexSans"
+          roboto.className
         )}
       >
         <Providers>

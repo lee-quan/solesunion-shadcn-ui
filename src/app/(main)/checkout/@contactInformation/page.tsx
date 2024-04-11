@@ -58,7 +58,7 @@ function DeliveryAddressSection() {
           data?.userDeliveryAddress?.country
         }`
       );
-  }, [data]);
+  }, [data, refetch, updateDeliveryAddress]);
 
   return (
     <div className="space-y-2">
