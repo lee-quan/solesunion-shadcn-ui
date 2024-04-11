@@ -13,7 +13,7 @@ export default async function Page({ searchParams }: { searchParams: any }) {
 
   const qParam = searchParams.q
     ? JSON.parse(decrypt(searchParams.q))
-    : { sizes: [], brands: [] };
+    : { sizes: [], brands: [], sortBy: "po.created_at desc" };
 
   const client = await useClient();
   const { data } = await client.query({
@@ -23,8 +23,11 @@ export default async function Page({ searchParams }: { searchParams: any }) {
       brands: qParam.brands,
       sizes: qParam.sizes,
       page: 1,
+      sortBy: qParam.sortBy,
     },
+    pollInterval: 0,
   });
+
 
   return (
     <>
