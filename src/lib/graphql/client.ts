@@ -8,12 +8,6 @@ import {
   from,
 } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
-import {
-  NextSSRApolloClient,
-  // NextSSRInMemoryCache,
-  SSRMultipartLink,
-} from "@apollo/experimental-nextjs-app-support/ssr";
-import { NextSSRInMemoryCache } from "@apollo/experimental-nextjs-app-support/ssr";
 import { getServerSession } from "next-auth/next";
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
