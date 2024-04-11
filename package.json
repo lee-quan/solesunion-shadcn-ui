@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "copy": "mv ./.next/static ./.next/standalone/; cp -r ./public ./.next/standalone/;",
+    "cleanall": "rm -r node_modules .next",
+    "cleanup": "rm -r node_modules"
   },
   "dependencies": {
     "@apollo/client": "^3.9.9",
