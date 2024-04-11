@@ -53,8 +53,6 @@ export function makeClient(session: any) {
 
   const link = from([errorLink, authLink, httpLink]);
   return new ApolloClient({
-    ssrMode: true,
-    // Instead of "createHttpLink" use SchemaLink here
     link: link,
     cache: new InMemoryCache(),
   });

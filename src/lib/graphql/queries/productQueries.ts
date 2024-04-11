@@ -146,12 +146,14 @@ export const GET_PRODUCTS_FOR_BROWSE_PAGE = gql`
     $brands: [String]
     $sizes: [String]
     $page: Int
+    $sortBy: String
   ) {
     browseProduct(
       category: $category
       brands: $brands
       sizes: $sizes
       page: $page
+      sort_by: $sortBy
     ) {
       data {
         product_title
