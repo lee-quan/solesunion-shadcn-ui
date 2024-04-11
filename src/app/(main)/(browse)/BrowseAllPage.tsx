@@ -38,6 +38,8 @@ export default function BrowseAllPage({ data }: { data: any }) {
     : { sizes: [], brands: [], sortBy: "po.created_at desc" };
 
   const [sortBy, setSortBy] = useState(qParam.sortBy);
+  const [open, setOpen] = useState(false);
+
   const handleSortChange = (value: string) => {
     return encrypt(
       JSON.stringify({
@@ -59,7 +61,7 @@ export default function BrowseAllPage({ data }: { data: any }) {
         </p>
         <div className="ml-auto flex items-center">
           <span className="text-xs font-bold">SORT</span>
-          <DropdownMenu>
+          <DropdownMenu open={open} onOpenChange={setOpen}>
             <DropdownMenuTrigger asChild>
               <Button
                 className="ml-3 shrink-0 font-light rounded-none shadow-none"
@@ -79,7 +81,10 @@ export default function BrowseAllPage({ data }: { data: any }) {
                     <DropdownMenuRadioItem
                       key={option.value}
                       value={option.value}
-                      onClick={() => setSortBy(option.value)}
+                      onClick={() => {
+                        setSortBy(option.value);
+                        setOpen(false);
+                      }}
                     >
                       <Link
                         href={`${pathname}?q=${handleSortChange(option.value)}`}
