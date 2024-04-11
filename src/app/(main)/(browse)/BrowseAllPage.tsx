@@ -9,10 +9,17 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { CLOUDFLARE_URL } from "@/lib/constants";
 import { decrypt, encrypt, price } from "@/lib/utils";
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 const OPTIONS = [
@@ -35,16 +42,28 @@ export default function BrowseAllPage({ data }: { data: any }) {
   const searchParams = useSearchParams();
   const qParam = searchParams.get("q")
     ? JSON.parse(decrypt(searchParams.get("q")))
-    : { sizes: [], brands: [], sortBy: "po.created_at desc" };
+    : { sizes: [], brands: [], sortBy: "po.created_at desc", page: 1 };
 
+  const router = useRouter();
   const [sortBy, setSortBy] = useState(qParam.sortBy);
   const [open, setOpen] = useState(false);
-
+  const [paginationData, setPaginationData] = useState<any>(data.browseProduct);
+  const [page, setPage] = useState(qParam.page);
   const handleSortChange = (value: string) => {
     return encrypt(
       JSON.stringify({
         ...qParam,
         sortBy: value,
+        page: 1,
+      })
+    );
+  };
+
+  const handlePageChange = (value: number) => {
+    return encrypt(
+      JSON.stringify({
+        ...qParam,
+        page: value,
       })
     );
   };
@@ -127,6 +146,64 @@ export default function BrowseAllPage({ data }: { data: any }) {
           </div>
         ))}
       </div>
+      <TablePagination
+        setPage={setPage}
+        pathname={pathname}
+        router={router}
+        handlePageChange={handlePageChange}
+        page={page}
+        last_page={paginationData.last_page}
+      />
     </>
+  );
+}
+
+function TablePagination({
+  setPage,
+  page,
+  last_page,
+  pathname,
+  router,
+  handlePageChange,
+}: any) {
+  return (
+    <Pagination>
+      <PaginationContent>
+        <PaginationItem>
+          <PaginationPrevious
+            href="#"
+            tabIndex={page <= 1 ? -1 : undefined}
+            className={page <= 1 ? "pointer-events-none opacity-50" : undefined}
+            onClick={() => {
+              if (page > 1) {
+                setPage(page - 1);
+                router.push(`${pathname}/?q=${handlePageChange(page - 1)}`);
+              }
+            }}
+          />
+        </PaginationItem>
+        <PaginationItem className="flex items-center">
+          <span className="mx-2 text-xs">
+            {page} of {last_page}
+          </span>
+        </PaginationItem>
+
+        <PaginationItem>
+          <PaginationNext
+            href="#"
+            tabIndex={page >= last_page ? -1 : undefined}
+            className={
+              page >= last_page ? "pointer-events-none opacity-50" : undefined
+            }
+            onClick={() => {
+              if (page < last_page) {
+                setPage(page + 1);
+                router.push(`${pathname}/?q=${handlePageChange(page + 1)}`);
+              }
+            }}
+          />
+        </PaginationItem>
+      </PaginationContent>
+    </Pagination>
   );
 }

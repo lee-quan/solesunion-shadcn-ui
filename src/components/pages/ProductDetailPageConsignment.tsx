@@ -90,7 +90,7 @@ export default function ProductDetailPageConsignment({
             <p className="text-lg font-bold">RM {price(offer.offer_price)}</p>
             <span className="flex items-center text-xs justify-center">
               <PackageIcon className="h-4 w-4 mr-2" />{" "}
-              <p className="font-light">2-3 days delivery</p>
+              <p className="font-light">1-2 days delivery</p>
             </span>
           </Link>
         </Button>

@@ -87,7 +87,7 @@ export default function ProductDetailPageDirectListing({
             <p className="text-lg font-bold">RM {price(offer.offer_price)}</p>
             <span className="flex items-center justify-center text-xs">
               <PackageIcon className="h-4 w-4 mr-2" />{" "}
-              <p className="font-light">2-3 days delivery</p>
+              <p className="font-light">1-2 days delivery</p>
             </span>
           </Link>
         </Button>
@@ -113,7 +113,7 @@ export default function ProductDetailPageDirectListing({
             <p className="text-lg font-bold">RM {price(offer.offer_price)}</p>
             <span className="flex items-center justify-center text-xs">
               <PackageIcon className="h-4 w-4 mr-2" />{" "}
-              <p className="font-light">5-9 days delivery</p>
+              <p className="font-light">3-5 days delivery</p>
             </span>
           </Link>
         </Button>

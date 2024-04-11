@@ -13,21 +13,20 @@ export default async function Page({ searchParams }: { searchParams: any }) {
 
   const qParam = searchParams.q
     ? JSON.parse(decrypt(searchParams.q))
-    : { sizes: [], brands: [], sortBy: "po.created_at desc" };
+    : { sizes: [], brands: [], sortBy: "po.created_at desc", page: 1 };
 
   const client = await useClient();
   const { data } = await client.query({
     query: GET_PRODUCTS_FOR_BROWSE_PAGE,
     variables: {
-      category: pathname.split("/").pop(),
-      brands: qParam.brands,
-      sizes: qParam.sizes,
-      page: 1,
-      sortBy: qParam.sortBy,
+      category: pathname.split("/").pop() || "",
+      brands: qParam.brands || [],
+      sizes: qParam.sizes || [],
+      page: qParam.page || 1,
+      sortBy: qParam.sortBy || "po.created_at desc",
     },
     pollInterval: 0,
   });
-
 
   return (
     <>
