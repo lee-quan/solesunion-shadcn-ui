@@ -106,8 +106,13 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 export const authOptions: NextAuthOptions = {
   debug: true,
-  secret: "MGU01acgedw084FXqhAH3/zHMFdy0cvpBZgwQE41+48=",
   session: {},
+  logger: {
+    error: console.error,
+    warn: console.warn,
+    debug: console.log,
+    info: console.info,
+  },
   providers: [
     CredentialsProvider({
       name: "Email and Password",
@@ -188,6 +193,7 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
+  secret: "OM2aNLORR46RW/N8GE6+EdbY4u3dnF3eLENopihbUvo=",
   callbacks: {
     async jwt({
       token,
