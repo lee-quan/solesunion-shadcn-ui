@@ -19,6 +19,7 @@ export default function LoginPage() {
             className="mx-auto h-12 w-auto"
             src="/images/solesunion.png"
           />
+          debugv1
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             Sign in to your account
           </h2>
@@ -55,11 +56,11 @@ function LoginForm() {
       validationSchema={validationSchema}
       onSubmit={async (values, { setSubmitting }) => {
         console.log(values)
-        // const response = await signIn("credentials", {
-        //   redirect: false,
-        //   email: values.email,
-        //   password: values.password,
-        // });
+        const response = await signIn("credentials", {
+          redirect: false,
+          email: values.email,
+          password: values.password,
+        });
         // console.log(response);
       }}
     >

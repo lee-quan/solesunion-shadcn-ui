@@ -112,65 +112,74 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: "Email and Password",
       credentials: {
-        email: { label: "Email", type: "email", placeholder: "Your Email" },
+        email: { label: "Email", type: "email" },
+        username: { label: "Username", type: "text" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        let headers = null;
-        const res = await fetch(
-          `${process.env.FRONTEND_URL}/api/sanctum/csrf-token`
-        );
-        if (res.ok) {
-          const header = await res.json();
-          headers = new Headers({
-            ...header,
-          });
-        }
-        const data = {
-          email: credentials?.email,
-          password: credentials?.password,
+        return {
+          id: "1",
+          name: "Lee Quan-|-405|v8UtMeI2tzXF6Qdgpy7oo5iKY8wxcjjT6LpNsV6Y71962a52",
+          accessToken: "405|v8UtMeI2tzXF6Qdgpy7oo5iKY8wxcjjT6LpNsV6Y71962a52",
         };
-        const options = {
-          method: "POST",
-          headers,
-          body: JSON.stringify(data),
-        };
+        // let headers = null;
+        // const res = await fetch(
+        //   `${process.env.FRONTEND_URL}/api/sanctum/csrf-token`
+        // );
+        // if (res.ok) {
+        //   const header = await res.json();
+        //   headers = new Headers({
+        //     ...header,
+        //   });
+        // }
+        // const data = {
+        //   email: credentials?.email,
+        //   password: credentials?.password,
+        // };
+        // const options = {
+        //   method: "POST",
+        //   headers,
+        //   body: JSON.stringify(data),
+        // };
 
-        try {
-          const response = await fetch("https://dev-api.solesunion.com/auth/login", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-          });
-          if (response.ok) {
-            const responseData = await response.json();
+        // try {
+        //   const response = await fetch(
+        //     "https://dev-api.solesunion.com/auth/login",
+        //     {
+        //       method: "POST",
+        //       headers: {
+        //         "Content-Type": "application/json",
+        //       },
+        //       body: JSON.stringify(data),
+        //     }
+        //   );
+        //   if (response.ok) {
+        //     const responseData = await response.json();
 
-            const user = {
-              id: responseData.user.id,
-              name: `${responseData.user.name}-|-${responseData.access_token}`,
-              email: responseData.user.email,
-              accessToken: responseData.access_token,
-              account: {
-                provider: "email",
-                type: "credentials",
-              },
-            };
-            return {
-              ...user,
-              accessToken: responseData.access_token,
-              account: {
-                provider: "email",
-                type: "credentials",
-              },
-            };
-          } else {
-            throw new Error("HTTP error! Status:" + response.status);
-          }
-        } catch (error) {
-          throw new Error("HTTP error! Status:" + error);
-        }
+        //     const user = {
+        //       id: responseData.user.id,
+        //       name: `${responseData.user.name}-|-${responseData.access_token}`,
+        //       email: responseData.user.email,
+        //       accessToken: responseData.access_token,
+        //       account: {
+        //         provider: "email",
+        //         type: "credentials",
+        //       },
+        //     };
+        //     return {
+        //       ...user,
+        //       accessToken: responseData.access_token,
+        //       account: {
+        //         provider: "email",
+        //         type: "credentials",
+        //       },
+        //     };
+        //   } else {
+        //     throw new Error("HTTP error! Status:" + response.status);
+        //   }
+        // } catch (error) {
+        //   throw new Error("HTTP error! Status:" + error);
+        // }
       },
     }),
   ],
