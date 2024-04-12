@@ -6,11 +6,6 @@ import Providers from "@/lib/Providers";
 import NextTopLoader from "nextjs-toploader";
 import { Toaster } from "@/components/ui/toaster";
 
-const fontSans = FontSans({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
-
 const roboto = Roboto_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
