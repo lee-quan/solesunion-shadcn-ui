@@ -54,24 +54,14 @@ function LoginForm() {
       }}
       validationSchema={validationSchema}
       onSubmit={async (values, { setSubmitting }) => {
-        await signIn("credentials", {
+        alert("CLICKed");
+        const response = await signIn("credentials", {
           // callbackUrl: "/",
           redirect: false,
           email: values.email,
           password: values.password,
-        }).then((response: any) => {
-          console.log(response);
-          if (response.ok) {
-            // router.push("/");
-            // console.log(response);
-            // console.log(response);
-            // window.location.reload();
-            // reload the page, and middleware will redirect to the /
-          } else {
-            console.log("error", response);
-            setError(response.error);
-          }
         });
+        console.log(response);
       }}
     >
       {({ isSubmitting }) => {
