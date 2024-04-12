@@ -54,14 +54,13 @@ function LoginForm() {
       }}
       validationSchema={validationSchema}
       onSubmit={async (values, { setSubmitting }) => {
-        alert("CLICKed");
-        const response = await signIn("credentials", {
-          // callbackUrl: "/",
-          redirect: false,
-          email: values.email,
-          password: values.password,
-        });
-        console.log(response);
+        console.log(values)
+        // const response = await signIn("credentials", {
+        //   redirect: false,
+        //   email: values.email,
+        //   password: values.password,
+        // });
+        // console.log(response);
       }}
     >
       {({ isSubmitting }) => {
