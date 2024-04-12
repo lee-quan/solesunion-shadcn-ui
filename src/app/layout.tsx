@@ -25,7 +25,6 @@ export default async function RootLayout({
   children: React.ReactNode;
   test: any;
 }) {
-  console.log(process.env.NEXTAUTH_SECRET);
   const session = await getServerSession();
 
   return (
