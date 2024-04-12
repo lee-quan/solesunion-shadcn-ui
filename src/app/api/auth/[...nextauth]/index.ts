@@ -103,22 +103,10 @@
 
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import log from "logging-service";
 
 export const authOptions: NextAuthOptions = {
   debug: true,
-  logger: {
-    error(code, metadata) {
-      log.error(code, metadata);
-    },
-    warn(code) {
-      log.warn(code);
-    },
-    debug(code, metadata) {
-      log.debug(code, metadata);
-    },
-  },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: "MGU01acgedw084FXqhAH3/zHMFdy0cvpBZgwQE41+48=",
   session: {},
   providers: [
     CredentialsProvider({
