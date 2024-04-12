@@ -19,7 +19,7 @@ export default function LoginPage() {
             className="mx-auto h-12 w-auto"
             src="/images/solesunion.png"
           />
-          debugv2
+          add log
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             Sign in to your account
           </h2>

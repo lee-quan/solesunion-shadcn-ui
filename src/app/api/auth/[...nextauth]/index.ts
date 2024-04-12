@@ -103,9 +103,21 @@
 
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import log from "logging-service";
 
 export const authOptions: NextAuthOptions = {
   debug: true,
+  logger: {
+    error(code, metadata) {
+      log.error(code, metadata);
+    },
+    warn(code) {
+      log.warn(code);
+    },
+    debug(code, metadata) {
+      log.debug(code, metadata);
+    },
+  },
   secret: process.env.NEXTAUTH_SECRET,
   session: {},
   providers: [
@@ -121,6 +133,11 @@ export const authOptions: NextAuthOptions = {
           id: "1",
           name: "Lee Quan-|-405|v8UtMeI2tzXF6Qdgpy7oo5iKY8wxcjjT6LpNsV6Y71962a52",
           accessToken: "405|v8UtMeI2tzXF6Qdgpy7oo5iKY8wxcjjT6LpNsV6Y71962a52",
+          account: {
+            provider: "email",
+            type: "credentials",
+          },
+          email: "",
         };
         // let headers = null;
         // const res = await fetch(
