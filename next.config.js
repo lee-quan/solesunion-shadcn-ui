@@ -22,8 +22,8 @@ const nextConfig = {
     ),
   },
   env: {
-    NEXTAUTH_SECRET: process.env.NEXT_PUBLIC_NEXTAUTH_SECRET,
-    NEXTAUTH_URL: process.env.NEXT_PUBLIC_NEXTAUTH_URL,
+    NEXTAUTH_SECRET: "ZylHDU+ysoMlhKdLlZh+6KYuWXR3RbDYl2OGQ74PYw0=",
+    NEXTAUTH_URL: "https://staging.solesunion.com",
     BACKEND_URL: process.env.NEXT_PUBLIC_BACKEND_URL,
     FRONTEND_ENV: process.env.NEXT_PUBLIC_ENV,
     FRONTEND_URL: process.env.NEXT_PUBLIC_NEXTAUTH_URL,
