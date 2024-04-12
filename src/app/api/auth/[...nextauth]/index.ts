@@ -1,4 +1,4 @@
-import { BACKEND_URL, NEXTAUTH_SECRET } from "@/lib/constants";
+import { BACKEND_URL } from "@/lib/constants";
 import { LOGIN_MUTATION } from "@/lib/graphql/mutations/authMutations";
 import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
 import { NextAuthOptions } from "next-auth";
@@ -6,7 +6,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 export const authOptions: NextAuthOptions = {
   debug: true,
-  secret: NEXTAUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET,
   session: {},
   providers: [
     CredentialsProvider({
