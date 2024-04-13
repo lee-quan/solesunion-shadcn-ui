@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import TestAuthPage from "./testAuthPage";
+import TestAuthPage from "./TestAuthPage";
 
 export default async function Page() {
   const session = await auth();
