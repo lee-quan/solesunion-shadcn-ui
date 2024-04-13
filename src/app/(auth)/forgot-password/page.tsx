@@ -2,7 +2,6 @@
 
 import {
     CardTitle,
-    CardDescription,
     CardHeader,
     CardContent,
     Card,
@@ -10,10 +9,8 @@ import {
 } from "@/components/ui/card";
 
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import useMutation from "@/hooks/useMutation";
 import {
-    FORGOT_PASSWORD_MUTATION,
     RESET_PASSWORD_MUTATION,
 } from "@/lib/graphql/mutations/authMutations";
 import { Form, Formik } from "formik";
@@ -24,7 +21,6 @@ import { useSearchParams } from "next/navigation";
 export default function ResetPasswordPage() {
     const [resetPassword] = useMutation(RESET_PASSWORD_MUTATION);
     const searchParams = useSearchParams();
-    const token = searchParams.get("token");
 
     const validationSchema = Yup.object().shape({
         password: Yup.string().required("Password is required"),
