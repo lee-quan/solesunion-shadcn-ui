@@ -12,6 +12,9 @@
     "cleanup": "rm -r node_modules"
   },
   "dependencies": {
+    "@apollo/client": "^3.9.11",
+    "@apollo/experimental-nextjs-app-support": "^0.10.0",
+    "graphql": "^16.8.1",
     "next": "14.2.1",
     "next-auth": "^5.0.0-beta.16",
     "react": "^18",
