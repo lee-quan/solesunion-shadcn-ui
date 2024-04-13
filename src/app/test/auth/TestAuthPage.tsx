@@ -6,12 +6,14 @@ import { useState } from "react";
 export default function TestAuthPage() {
   const [email, setEmail] = useState("a@gmail.com");
   const [password, setPassword] = useState("123");
+  console.log(process.env.FRONTEND_URL);
+  console.log(process.env.BACKEND_URL);
   return (
     <form
       action={async () => {
         const response = await signIn("credentials", {
-          //   redirect: false,
-          callbackUrl: "/test/auth",
+          redirect: false,
+          // callbackUrl: "/test/auth",
           email,
           password,
         });
@@ -37,16 +39,6 @@ export default function TestAuthPage() {
         />
       </label>
       <button type="submit">Sign In</button>
-
-      <button
-        onClick={() => {
-          signOut({
-            callbackUrl: "/test/auth",
-          });
-        }}
-      >
-        Sign Out
-      </button>
     </form>
   );
 }
