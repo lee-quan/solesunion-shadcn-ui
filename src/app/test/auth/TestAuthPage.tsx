@@ -1,6 +1,6 @@
 "use client";
 
-import { signIn } from "next-auth/react";
+import { signIn, signOut } from "next-auth/react";
 import { useState } from "react";
 
 export default function TestAuthPage() {
@@ -10,7 +10,7 @@ export default function TestAuthPage() {
     <form
       action={async () => {
         const response = await signIn("credentials", {
-        //   redirect: false,
+          //   redirect: false,
           callbackUrl: "/test/auth",
           email,
           password,
@@ -37,6 +37,16 @@ export default function TestAuthPage() {
         />
       </label>
       <button type="submit">Sign In</button>
+
+      <button
+        onClick={() => {
+          signOut({
+            callbackUrl: "/test/auth",
+          });
+        }}
+      >
+        Sign Out
+      </button>
     </form>
   );
 }
