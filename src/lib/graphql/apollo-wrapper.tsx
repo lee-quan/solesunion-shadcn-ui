@@ -12,10 +12,10 @@ import { BACKEND_URL } from "../constants";
 import { useAuthSession } from "../auth/useAuthSession";
 import { useMemo } from "react";
 import { setContext } from "@apollo/client/link/context";
+import { useSession } from "next-auth/react";
 
 function makeClient(session: any) {
   let uri = `${BACKEND_URL}/graphql${session ? "/authenticated" : ""}`;
-
   const httpLink = new HttpLink({
     uri,
     headers: {
@@ -34,20 +34,36 @@ function makeClient(session: any) {
     if (networkError) console.log(`[Network error]: ${networkError}`);
   });
 
-  const authLink = setContext((_, { headers }) => {
-    if (session) {
-      const token = session?.user?.token?.access_token;
-      return {
-        headers: {
-          ...headers,
-          Authorization: `Bearer ${token}`,
-        },
-      };
-    } else {
-      return { headers };
-    }
-  });
+  if (session) {
+    const authLink = setContext((_, { headers }) => {
+      if (session) {
+        const token = session?.user?.token?.access_token;
+        return {
+          headers: {
+            ...headers,
+            Authorization: `Bearer ${token}`,
+          },
+        };
+      } else {
+        return { headers };
+      }
+    });
 
+    return new NextSSRApolloClient({
+      cache: new NextSSRInMemoryCache(),
+      link:
+        typeof window === "undefined"
+          ? ApolloLink.from([
+              errorLink,
+              new SSRMultipartLink({
+                stripDefer: true,
+              }),
+              authLink,
+              httpLink,
+            ])
+          : from([errorLink, authLink, httpLink]),
+    });
+  }
   return new NextSSRApolloClient({
     cache: new NextSSRInMemoryCache(),
     link:
@@ -57,19 +73,15 @@ function makeClient(session: any) {
             new SSRMultipartLink({
               stripDefer: true,
             }),
-            authLink,
             httpLink,
           ])
-        : from([errorLink, authLink, httpLink]),
+        : from([errorLink, httpLink]),
   });
 }
 
 export function ApolloWrapper({ children }: React.PropsWithChildren) {
-  const session = useAuthSession();
-
-  const client = useMemo(() => {
-    return makeClient(session);
-  }, [session]);
+  const { data } = useSession();
+  const client = useMemo(() => makeClient(data), [data]);
   return (
     <ApolloNextAppProvider makeClient={() => client}>
       {children}

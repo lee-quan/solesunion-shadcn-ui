@@ -74,7 +74,7 @@ function LoginForm() {
           })
             .then((response) => {
               if (!!!response?.error) {
-                router.push("/");
+                window.location.reload();
               } else {
                 throw new Error();
               }

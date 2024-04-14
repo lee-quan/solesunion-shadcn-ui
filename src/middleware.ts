@@ -1,15 +1,21 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
-export function middleware(request: Request) {
-
-  // Store current request url in a custom header, which you can read later
+export function middleware(request: NextRequest) {
   const requestHeaders = new Headers(request.headers);
-  requestHeaders.set('x-url', request.url);
+  requestHeaders.set("x-url", request.url);
 
-  return NextResponse.next({
-    request: {
-      // Apply new request headers
-      headers: requestHeaders,
-    }
-  });
+  if (
+    request.nextUrl.pathname.startsWith("/browse") ||
+    request.nextUrl.pathname.startsWith("/sneakers") ||
+    request.nextUrl.pathname.startsWith("/apparels")
+  ) {
+    return NextResponse.next({
+      request: {
+        headers: requestHeaders,
+      },
+    });
+  }
+
+
 }
