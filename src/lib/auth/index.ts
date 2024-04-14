@@ -9,6 +9,8 @@ import {
   useQuery,
 } from "@apollo/client";
 import { BACKEND_URL } from "../constants";
+import { cookies } from "next/headers";
+import { encrypt } from "../utils";
 
 declare module "next-auth" {
   interface Session {
@@ -64,8 +66,8 @@ export const { handlers, auth, signOut } = NextAuth({
             },
           });
           if (data.LoginMutation.success) {
-            console.log(data.LoginMutation);
             const { access_token, user } = data.LoginMutation;
+            cookies().set("s_v1", encrypt(access_token));
             return {
               id: user.id,
               name: user.name,
@@ -73,33 +75,32 @@ export const { handlers, auth, signOut } = NextAuth({
               email: user.email,
             };
           } else {
-            throw new Error(data.LoginMutation.message);
+            return null;
           }
         } catch (e) {
-          console.log(e);
-          throw new Error("Invalid credentials");
+          return null;
         }
-
-        return {
-          id: "1",
-          name: "John Doe",
-          access_token: "123",
-          email: "credentials.email",
-          image: "https://www.gravatar.com/avatar/",
-          profile: { name: "John Doe" },
-        };
       },
     }),
   ],
   callbacks: {
+    authorized({ auth }) {
+      return false;
+    },
+    signIn({ credentials }) {
+      console.log(credentials, "credentials");
+      return true;
+    },
     session({ session, token, user }) {
       return {
         ...session,
         user: {
           ...session.user,
-          access_token: token.access_token,
-          expires_at: token.expires_at,
-          refresh_token: token.refresh_token,
+          token: {
+            access_token: token.access_token,
+            expires_at: token.expires_at,
+            refresh_token: token.refresh_token,
+          },
         },
       };
     },
@@ -119,6 +120,7 @@ export const { handlers, auth, signOut } = NextAuth({
         };
       }
 
+      // console.log(token);
       return token;
     },
   },

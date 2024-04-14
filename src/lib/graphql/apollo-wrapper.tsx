@@ -7,10 +7,19 @@ import {
   NextSSRInMemoryCache,
   SSRMultipartLink,
 } from "@apollo/experimental-nextjs-app-support/ssr";
+import { BACKEND_URL } from "../constants";
+import { useAuthSession } from "../auth/useAuthSession";
+import { useMemo } from "react";
 
-function makeClient() {
+function makeClient(session: any) {
+  let uri = `${BACKEND_URL}/graphql${session ? "/a_v1" : ""}`;
+
+  console.log(uri);
   const httpLink = new HttpLink({
-    uri: "put your api endpoint here",
+    uri,
+    headers: {
+      Authorization: session ? `Bearer ${session.user.token.access_token}` : "",
+    },
   });
 
   return new NextSSRApolloClient({
@@ -28,9 +37,17 @@ function makeClient() {
 }
 
 export function ApolloWrapper({ children }: React.PropsWithChildren) {
+  const session = useAuthSession();
+
+  const client = useMemo(() => makeClient(session), [session]);
   return (
-    <ApolloNextAppProvider makeClient={makeClient}>
+    <ApolloNextAppProvider makeClient={() => client}>
       {children}
     </ApolloNextAppProvider>
   );
+}
+function setContext(
+  arg0: (_: any, { headers }: { headers: any }) => { headers: any }
+) {
+  throw new Error("Function not implemented.");
 }

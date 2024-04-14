@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import BestSellerCarousel from "@/components/carousel/BestSellerCarousel";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { useAuthSession } from "@/lib/auth/useAuthSession";
 
 export default function HomePage({
   data,
@@ -86,12 +87,14 @@ export default function HomePage({
     setActiveCategory(category);
   };
 
+  const session = useAuthSession();
+
   const categoryContent = (category: string) => {
     switch (category) {
       case "sneakers":
-        // Render sneakers content
         return (
           <>
+            <p>{JSON.stringify(session, null, 2)}</p>
             <section className="w-full py-12">
               <div className="container px-4 md:px-6">
                 <div className="flex flex-col items-center space-y-4 text-center">

@@ -73,10 +73,14 @@ function LoginForm() {
             password: values.password,
           })
             .then((response) => {
-              console.log(response);
+              if (!!!response?.error) {
+                router.push("/");
+              } else {
+                throw new Error();
+              }
             })
             .catch((e) => {
-              console.log(e);
+              setError("Invalid Credentials");
             });
         } catch (e) {}
       }}

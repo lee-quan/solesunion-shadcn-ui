@@ -1,5 +1,4 @@
-// import Image from "next/image";
-
+import HomePage from "@/components/pages/HomePage";
 import { auth } from "@/lib/auth";
 import { getClient } from "@/lib/graphql/apollo-client";
 import { GET_PRODUCT_FOR_HOME_PAGE } from "@/lib/graphql/queries/productQueries";
@@ -16,9 +15,7 @@ export default async function UserAvatar() {
 
   return (
     <div>
-      <p>{session?.user?.email}</p>
-      <p>{data && JSON.stringify(data)}</p>
-      {/* <button onClick={() => signOut()}>SIGNOUT</button> */}
+      <HomePage data={data} />
     </div>
   );
 }
