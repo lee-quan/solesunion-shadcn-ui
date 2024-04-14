@@ -83,15 +83,15 @@ export default function SellPage() {
                 <strong>Online Listing:</strong>
               </p>
               <p>
-                List your sneakers online and keep them until they're sold. Once
+                List your sneakers online and keep them until they&apos;re sold. Once
                 sold, ship them to us for authentication. After verification,
-                we'll ship them to the buyer.
+                we&apos;ll ship them to the buyer.
               </p>
               <p>
                 <strong>Consignment:</strong>
               </p>
               <p>
-                Ship your sneakers to us right away. We'll authenticate and
+                Ship your sneakers to us right away. We&apos;ll authenticate and
                 store them. When they sell, we ship directly to the buyer,
                 streamlining the process for you.
               </p>

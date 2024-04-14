@@ -192,7 +192,7 @@ function PaymentMethodSection() {
 
               <div className="flex-col hidden peer-aria-checked:flex gap-5">
                 <p className="text-xs text-gray-500">
-                  After clicking "Pay with {method.paymentGateway}", you will be
+                  After clicking &quot;Pay with {method.paymentGateway}&quot;, you will be
                   redirected to eGHL to complete the purchase securely.
                 </p>
                 <div className="flex flex-col items-start space-x-2">
