@@ -8,7 +8,7 @@ const nextConfig = {
     FRONTEND_URL: process.env.FRONTEND_URL,
     BACKEND_URL: process.env.BACKEND_URL,
   },
-  reactStrictMode: true,
+  reactStrictMode: false,
   swcMinify: true,
   output: "standalone",
   distDir: ".next",

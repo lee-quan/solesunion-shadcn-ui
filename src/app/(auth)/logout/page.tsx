@@ -22,7 +22,7 @@ export default function Component() {
                         className="w-1/2"
                         onClick={() => {
                             signOut({
-                                callbackUrl: "/",
+                                callbackUrl: "/login",
                             });
                         }}
                     >

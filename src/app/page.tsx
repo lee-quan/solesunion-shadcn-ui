@@ -1,7 +1,7 @@
 // import Image from "next/image";
 
-import { auth } from "@/auth";
-import { getClient } from "@/lib/graphql/client";
+import { auth } from "@/lib/auth";
+import { getClient } from "@/lib/graphql/apollo-client";
 import { GET_PRODUCT_FOR_HOME_PAGE } from "@/lib/graphql/queries/productQueries";
 
 export default async function UserAvatar() {
@@ -12,7 +12,6 @@ export default async function UserAvatar() {
     query: GET_PRODUCT_FOR_HOME_PAGE,
   });
 
-  console.log(data);
   if (!session?.user) return <>nope</>;
 
   return (

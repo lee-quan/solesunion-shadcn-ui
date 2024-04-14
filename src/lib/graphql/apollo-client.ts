@@ -10,3 +10,12 @@ export const { getClient } = registerApolloClient(() => {
     }),
   });
 });
+
+// export const getClient = () => {
+//   return new ApolloClient({
+//     cache: new InMemoryCache(),
+//     link: new HttpLink({
+//       uri: `${BACKEND_URL}/graphql`,
+//     }),
+//   });
+// };

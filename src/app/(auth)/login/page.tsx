@@ -8,33 +8,45 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { FormField } from "@/components/form-field";
 import { useRouter } from "next/navigation";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
+    <main className="flex flex-col items-center justify-center min-h-screen bg-gray-100 px-4 sm:px-6 lg:px-8">
+      <Card className="w-full max-w-md mx-auto">
+        <CardHeader className="space-y-1">
           <img
-            alt="Marketplace Logo"
-            className="mx-auto h-12 w-auto"
             src="/images/solesunion.png"
+            alt="Soles Union Logo"
+            className="mx-auto w-auto"
           />
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <CardTitle className="text-2xl font-bold">
             Sign in to your account
-          </h2>
-        </div>
-        <LoginForm />
-        <div className="!mt-2 text-center text-sm font-light">
-          Don&apos;t have an account?{" "}
-          <Link
-            className="font-medium text-gray-900 underline hover:text-gray-500 "
-            href="/signup"
-          >
-            Sign up
-          </Link>
-        </div>
-      </div>
-    </div>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <LoginForm />
+        </CardContent>
+        <CardFooter>
+          <div className="!mt-2 text-center text-sm font-light">
+            Don&apos;t have an account?{" "}
+            <Link
+              className="font-medium text-gray-900 underline hover:text-gray-500 "
+              href="/signup"
+            >
+              Sign up
+            </Link>
+          </div>
+        </CardFooter>
+      </Card>
+    </main>
   );
 }
 
@@ -54,7 +66,6 @@ function LoginForm() {
       }}
       validationSchema={validationSchema}
       onSubmit={async (values, { setSubmitting }) => {
-        console.log(values);
         try {
           await signIn("credentials", {
             redirect: false,
@@ -67,16 +78,13 @@ function LoginForm() {
             .catch((e) => {
               console.log(e);
             });
-        } catch (e) {
-          console.log(e);
-        }
-        // console.log(response);
+        } catch (e) {}
       }}
     >
       {({ isSubmitting }) => {
         return (
-          <Form className="mt-8 space-y-6">
-            <div className="rounded-md shadow-sm -space-y-px">
+          <Form className="space-y-4">
+            <div>
               <p className="text-red-500 text-sm">{error}</p>
               <div className="space-y-2">
                 <FormField
@@ -95,14 +103,12 @@ function LoginForm() {
             </div>
             <div>
               <div className="flex items-center justify-between">
-                <div className="text-sm">
-                  <Link
-                    href="/password-reset"
-                    className="font-medium text-gray-900 hover:text-gray-500"
-                  >
-                    Forgot your password?
-                  </Link>
-                </div>
+                <Link
+                  href="/password-reset"
+                  className="font-medium text-gray-900 hover:text-gray-500"
+                >
+                  Forgot your password?
+                </Link>
               </div>
             </div>
             <div>

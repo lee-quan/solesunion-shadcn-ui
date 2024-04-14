@@ -16,6 +16,7 @@ export function FormField({
   errorMessageClassName,
   setValue,
   value,
+  labelContainerClassName,
 }: {
   error?: string;
   name: string;
@@ -28,10 +29,16 @@ export function FormField({
   errorMessageClassName?: string;
   setValue?: any;
   value?: any;
+  labelContainerClassName?: string;
 }) {
   return (
     <div className={cn("grid w-full items-start gap-1.5", containerClassName)}>
-      <div className="flex items-center justify-between">
+      <div
+        className={cn(
+          "flex items-center justify-between",
+          labelContainerClassName
+        )}
+      >
         <Label htmlFor={name} className={labelClassName}>
           {label}
         </Label>
