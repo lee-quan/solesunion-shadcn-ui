@@ -117,14 +117,14 @@ export default function ProductDetailPageConsignment({
                 }}
               >
                 <img
-                  src="/images/solesunion-removebg-preview.png"
+                  src="/image/solesunion-removebg-preview.png"
                   className="h-10 w-auto"
                 />
               </div>
               <div className="relative w-3/5 flex items-center justify-between font-normal text-white uppercase text-sm pl-4">
                 100% Authentic
-                <img src="/images/silhouette1.svg" className="hidden lg:flex" />
-                <img src="/images/silhouette2.svg" />
+                <img src="/image/silhouette1.svg" className="hidden lg:flex" />
+                <img src="/image/silhouette2.svg" />
               </div>
             </div>
           </Link>

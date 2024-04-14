@@ -9,7 +9,7 @@ export default function LandingPageHero() {
           {/* <img
                         alt="Hero"
                         className="mx-auto w-full h-full aspect-video overflow-hidden object-cover sm:w-full lg:order-last"
-                        src="/images/solesunion_store.jpeg"
+                        src="/image/solesunion_store.jpeg"
                     /> */}
           <div className="lg:order-last">
             <HeroCarousel />

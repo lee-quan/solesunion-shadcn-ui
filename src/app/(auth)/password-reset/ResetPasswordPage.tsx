@@ -36,7 +36,7 @@ export default function ResetPasswordPage({
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-gray-100 px-4 sm:px-6 lg:px-8">
       <img
-        src="/images/solesunion.png"
+        src="/image/solesunion.png"
         alt="Soles Union Logo"
         className="mx-auto w-auto"
       />

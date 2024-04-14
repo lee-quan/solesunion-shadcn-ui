@@ -1,11 +1,11 @@
 import { cn } from "@/lib/utils";
 
 export function WhiteLogo(props: React.SVGProps<SVGSVGElement>) {
-  return <img src="/images/solesunion.jpg" className="w-[100px]" />;
+  return <img src="/image/solesunion.jpg" className="w-[100px]" />;
 }
 
 export function BlackLogo(props: React.SVGProps<SVGSVGElement>) {
-  return <img src="/images/solesunion.png" className="w-[100px]" />;
+  return <img src="/image/solesunion.png" className="w-[100px]" />;
 }
 
 export function TiktokIcon(props: React.SVGProps<SVGSVGElement>) {

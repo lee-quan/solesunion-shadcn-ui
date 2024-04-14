@@ -37,7 +37,7 @@ export default function SignupPage() {
       <Card className="w-full md:max-w-md mx-auto">
         <CardHeader className="space-y-1">
           <img
-            src="/images/solesunion.png"
+            src="/image/solesunion.png"
             alt="Soles Union Logo"
             className="mx-auto w-auto"
           />
