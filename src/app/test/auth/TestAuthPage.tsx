@@ -11,7 +11,6 @@ export default function TestAuthPage() {
   const [password, setPassword] = useState("123");
   const session = useAuthSession();
 
-  console.log(session);
   return (
     <div className="space-y-4">
       <form

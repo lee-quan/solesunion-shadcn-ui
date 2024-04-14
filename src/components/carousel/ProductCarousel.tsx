@@ -5,14 +5,6 @@ import useEmblaCarousel from "embla-carousel-react";
 import "./css/ProductCarousel.css";
 import { CLOUDFLARE_URL } from "@/lib/constants";
 
-const images = [
-  "https://static.wixstatic.com/media/e4745c_a80d9b61cde14bd980621a88a97033b6~mv2.jpg/v1/fill/w_708,h_944,q_90/e4745c_a80d9b61cde14bd980621a88a97033b6~mv2.webp",
-  "https://static.wixstatic.com/media/e4745c_86da12ba0fc744a9948164d3a2f9e393~mv2.jpg/v1/fill/w_708,h_944,q_90/e4745c_86da12ba0fc744a9948164d3a2f9e393~mv2.webp",
-  "https://static.wixstatic.com/media/e4745c_a80d9b61cde14bd980621a88a97033b6~mv2.jpg/v1/fill/w_708,h_944,q_90/e4745c_a80d9b61cde14bd980621a88a97033b6~mv2.webp",
-  "https://static.wixstatic.com/media/e4745c_86da12ba0fc744a9948164d3a2f9e393~mv2.jpg/v1/fill/w_708,h_944,q_90/e4745c_86da12ba0fc744a9948164d3a2f9e393~mv2.webp",
-  "https://static.wixstatic.com/media/e4745c_a80d9b61cde14bd980621a88a97033b6~mv2.jpg/v1/fill/w_708,h_944,q_90/e4745c_a80d9b61cde14bd980621a88a97033b6~mv2.webp",
-  "https://static.wixstatic.com/media/e4745c_86da12ba0fc744a9948164d3a2f9e393~mv2.jpg/v1/fill/w_708,h_944,q_90/e4745c_86da12ba0fc744a9948164d3a2f9e393~mv2.webp",
-];
 
 export default function ProductCarousel({
   section,

@@ -87,10 +87,6 @@ export const { handlers, auth, signOut } = NextAuth({
     authorized({ auth }) {
       return false;
     },
-    signIn({ credentials }) {
-      console.log(credentials, "credentials");
-      return true;
-    },
     session({ session, token, user }) {
       return {
         ...session,
@@ -120,7 +116,6 @@ export const { handlers, auth, signOut } = NextAuth({
         };
       }
 
-      // console.log(token);
       return token;
     },
   },

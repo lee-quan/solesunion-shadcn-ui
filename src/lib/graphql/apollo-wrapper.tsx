@@ -39,7 +39,10 @@ function makeClient(session: any) {
 export function ApolloWrapper({ children }: React.PropsWithChildren) {
   const session = useAuthSession();
 
-  const client = useMemo(() => makeClient(session), [session]);
+  const client = useMemo(() => {
+    console.log(session);
+    return makeClient(session);
+  }, [session]);
   return (
     <ApolloNextAppProvider makeClient={() => client}>
       {children}
