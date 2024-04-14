@@ -6,8 +6,8 @@ import "./css/HeroCarousel.css";
 import { CLOUDFLARE_URL } from "@/lib/constants";
 
 const images = [
-  "/images/solesunion_store_1.jpeg",
-  "/images/solesunion_store_2.jpeg",
+  "/image/solesunion_store_1.jpeg",
+  "/image/solesunion_store_2.jpeg",
 ];
 
 export default function HeroCarousel() {

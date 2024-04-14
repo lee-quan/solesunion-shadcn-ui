@@ -35,21 +35,21 @@ const paymentMethods: {
     id: "eghl",
     name: "e-Wallet, Online Banking",
     description: "Fast and secure online payment",
-    logo: "/images/logo-eghl.png",
+    logo: "/image/logo-eghl.png",
     paymentGateway: "eGHL",
   },
   {
     id: "stripe",
     name: "Credit/Debit Card",
     description: "Safe and reliable payment gateway (Stripe)",
-    logo: "/images/logo-stripe.png",
+    logo: "/image/logo-stripe.png",
     paymentGateway: "Stripe",
   },
   {
     id: "atome",
     name: "0% interest, Pay later in  3 Installments, due monthly",
     description: "Flexible payment with 0% interest (Atome)",
-    logo: "/images/logo-atome.png",
+    logo: "/image/logo-atome.png",
     paymentGateway: "Atome",
   },
 ];
@@ -192,8 +192,9 @@ function PaymentMethodSection() {
 
               <div className="flex-col hidden peer-aria-checked:flex gap-5">
                 <p className="text-xs text-gray-500">
-                  After clicking &quot;Pay with {method.paymentGateway}&quot;, you will be
-                  redirected to eGHL to complete the purchase securely.
+                  After clicking &quot;Pay with {method.paymentGateway}&quot;,
+                  you will be redirected to eGHL to complete the purchase
+                  securely.
                 </p>
                 <div className="flex flex-col items-start space-x-2">
                   <div className="flex items-center space-x-2">
