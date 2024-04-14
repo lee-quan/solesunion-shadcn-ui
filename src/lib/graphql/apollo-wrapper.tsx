@@ -1,6 +1,7 @@
 "use client";
 
-import { ApolloLink, HttpLink } from "@apollo/client";
+import { ApolloLink, HttpLink, from, concat } from "@apollo/client";
+import { onError } from "@apollo/client/link/error";
 import {
   ApolloNextAppProvider,
   NextSSRApolloClient,
@@ -10,16 +11,41 @@ import {
 import { BACKEND_URL } from "../constants";
 import { useAuthSession } from "../auth/useAuthSession";
 import { useMemo } from "react";
+import { setContext } from "@apollo/client/link/context";
 
 function makeClient(session: any) {
-  let uri = `${BACKEND_URL}/graphql${session ? "/a_v1" : ""}`;
+  let uri = `${BACKEND_URL}/graphql${session ? "/authenticated" : ""}`;
 
-  console.log(uri);
   const httpLink = new HttpLink({
     uri,
     headers: {
-      Authorization: session ? `Bearer ${session.user.token.access_token}` : "",
+      "Content-Type": "application/json",
     },
+  });
+
+  const errorLink = onError(({ graphQLErrors, networkError }) => {
+    if (graphQLErrors)
+      graphQLErrors.forEach(({ message, locations, path }) =>
+        console.log(
+          `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+        )
+      );
+
+    if (networkError) console.log(`[Network error]: ${networkError}`);
+  });
+
+  const authLink = setContext((_, { headers }) => {
+    if (session) {
+      const token = session?.user?.token?.access_token;
+      return {
+        headers: {
+          ...headers,
+          Authorization: `Bearer ${token}`,
+        },
+      };
+    } else {
+      return { headers };
+    }
   });
 
   return new NextSSRApolloClient({
@@ -27,12 +53,14 @@ function makeClient(session: any) {
     link:
       typeof window === "undefined"
         ? ApolloLink.from([
+            errorLink,
             new SSRMultipartLink({
               stripDefer: true,
             }),
+            authLink,
             httpLink,
           ])
-        : httpLink,
+        : from([errorLink, authLink, httpLink]),
   });
 }
 
@@ -40,7 +68,6 @@ export function ApolloWrapper({ children }: React.PropsWithChildren) {
   const session = useAuthSession();
 
   const client = useMemo(() => {
-    console.log(session);
     return makeClient(session);
   }, [session]);
   return (
@@ -48,9 +75,4 @@ export function ApolloWrapper({ children }: React.PropsWithChildren) {
       {children}
     </ApolloNextAppProvider>
   );
-}
-function setContext(
-  arg0: (_: any, { headers }: { headers: any }) => { headers: any }
-) {
-  throw new Error("Function not implemented.");
 }

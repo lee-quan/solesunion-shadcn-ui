@@ -1,12 +1,13 @@
+import { CLOUDFLARE_URL } from "@/lib/constants";
+import { GET_PRODUCTS_FOR_BROWSE_PAGE } from "@/lib/graphql/queries/productQueries";
 import { decrypt } from "@/lib/utils";
 import { headers } from "next/headers";
 import BrowseAllPage from "../BrowseAllPage";
 import { getClient } from "@/lib/graphql/apollo-client";
-import { GET_PRODUCTS_FOR_BROWSE_PAGE } from "@/lib/graphql/queries/productQueries";
 
 export default async function Page({ searchParams }: { searchParams: any }) {
   const headersList = headers();
-  const fullUrl = headersList.get("referer") || "";
+  const fullUrl = headersList.get("x-url") || "";
   const pathname = `/${fullUrl.split("/").pop()}`;
 
   const qParam = searchParams.q

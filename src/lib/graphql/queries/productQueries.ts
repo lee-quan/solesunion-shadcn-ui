@@ -156,6 +156,7 @@ export const GET_PRODUCTS_FOR_BROWSE_PAGE = gql`
       sort_by: $sortBy
     ) {
       data {
+        category_id
         product_title
         image_file
         slug

@@ -105,7 +105,7 @@ export const { handlers, auth, signOut } = NextAuth({
 
       if (account && user) {
         const tempUser: any = { ...user };
-        token.access_token = tempUser.access_token + "access";
+        token.access_token = tempUser.access_token;
         token.expires_at = 0;
         token.id = user.id;
         token.user = {

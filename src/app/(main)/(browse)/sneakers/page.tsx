@@ -7,7 +7,7 @@ import { getClient } from "@/lib/graphql/apollo-client";
 
 export default async function Page({ searchParams }: { searchParams: any }) {
   const headersList = headers();
-  const fullUrl = headersList.get("referer") || "";
+  const fullUrl = headersList.get("x-url") || "";
   const pathname = `/${fullUrl.split("/").pop()}`;
 
   const qParam = searchParams.q
