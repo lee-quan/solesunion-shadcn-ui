@@ -1,0 +1,192 @@
+[
+  {
+    "ach_bank_code": "32",
+    "name": "Affin Bank",
+    "swift_code": "PHBMMYKL"
+  },
+  {
+    "ach_bank_code": "32",
+    "name": "Affin Islamic Bank",
+    "swift_code": "AIBBMYKL"
+  },
+  {
+    "ach_bank_code": "43",
+    "name": "Agrobank",
+    "swift_code": "AGOBMYKL"
+  },
+  {
+    "ach_bank_code": "50",
+    "name": "Al-Rajhi Banking \u0026 Investment Corporation",
+    "swift_code": "RJHIMYKL"
+  },
+  {
+    "ach_bank_code": "12",
+    "name": "Alliance Bank",
+    "swift_code": "MFBBMYKL"
+  },
+  {
+    "ach_bank_code": "08",
+    "name": "AmBank",
+    "swift_code": "ARBKMYKL"
+  },
+  {
+    "ach_bank_code": "08",
+    "name": "AmBank Islamic",
+    "swift_code": "AISLMYKL"
+  },
+  {
+    "ach_bank_code": "63",
+    "name": "BNP Paribas",
+    "swift_code": "BNPAMYKL"
+  },
+  {
+    "ach_bank_code": "04",
+    "name": "Bangkok Bank",
+    "swift_code": "BKKBMYKL"
+  },
+  {
+    "ach_bank_code": "40",
+    "name": "Bank Islam",
+    "swift_code": "BIMBMYKL"
+  },
+  {
+    "ach_bank_code": "99",
+    "name": "Bank Kerjasama Rakyat Malaysia",
+    "swift_code": "BKRMMYKL"
+  },
+  {
+    "ach_bank_code": "41",
+    "name": "Bank Muamalat",
+    "swift_code": "BMMBMYKL"
+  },
+  {
+    "ach_bank_code": "06",
+    "name": "Bank Simpanan Nasional",
+    "swift_code": "BSNAMYK1"
+  },
+  {
+    "ach_bank_code": "07",
+    "name": "Bank of America",
+    "swift_code": "BOFAMY2X"
+  },
+  {
+    "ach_bank_code": "42",
+    "name": "Bank of China",
+    "swift_code": "BKCHMYKL"
+  },
+  {
+    "ach_bank_code": "10",
+    "name": "Bank of Tokyo-Mitsubishi UFJ",
+    "swift_code": "BOTKMYKX"
+  },
+  {
+    "ach_bank_code": "35",
+    "name": "CIMB Bank",
+    "swift_code": "CIBBMYKL"
+  },
+  {
+    "ach_bank_code": "35",
+    "name": "CIMB Islamic Bank",
+    "swift_code": "CTBBMYKL"
+  },
+  {
+    "ach_bank_code": "46",
+    "name": "China Construction Bank",
+    "swift_code": "PCBCMYKL"
+  },
+  {
+    "ach_bank_code": "17",
+    "name": "Citibank",
+    "swift_code": "CITIMYKL"
+  },
+  {
+    "ach_bank_code": "19",
+    "name": "Deutsche Bank",
+    "swift_code": "DEUTMYKL"
+  },
+  {
+    "ach_bank_code": "56",
+    "name": "HSBC Amanah",
+    "swift_code": "HMABMYKL"
+  },
+  {
+    "ach_bank_code": "22",
+    "name": "HSBC Bank",
+    "swift_code": "HBMBMYKL"
+  },
+  {
+    "ach_bank_code": "24",
+    "name": "Hong Leong Bank",
+    "swift_code": "HLBBMYKL"
+  },
+  {
+    "ach_bank_code": "24",
+    "name": "Hong Leong Islamic Bank",
+    "swift_code": "HLIBMYKL"
+  },
+  {
+    "ach_bank_code": "59",
+    "name": "Industrial \u0026 Commercial Bank of China (ICBC)",
+    "swift_code": "ICBKMYKL"
+  },
+  {
+    "ach_bank_code": "15",
+    "name": "JP Morgan Chase",
+    "swift_code": "CHASMYKX"
+  },
+  {
+    "ach_bank_code": "44",
+    "name": "Kuwait Finance House",
+    "swift_code": "KFHOMYKL"
+  },
+  {
+    "ach_bank_code": "52",
+    "name": "MBSB Bank",
+    "swift_code": "AFBQMYKL"
+  },
+  {
+    "ach_bank_code": "27",
+    "name": "Maybank",
+    "swift_code": "MBBEMYKL"
+  },
+  {
+    "ach_bank_code": "60",
+    "name": "Mizuho Bank",
+    "swift_code": "MHCBMYKA"
+  },
+  {
+    "ach_bank_code": "29",
+    "name": "OCBC Al-Amin Bank",
+    "swift_code": "OABBMYKL"
+  },
+  {
+    "ach_bank_code": "29",
+    "name": "OCBC Bank",
+    "swift_code": "OCBCMYKL"
+  },
+  {
+    "ach_bank_code": "33",
+    "name": "Public Bank",
+    "swift_code": "PBBEMYKL"
+  },
+  {
+    "ach_bank_code": "18",
+    "name": "RHB Bank",
+    "swift_code": "RHBBMYKL"
+  },
+  {
+    "ach_bank_code": "14",
+    "name": "Standard Chartered Bank",
+    "swift_code": "SCBLMYKX"
+  },
+  {
+    "ach_bank_code": "45",
+    "name": "Sumitomo Mitsui Banking Corporation",
+    "swift_code": "SMBCMYKL"
+  },
+  {
+    "ach_bank_code": "26",
+    "name": "United Overseas Bank",
+    "swift_code": "UOVBMYKL"
+  }
+]

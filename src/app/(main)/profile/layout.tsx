@@ -87,6 +87,62 @@ function ProfileMenu({ pathname }: { pathname: string }) {
   );
 }
 
+function SellerNavigationItems({ pathname }: { pathname: string }) {
+  return (
+    <>
+      <Link
+        href={"/profile/payout"}
+        className={cn(
+          "flex items-center gap-3 rounded-lg px-3 py-2 transition-all text-gray-500 hover:text-gray-900",
+          pathname === "/profile/payout"
+            ? "bg-gray-100 text-gray-900"
+            : "text-gray-500"
+        )}
+        onClick={() => {}}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+          <path d="m3.3 7 8.7 5 8.7-5" />
+          <path d="M12 22V12" />
+        </svg>
+        Payout Information
+      </Link>
+      <Link
+        href={"/seller"}
+        className="flex items-center gap-3 rounded-lg px-3 py-2 transition-all text-gray-500 hover:text-gray-900"
+        onClick={() => {}}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+          <path d="m3.3 7 8.7 5 8.7-5" />
+          <path d="M12 22V12" />
+        </svg>
+        Listings
+      </Link>
+    </>
+  );
+}
+
 const profileNavigationLinks = [
   {
     label: "Profile",
@@ -124,43 +180,45 @@ const profileNavigationLinks = [
     icon: SettingsIcon,
     onclick: () => {},
   },
-  {
-    label: "Logout",
-    href: "/",
-    icon: LogOutIcon,
-    onclick: () => {
-      signOut({
-        callbackUrl: "/",
-      });
-    },
-    className:
-      "mt-9 flex items-center gap-3 rounded-lg px-3 py-2 transition-all text-red-500 hover:text-red-900",
-  },
 ];
 
 function ProfileNavigationItems({ pathname }: { pathname: string }) {
   return (
     <>
-      {profileNavigationLinks.map((link, index) => (
-        <Link
-          key={index}
-          href={link.href}
-          className={
-            link.className
-              ? link.className
-              : cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-gray-900",
-                  pathname === link.href
-                    ? "bg-gray-100 text-gray-900"
-                    : "text-gray-500"
-                )
-          }
-          onClick={link.onclick}
-        >
-          <link.icon className="h-4 w-4" />
-          {link.label}
-        </Link>
-      ))}
+      {profileNavigationLinks.map(
+        (
+          link: {
+            label: string;
+            href: string;
+            icon: any;
+            onclick: () => void;
+          },
+          index
+        ) => (
+          <Link
+            key={index}
+            href={link.href}
+            className={cn(
+              "flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-gray-900",
+              pathname === link.href
+                ? "bg-gray-100 text-gray-900"
+                : "text-gray-500"
+            )}
+          >
+            <link.icon className="h-4 w-4" />
+            {link.label}
+          </Link>
+        )
+      )}
+      <SellerNavigationItems pathname={pathname} />
+
+      <Link
+        className="mt-9 flex items-center gap-3 rounded-lg px-3 py-2 transition-all text-red-500 hover:text-red-900"
+        href={{}}
+      >
+        <LogOutIcon className="h-4 w-4" />
+        Logout
+      </Link>
     </>
   );
 }
