@@ -28,8 +28,10 @@ export function prettyDate(date: string) {
 
 const password = "d6F3Efeq";
 
-export function encrypt(text: string | undefined | null | number) {
+export function encrypt(text: string | undefined | null | number | {}) {
   if (text) {
+    if (typeof text === "object") text = JSON.stringify(text);
+
     const result = crypto.AES.encrypt(`${text}`, password);
     var temp = result
       .toString()

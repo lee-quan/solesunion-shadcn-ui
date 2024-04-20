@@ -13,7 +13,6 @@ export default async function Page({ searchParams }: { searchParams: any }) {
   const qParam = searchParams.q
     ? JSON.parse(decrypt(searchParams.q))
     : { sizes: [], brands: [], sortBy: "po.created_at desc", page: 1 };
-  console.log("full", fullUrl);
 
   const client = getClient();
   const { data } = await client.query({

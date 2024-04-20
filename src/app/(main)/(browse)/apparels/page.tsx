@@ -25,7 +25,6 @@ export default async function Page({ searchParams }: { searchParams: any }) {
       page: qParam.page || 1,
       sortBy: qParam.sortBy || "po.created_at desc",
     },
-    // pollInterval: 0,
   });
 
   return (

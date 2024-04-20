@@ -236,7 +236,6 @@ function PayoutInformationForm() {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState<string | null>(null);
 
-  console.log(value);
   const [updateUserProfile, { data, loading, error }] =
     useMutation(UPDATE_USER_PROFILE);
 
@@ -354,7 +353,6 @@ function BankList({
               key={bank.value}
               value={bank.label}
               onSelect={(currentValue) => {
-                console.log(currentValue, value);
                 setValue(currentValue === value ? "" : currentValue);
                 setOpen(false);
               }}

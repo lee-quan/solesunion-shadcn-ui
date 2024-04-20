@@ -18,3 +18,12 @@ export const CREATE_PRODUCT_OFFER = gql`
     }
   }
 `;
+
+export const UPDATE_PRODUCT_OFFER = gql`
+  mutation UpdateProductOffer($offer_id: Int!, $price: Int!) {
+    UpdateProductOffer(offer_id: $offer_id, price: $price) {
+      success
+      message
+    }
+  }
+`;

@@ -11,6 +11,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import useQParam from "@/hooks/useQParams";
 import { GET_LOWEST_ACTIVE_OFFER_AND_LAST_SALE } from "@/lib/graphql/queries/productQueries";
 import { decrypt, encrypt, prettyDate, price2d } from "@/lib/utils";
 import { useQuery } from "@apollo/client";
@@ -20,13 +21,14 @@ import { useState } from "react";
 
 export default function SellPage() {
   const searchParams = useSearchParams();
-  const sizeInfo = JSON.parse(decrypt(searchParams.get("q")) || "{}");
-  const [price, setPrice] = useState(0);
-  const [listType, setListType] = useState("Online");
+  const qParam = useQParam();
+
+  const [price, setPrice] = useState(qParam.price ?? 0);
+  const [listType, setListType] = useState(qParam.listType ?? "Online");
 
   const { data } = useQuery(GET_LOWEST_ACTIVE_OFFER_AND_LAST_SALE, {
     variables: {
-      product_size_id: sizeInfo.id,
+      product_size_id: qParam.id,
     },
   });
 
@@ -34,7 +36,7 @@ export default function SellPage() {
     <div className="h-full flex flex-col space-y-2">
       <div className="flex items-center justify-between">
         <div className="text-lg font-bold">MAKE A LIST</div>
-        <div className="text-sm text-gray-500">{sizeInfo.size}</div>
+        <div className="text-sm text-gray-500">{qParam.size}</div>
       </div>
       <div className="flex items-center justify-between relative h-16">
         <Button className="bg-gray-100 px-2 h-full text-sm absolute left-0 text-black shadow-none ">
@@ -83,9 +85,9 @@ export default function SellPage() {
                 <strong>Online Listing:</strong>
               </p>
               <p>
-                List your sneakers online and keep them until they&apos;re sold. Once
-                sold, ship them to us for authentication. After verification,
-                we&apos;ll ship them to the buyer.
+                List your sneakers online and keep them until they&apos;re sold.
+                Once sold, ship them to us for authentication. After
+                verification, we&apos;ll ship them to the buyer.
               </p>
               <p>
                 <strong>Consignment:</strong>
@@ -99,7 +101,7 @@ export default function SellPage() {
           </Tooltip>
         </TooltipProvider>
         <RadioGroup
-          defaultValue="online"
+          defaultValue="Online"
           value={listType}
           onValueChange={(value) => {
             setListType(value);
@@ -147,7 +149,7 @@ export default function SellPage() {
               price > 0
                 ? `list/review?q=${encrypt(
                     JSON.stringify({
-                      ...sizeInfo,
+                      ...qParam,
                       price,
                       listType,
                     })

@@ -4,6 +4,7 @@ import "./css/BestSellerCarousel.css";
 import useEmblaCarousel from "embla-carousel-react";
 import { cn, price } from "@/lib/utils";
 import { CLOUDFLARE_URL } from "@/lib/constants";
+import { useSession } from "next-auth/react";
 
 const OPTIONS: EmblaOptionsType = {
   axis: "y",
@@ -26,6 +27,7 @@ export default function BestSellerCarousel({
 }) {
   const [emblaRef, emblaApi] = useEmblaCarousel(OPTIONS);
 
+  const { update } = useSession();
   return (
     <section className="best__seller__carousel">
       <div className="best__seller__carousel__viewport" ref={emblaRef}>
@@ -45,8 +47,8 @@ export default function BestSellerCarousel({
                 </span>
                 <img
                   src={`${CLOUDFLARE_URL}/${product.image_file}/thumbnail`}
-                    alt={product.product_title}
-                    className="h-full"
+                  alt={product.product_title}
+                  className="h-full"
                 />
                 <div className="justify-between w-full items-center px-5 hidden md:flex">
                   <div className="hidden lg:block">

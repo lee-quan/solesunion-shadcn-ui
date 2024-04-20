@@ -84,9 +84,6 @@ export const { handlers, auth, signOut } = NextAuth({
     }),
   ],
   callbacks: {
-    authorized({ auth }) {
-      return false;
-    },
     session({ session, token, user }) {
       return {
         ...session,
