@@ -28,12 +28,12 @@ import { auth } from "./lib/auth";
 
 export default auth((req) => {
   if (req.nextUrl.pathname === "/seller") {
-    return NextResponse.redirect("http://localhost:3000/seller/offer", {
-      status: 302,
-    });
+    const url = req.nextUrl.clone();
+    url.pathname = "/seller/offer";
+    return NextResponse.redirect(url);
   }
   // if not authenticated, redirect to login
-  
+
   return NextResponse.next({
     request: req,
   });

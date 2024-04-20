@@ -75,6 +75,7 @@ export default function SellerDashboardLayout({
   ];
 
   const qParams = useQParam();
+  const status = qParams.status ?? "active";
   const [open, setOpen] = useState(false);
   return (
     <div className="grid min-h-screen w-full lg:grid-cols-[280px_1fr]">
@@ -93,7 +94,7 @@ export default function SellerDashboardLayout({
                   key={link.label}
                   className={cn(
                     "flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900",
-                    qParams.status === link.status
+                    status === link.status
                       ? "bg-gray-100 text-gray-900"
                       : "text-gray-500"
                   )}
@@ -117,7 +118,7 @@ export default function SellerDashboardLayout({
             <h1 className="font-semibold text-lg">
               {
                 SellerDashboardLinks.find(
-                  (link) => qParams.status === link.status
+                  (link) => status === link.status
                 )?.label
               }
             </h1>
@@ -128,7 +129,7 @@ export default function SellerDashboardLayout({
                 <h1 className="font-semibold text-lg">
                   {
                     SellerDashboardLinks.find(
-                      (link) => qParams.status === link.status
+                      (link) => status === link.status
                     )?.label
                   }
                 </h1>
@@ -144,7 +145,7 @@ export default function SellerDashboardLayout({
                   }}
                   className={cn(
                     "w-full",
-                    qParams.status === link.status
+                    status === link.status
                       ? "bg-gray-100 text-gray-900"
                       : "text-gray-500"
                   )}
@@ -165,7 +166,7 @@ export default function SellerDashboardLayout({
           <p>
             {
               SellerDashboardLinks.find(
-                (link) => qParams.status === link.status
+                (link) => status === link.status
               )?.description
             }
           </p>
