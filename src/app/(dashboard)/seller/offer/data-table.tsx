@@ -37,7 +37,7 @@ import {
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@radix-ui/react-select";
+} from "@/components/ui/select";
 import { LoaderIcon } from "@/components/icons";
 import { cn } from "@/lib/utils";
 
@@ -213,8 +213,8 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
 
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-end space-x-2 py-4">
+        <div className="flex-1 text-sm text-muted-foreground px-2">
           {table.getFilteredSelectedRowModel().rows.length} of{" "}
           {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
