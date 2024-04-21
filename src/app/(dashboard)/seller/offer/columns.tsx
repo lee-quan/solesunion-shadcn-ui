@@ -48,12 +48,12 @@ export const columns: ColumnDef<Offer>[] = [
     enableColumnFilter: false,
     enableSorting: false,
     enableHiding: false,
+    size: 40,
   },
   {
     id: "product",
     header: "Product",
     accessorKey: "product.product_title",
-    size: 2300,
     cell: ({ row }) => {
       const offer = row.original;
       return (
@@ -64,15 +64,28 @@ export const columns: ColumnDef<Offer>[] = [
             className="w-10 h-10 object-cover rounded-lg hidden md:block"
           />
           <div className="ml-2">
-            <p className="text-sm font-semibold">
+            <Link
+              href={`/${offer.product.slug}`}
+              className="text-sm font-semibold"
+            >
               {offer.product.product_title}
+            </Link>
+            <p className="text-xs md:hidden">
+              Price:{" "}
+              <span className="font-bold text-sm">
+                RM {price2d(offer.offer_price)}
+              </span>
             </p>
-            <p>({offer.id})</p>
+            <p className="text-xs md:hidden">
+              Size: <span className="font-bold text-sm">{offer.prod_size}</span>
+            </p>
+            {/* <p>({offer.id})</p> */}
           </div>
         </div>
       );
     },
     enableColumnFilter: true,
+    size: 500,
   },
   {
     id: "product_sku",
@@ -94,12 +107,11 @@ export const columns: ColumnDef<Offer>[] = [
         >
           Price
           {/* arrowup, arrowdown, arrowupdown */}
-          {column.getIsSorted() === "asc" ? (
-            <ArrowUpIcon className="ml-2 h-4 w-4" />
-          ) : column.getIsSorted() === "desc" ? (
-            <ArrowDownIcon className="ml-2 h-4 w-4" />
-          ) : (
-            <ArrowUpDownIcon className="ml-2 h-4 w-4" />
+          {{
+            asc: " 🔼",
+            desc: " 🔽",
+          }[column.getIsSorted() as string] ?? (
+            <ArrowUpDownIcon className="ml-2 h-4" />
           )}
         </Button>
       );
@@ -113,8 +125,9 @@ export const columns: ColumnDef<Offer>[] = [
     },
     enableColumnFilter: true,
     meta: {
-      editable: true,
+      className: "hidden md:table-cell",
     },
+    size: 80,
   },
   {
     id: "prod_size",
@@ -124,6 +137,10 @@ export const columns: ColumnDef<Offer>[] = [
       <p className="text-sm font-semibold">{row.getValue("prod_size")}</p>
     ),
     enableColumnFilter: true,
+    size: 50,
+    meta: {
+      className: "hidden md:table-cell",
+    },
   },
   {
     id: "action",

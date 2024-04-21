@@ -12,6 +12,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { useVirtualizer } from "@tanstack/react-virtual";
 
 import {
   Table,
@@ -21,7 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -38,6 +39,7 @@ import {
   SelectItem,
 } from "@radix-ui/react-select";
 import { LoaderIcon } from "@/components/icons";
+import { cn } from "@/lib/utils";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -87,90 +89,130 @@ export function DataTable<TData, TValue>({
       pagination,
     },
   });
+  const visibleColumns = table.getVisibleLeafColumns();
+  const tableContainerRef = useRef<HTMLDivElement>(null);
+  const columnVirtualizer = useVirtualizer({
+    count: visibleColumns.length,
+    estimateSize: (index) => visibleColumns[index].getSize(), //estimate width of each column for accurate scrollbar dragging
+    getScrollElement: () => tableContainerRef.current,
+    horizontal: true,
+  });
+  const virtualColumns = columnVirtualizer.getVirtualItems();
+
+  let virtualPaddingLeft: number | undefined;
+  let virtualPaddingRight: number | undefined;
+
+  if (columnVirtualizer && virtualColumns?.length) {
+    virtualPaddingLeft = virtualColumns[0]?.start ?? 0;
+    virtualPaddingRight =
+      columnVirtualizer.getTotalSize() -
+      (virtualColumns[virtualColumns.length - 1]?.end ?? 0);
+  }
 
   return (
     <div className="rounded-md border overflow-x-auto">
-      <Table className="!w-full border-collapse">
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                    {header.column.getCanFilter() && (
-                      <Input
-                        placeholder={
-                          typeof header.column.columnDef.header === "string"
-                            ? header.column.columnDef.header
-                            : "Min Price"
-                        }
-                        value={
-                          (table
-                            .getColumn(header.column.id)
-                            ?.getFilterValue() as string) ?? ""
-                        }
-                        onChange={(event) => {
-                          return table
-                            .getColumn(header.column.id)
-                            ?.setFilterValue(event.target.value);
-                        }}
-                        className="max-w-sm"
-                      />
-                    )}
-                  </TableHead>
-                );
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {loading ? (
-            <TableRow>
-              <TableCell
-                colSpan={columns.length}
-                className="h-24 flex justify-center w-full items-center"
-              >
-                <LoaderIcon className="animate-spin" />
-              </TableCell>
-            </TableRow>
-          ) : (
-            <>
-              {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    ))}
+      <div
+        ref={tableContainerRef}
+        style={{
+          overflow: "auto", //our scrollable table container
+          position: "relative", //needed for sticky header
+        }}
+      >
+        <Table className="!w-full border-collapse">
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  const meta = header.column.columnDef.meta;
+                  console.log(meta);
+                  return (
+                    <TableHead
+                      key={header.id}
+                      className={cn(meta?.className ?? "")}
+                    >
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                      {header.column.getCanFilter() && (
+                        <Input
+                          placeholder={
+                            typeof header.column.columnDef.header === "string"
+                              ? header.column.columnDef.header
+                              : "Min Price"
+                          }
+                          value={
+                            (table
+                              .getColumn(header.column.id)
+                              ?.getFilterValue() as string) ?? ""
+                          }
+                          onChange={(event) => {
+                            return table
+                              .getColumn(header.column.id)
+                              ?.setFilterValue(event.target.value);
+                          }}
+                          className="max-w-sm"
+                        />
+                      )}
+                    </TableHead>
+                  );
+                })}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {loading ? (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 flex justify-center w-full items-center"
+                >
+                  <LoaderIcon className="animate-spin" />
+                </TableCell>
+              </TableRow>
+            ) : (
+              <>
+                {table.getRowModel().rows?.length ? (
+                  table.getRowModel().rows.map((row) => (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && "selected"}
+                    >
+                      {row.getVisibleCells().map((cell) => {
+                        const meta = cell.column.columnDef.meta;
+
+                        return (
+                          <TableCell
+                            key={cell.id}
+                            className={cn(meta?.className ?? "")}
+                          >
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      No results.
+                    </TableCell>
                   </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 text-center"
-                  >
-                    No results.
-                  </TableCell>
-                </TableRow>
-              )}
-            </>
-          )}
-        </TableBody>
-      </Table>
+                )}
+              </>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
           {table.getFilteredSelectedRowModel().rows.length} of{" "}
