@@ -22,7 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useRef, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -39,7 +39,9 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { LoaderIcon } from "@/components/icons";
-import { cn } from "@/lib/utils";
+import { cn, encrypt, price2d } from "@/lib/utils";
+import Link from "next/link";
+import { CLOUDFLARE_URL } from "@/lib/constants";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -175,28 +177,84 @@ export function DataTable<TData, TValue>({
             ) : (
               <>
                 {table.getRowModel().rows?.length ? (
-                  table.getRowModel().rows.map((row) => (
-                    <TableRow
-                      key={row.id}
-                      data-state={row.getIsSelected() && "selected"}
-                    >
-                      {row.getVisibleCells().map((cell) => {
-                        const meta = cell.column.columnDef.meta;
-
-                        return (
+                  table.getRowModel().rows.map((row) => {
+                    const offer: any = row.original;
+                    return (
+                      <Fragment key={row.id}>
+                        <TableRow
+                          data-state={row.getIsSelected() && "selected"}
+                          className="hidden md:table-row"
+                        >
+                          {row.getVisibleCells().map((cell) => {
+                            const meta = cell.column.columnDef.meta;
+                            return (
+                              <TableCell
+                                key={cell.id}
+                                className={cn(meta?.className ?? "")}
+                              >
+                                {flexRender(
+                                  cell.column.columnDef.cell,
+                                  cell.getContext()
+                                )}
+                              </TableCell>
+                            );
+                          })}
+                        </TableRow>
+                        <TableRow
+                          data-state={row.getIsSelected() && "selected"}
+                          className="md:hidden"
+                        >
                           <TableCell
-                            key={cell.id}
-                            className={cn(meta?.className ?? "")}
+                            colSpan={columns.length}
+                            className="h-24"
                           >
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext()
-                            )}
+                            <div className="flex flex-row items-center w-full space-x-2">
+                              <img
+                                src={`${CLOUDFLARE_URL}/${offer.product.images[0].image_file}/thumbnail`}
+                                alt={offer.product.product_title}
+                                className="w-10 h-10 object-cover rounded-lg"
+                              />
+                              <div className="flex flex-col flex-1">
+                                <p>{offer?.product?.product_title}</p>
+                                <p className="text-xs">
+                                  {offer?.product?.product_sku}
+                                </p>
+                                <p className="text-xs">
+                                  Price:{" "}
+                                  <span className="font-bold text-sm">
+                                    RM {price2d(offer.offer_price)}
+                                  </span>
+                                </p>
+                                <p className="text-xs">
+                                  Size:{" "}
+                                  <span className="font-bold text-sm">
+                                    {offer.prod_size}
+                                  </span>
+                                </p>
+                              </div>
+                              <Button asChild>
+                                <Link
+                                  href={`/${
+                                    offer.product.slug
+                                  }/list?q=${encrypt(
+                                    JSON.stringify({
+                                      id: offer.product_size_id,
+                                      offer_id: offer.id,
+                                      size: offer.prod_size,
+                                      price: offer.offer_price,
+                                      listType: "Consignment",
+                                    })
+                                  )}`}
+                                >
+                                  Edit
+                                </Link>
+                              </Button>
+                            </div>
                           </TableCell>
-                        );
-                      })}
-                    </TableRow>
-                  ))
+                        </TableRow>
+                      </Fragment>
+                    );
+                  })
                 ) : (
                   <TableRow>
                     <TableCell

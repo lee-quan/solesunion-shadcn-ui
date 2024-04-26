@@ -1,6 +1,6 @@
 "use client";
 
-import { ApolloLink, HttpLink, from, concat } from "@apollo/client";
+import { ApolloLink, HttpLink, from } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
 import {
   ApolloNextAppProvider,
@@ -9,7 +9,6 @@ import {
   SSRMultipartLink,
 } from "@apollo/experimental-nextjs-app-support/ssr";
 import { BACKEND_URL } from "../constants";
-import { useAuthSession } from "../auth/useAuthSession";
 import { useMemo } from "react";
 import { setContext } from "@apollo/client/link/context";
 import { useSession } from "next-auth/react";

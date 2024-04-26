@@ -26,30 +26,30 @@ export type Offer = {
 };
 
 export const columns: ColumnDef<Offer>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableColumnFilter: false,
-    enableSorting: false,
-    enableHiding: false,
-    size: 40,
-  },
+  // {
+  //   id: "select",
+  //   header: ({ table }) => (
+  //     <Checkbox
+  //       checked={
+  //         table.getIsAllPageRowsSelected() ||
+  //         (table.getIsSomePageRowsSelected() && "indeterminate")
+  //       }
+  //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+  //       aria-label="Select all"
+  //     />
+  //   ),
+  //   cell: ({ row }) => (
+  //     <Checkbox
+  //       checked={row.getIsSelected()}
+  //       onCheckedChange={(value) => row.toggleSelected(!!value)}
+  //       aria-label="Select row"
+  //     />
+  //   ),
+  //   enableColumnFilter: false,
+  //   enableSorting: false,
+  //   enableHiding: false,
+  //   size: 40,
+  // },
   {
     id: "product",
     header: "Product",
@@ -70,15 +70,6 @@ export const columns: ColumnDef<Offer>[] = [
             >
               {offer.product.product_title}
             </Link>
-            <p className="text-xs md:hidden">
-              Price:{" "}
-              <span className="font-bold text-sm">
-                RM {price2d(offer.offer_price)}
-              </span>
-            </p>
-            <p className="text-xs md:hidden">
-              Size: <span className="font-bold text-sm">{offer.prod_size}</span>
-            </p>
             {/* <p>({offer.id})</p> */}
           </div>
         </div>

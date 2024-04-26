@@ -32,12 +32,12 @@ export default function ProfileLayout({
 }) {
   const pathname = usePathname();
   return (
-    <div className="min-h-[calc(100vh-80px)] w-full overflow-hidden lg:grid-cols-[280px_1fr] lg:flex">
+    <div className="min-h-[calc(100vh-80px)] w-full overflow-hidden lg:grid lg:grid-cols-[180px_1fr]">
       <ProfileSideBar pathname={pathname} />
       <ProfileMenu pathname={pathname} />
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
         {children}
-      </main>
+      </main> 
     </div>
   );
 }
@@ -122,22 +122,7 @@ function SellerNavigationItems({ pathname }: { pathname: string }) {
         className="flex items-center gap-3 rounded-lg px-3 py-2 transition-all text-gray-500 hover:text-gray-900"
         onClick={() => {}}
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
-          <path d="m3.3 7 8.7 5 8.7-5" />
-          <path d="M12 22V12" />
-        </svg>
-        Listings
+        Seller Dashboard
       </Link>
     </>
   );

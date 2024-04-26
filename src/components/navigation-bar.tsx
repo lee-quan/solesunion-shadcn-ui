@@ -11,6 +11,7 @@ import {
 import { BlackLogo, CheckIcon, MenuIcon, ShieldIcon, TagIcon } from "./icons";
 import { signOut, useSession } from "next-auth/react";
 import { cn } from "@/lib/utils";
+import { useState } from "react";
 
 const NavigationLinks = [
   {
@@ -41,12 +42,13 @@ const NavigationLinks = [
 ];
 
 export default function NavigationBar() {
+  const [open, setOpen] = useState(false);
   const { data: session } = useSession();
   return (
     <>
       <NotificationBar />
       <header className="sticky top-0 flex h-20 w-full shrink-0 items-center px-4 md:px-6 bg-white z-50 border-b">
-        <Sheet>
+        <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>
             <Button className="lg:hidden" size="icon" variant="outline">
               <MenuIcon className="h-6 w-6" />
@@ -71,6 +73,7 @@ export default function NavigationBar() {
                       link.auth ? (session ? "block" : "hidden") : "block"
                     )}
                     href={link.href}
+                    onClick={()=>setOpen(false)}
                   >
                     {link.title}
                   </Link>
