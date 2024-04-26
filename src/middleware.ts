@@ -2,8 +2,6 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 // export function middleware(request: NextRequest) {
-//   const requestHeaders = new Headers(request.headers);
-//   requestHeaders.set("x-url", request.url);
 
 //   if (
 //     request.nextUrl.pathname.startsWith("/browse") ||
@@ -26,15 +24,21 @@ import type { NextRequest } from "next/server";
 
 import { auth } from "./lib/auth";
 
-export default auth((req) => {
-  if (req.nextUrl.pathname === "/seller") {
-    const url = req.nextUrl.clone();
+export default auth((request) => {
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-url", request.url);
+
+  if (request.nextUrl.pathname === "/seller") {
+    const url = request.nextUrl.clone();
     url.pathname = "/seller/offer";
     return NextResponse.redirect(url);
   }
   // if not authenticated, redirect to login
-
+  // console.log
   return NextResponse.next({
-    request: req,
+    request: {
+      ...request,
+      headers: requestHeaders,
+    }
   });
 });
