@@ -14,8 +14,30 @@ export const GET_PRODUCT_OFFERS = gql`
         slug
         product_title
         product_sku
-        images {
+        image {
           image_file
+        }
+      }
+    }
+  }
+`;
+
+export const SELLER_DASHBOARD__CONSIGNMENT_PRODUCT_OFFER = gql`
+  query SellerDashboardConsignmentProductOfferQuery($status: String) {
+    SellerDashboard_ConsignmentProductOffer(status: $status) {
+      product_title
+      product_sku
+      slug
+      lowest_offer
+      image {
+        image_file
+      }
+      product_sizes {
+        size
+        offer {
+          id
+          offer_price
+          ready_stock
         }
       }
     }

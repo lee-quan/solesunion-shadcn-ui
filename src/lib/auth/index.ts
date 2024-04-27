@@ -1,12 +1,10 @@
 import NextAuth, { type DefaultSession } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { getClient } from "../graphql/apollo-client";
 import { LOGIN_MUTATION } from "../graphql/mutations/authMutations";
 import {
   ApolloClient,
   HttpLink,
   InMemoryCache,
-  useQuery,
 } from "@apollo/client";
 import { BACKEND_URL } from "../constants";
 import { cookies } from "next/headers";
@@ -15,6 +13,7 @@ import { encrypt } from "../utils";
 declare module "next-auth" {
   interface Session {
     user: {
+      role:string;
       token: {
         access_token: string;
         expires_at: number;
@@ -73,6 +72,7 @@ export const { handlers, auth, signOut } = NextAuth({
               name: user.name,
               access_token,
               email: user.email,
+              role: user.role,
             };
           } else {
             return null;
@@ -89,6 +89,7 @@ export const { handlers, auth, signOut } = NextAuth({
         ...session,
         user: {
           ...session.user,
+          role: token.role,
           token: {
             access_token: token.access_token,
             expires_at: token.expires_at,
@@ -97,12 +98,12 @@ export const { handlers, auth, signOut } = NextAuth({
         },
       };
     },
-    async jwt(test) {
-      const { token, user, account, profile, ...props } = test;
-
+    async jwt(args) {
+      const { token, user, account, profile, ...props } = args;
       if (account && user) {
         const tempUser: any = { ...user };
         token.access_token = tempUser.access_token;
+        token.role = tempUser.role;
         token.expires_at = 0;
         token.id = user.id;
         token.user = {

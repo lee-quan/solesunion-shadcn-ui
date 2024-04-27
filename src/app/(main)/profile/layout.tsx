@@ -133,19 +133,16 @@ const profileNavigationLinks = [
     label: "Profile",
     href: "/profile",
     icon: UserIcon,
-    onclick: () => {},
   },
   {
     label: "Addresses",
     href: "/profile/addresses",
     icon: HomeIcon,
-    onclick: () => {},
   },
   {
     label: "Orders",
     href: "/profile/orders",
     icon: ShoppingCartIcon,
-    onclick: () => {},
   },
   // {
   //     label: "Listings",
@@ -163,7 +160,6 @@ const profileNavigationLinks = [
     label: "Settings",
     href: "/profile/settings",
     icon: SettingsIcon,
-    onclick: () => {},
   },
 ];
 
@@ -176,7 +172,6 @@ function ProfileNavigationItems({ pathname }: { pathname: string }) {
             label: string;
             href: string;
             icon: any;
-            onclick: () => void;
           },
           index
         ) => (
@@ -199,7 +194,7 @@ function ProfileNavigationItems({ pathname }: { pathname: string }) {
 
       <Link
         className="mt-9 flex items-center gap-3 rounded-lg px-3 py-2 transition-all text-red-500 hover:text-red-900"
-        href={{}}
+        href="/api/auth/logout"
       >
         <LogOutIcon className="h-4 w-4" />
         Logout

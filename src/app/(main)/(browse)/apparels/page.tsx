@@ -9,11 +9,9 @@ export default async function Page({ searchParams }: { searchParams: any }) {
   const headersList = headers();
   const fullUrl = headersList.get("x-url") || "";
   const pathname = `${fullUrl.split("/").pop()}`;
-  console.log(123)
   const qParam = searchParams.q
     ? JSON.parse(decrypt(searchParams.q))
     : { sizes: [], brands: [], sortBy: "po.created_at desc", page: 1 };
-  console.log(headersList);
   const client = getClient();
   const { data } = await client.query({
     query: GET_PRODUCTS_FOR_BROWSE_PAGE,

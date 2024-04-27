@@ -10,19 +10,21 @@ import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 
 export type Offer = {
-  product: {
-    product_title: string;
-    product_sku: string;
-    slug: string;
-    images: {
-      image_file: string;
-    }[];
+  product_title: string;
+  product_sku: string;
+  slug: string;
+  lowest_price: number;
+  images: {
+    image_file: string;
   };
-  id: number;
-  offer_price: number;
-  prod_size: string;
-  product_size_id: number;
-  in_store: number;
+  product_sizes: {
+    size: string;
+    offer: {
+      id: number;
+      offer_price: number;
+      ready_stock: number;
+    };
+  }[];
 };
 
 export const columns: ColumnDef<Offer>[] = [
@@ -53,22 +55,19 @@ export const columns: ColumnDef<Offer>[] = [
   {
     id: "product",
     header: "Product",
-    accessorKey: "product.product_title",
+    accessorKey: "product_title",
     cell: ({ row }) => {
-      const offer = row.original;
+      const product = row.original;
       return (
         <div className="flex items-center">
           <img
-            src={`${CLOUDFLARE_URL}/${offer.product.images[0].image_file}/thumbnail`}
-            alt={offer.product.product_title}
+            src={`${CLOUDFLARE_URL}/${product.image.image_file}/thumbnail`}
+            alt={product.product_title}
             className="w-10 h-10 object-cover rounded-lg hidden md:block"
           />
           <div className="ml-2">
-            <Link
-              href={`/${offer.product.slug}`}
-              className="text-sm font-semibold"
-            >
-              {offer.product.product_title}
+            <Link href={`/${product.slug}`} className="text-sm font-semibold">
+              {product.product_title}
             </Link>
             {/* <p>({offer.id})</p> */}
           </div>
@@ -81,15 +80,15 @@ export const columns: ColumnDef<Offer>[] = [
   {
     id: "product_sku",
     header: "SKU",
-    accessorKey: "product.product_sku",
+    accessorKey: "product_sku",
     cell: ({ row }) => (
       <p className="text-sm font-semibold">{row.getValue("product_sku")}</p>
     ),
     enableColumnFilter: true,
   },
   {
-    id: "offer_price",
-    accessorKey: "offer_price",
+    id: "lowest_offer",
+    accessorKey: "lowest_offer",
     header: ({ column }) => {
       return (
         <Button
@@ -107,7 +106,7 @@ export const columns: ColumnDef<Offer>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div>RM {row.getValue("offer_price")}</div>,
+    cell: ({ row }) => <div>RM {row.getValue("lowest_offer")}</div>,
     filterFn: (row, columnId, filterValue) => {
       // Convert values to numbers for comparison
       const rowValue = Number(row.getValue(columnId));
@@ -121,12 +120,21 @@ export const columns: ColumnDef<Offer>[] = [
     size: 80,
   },
   {
-    id: "prod_size",
-    header: "Size",
-    accessorKey: "prod_size",
-    cell: ({ row }) => (
-      <p className="text-sm font-semibold">{row.getValue("prod_size")}</p>
-    ),
+    id: "ready_stock",
+    header: "Stock",
+    accessorKey: "product_sizes",
+    cell: ({ row }) => {
+      return (
+        <div className="flex items-center gap-[1px]">
+          {row.original.product_sizes.map((size) => (
+            <div key={size.size} className="outline outline-1 p-1">
+              <p className="text-sm font-semibold">{size.size}</p>
+              <p className="text-xs text-gray-500">{size.offer?.ready_stock || 0}</p>
+            </div>
+          ))}
+        </div>
+      );
+    },
     enableColumnFilter: true,
     size: 50,
     meta: {
@@ -137,20 +145,8 @@ export const columns: ColumnDef<Offer>[] = [
     id: "action",
     header: "Action",
     cell: ({ row }) => (
-      <Button asChild>
-        <Link
-          href={`/${row.original.product.slug}/list?q=${encrypt(
-            JSON.stringify({
-              id: row.original.product_size_id,
-              offer_id: row.original.id,
-              size: row.original.prod_size,
-              price: row.original.offer_price,
-              listType: "Consignment",
-            })
-          )}`}
-        >
-          Edit
-        </Link>
+      <Button>
+       Edit
       </Button>
     ),
   },

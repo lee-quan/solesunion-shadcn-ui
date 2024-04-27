@@ -126,7 +126,6 @@ export function DataTable<TData, TValue>({
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   const meta = header.column.columnDef.meta;
-                  console.log(meta);
                   return (
                     <TableHead
                       key={header.id}
@@ -178,7 +177,7 @@ export function DataTable<TData, TValue>({
               <>
                 {table.getRowModel().rows?.length ? (
                   table.getRowModel().rows.map((row) => {
-                    const offer: any = row.original;
+                    const product: any = row.original;
                     return (
                       <Fragment key={row.id}>
                         <TableRow
@@ -204,51 +203,48 @@ export function DataTable<TData, TValue>({
                           data-state={row.getIsSelected() && "selected"}
                           className="md:hidden"
                         >
-                          <TableCell
-                            colSpan={columns.length}
-                            className="h-24"
-                          >
+                          <TableCell colSpan={columns.length} className="h-24">
                             <div className="flex flex-row items-center w-full space-x-2">
                               <img
-                                src={`${CLOUDFLARE_URL}/${offer.product.images[0].image_file}/thumbnail`}
-                                alt={offer.product.product_title}
+                                src={`${CLOUDFLARE_URL}/${product.image.image_file}/thumbnail`}
+                                alt={product.product_title}
                                 className="w-10 h-10 object-cover rounded-lg"
                               />
                               <div className="flex flex-col flex-1">
-                                <p>{offer?.product?.product_title}</p>
+                                <p>{product?.product_title}</p>
                                 <p className="text-xs">
-                                  {offer?.product?.product_sku}
+                                  {product?.product_sku}
                                 </p>
                                 <p className="text-xs">
                                   Price:{" "}
                                   <span className="font-bold text-sm">
-                                    RM {price2d(offer.offer_price)}
+                                    RM {price2d(product.lowest_offer)}
                                   </span>
                                 </p>
-                                <p className="text-xs">
-                                  Size:{" "}
-                                  <span className="font-bold text-sm">
-                                    {offer.prod_size}
-                                  </span>
-                                </p>
+                                <div className="flex items-center gap-[1px]">
+                                  {product.product_sizes.map(
+                                    (size: {
+                                      size: string;
+                                      offer: {
+                                        ready_stock: number;
+                                      };
+                                    }) => (
+                                      <div
+                                        key={size.size}
+                                        className="outline outline-1 p-1"
+                                      >
+                                        <p className="text-sm font-semibold">
+                                          {size.size}
+                                        </p>
+                                        <p className="text-xs text-gray-500">
+                                          {size.offer?.ready_stock || 0}
+                                        </p>
+                                      </div>
+                                    )
+                                  )}
+                                </div>
                               </div>
-                              <Button asChild>
-                                <Link
-                                  href={`/${
-                                    offer.product.slug
-                                  }/list?q=${encrypt(
-                                    JSON.stringify({
-                                      id: offer.product_size_id,
-                                      offer_id: offer.id,
-                                      size: offer.prod_size,
-                                      price: offer.offer_price,
-                                      listType: "Consignment",
-                                    })
-                                  )}`}
-                                >
-                                  Edit
-                                </Link>
-                              </Button>
+                              <Button>Edit</Button>
                             </div>
                           </TableCell>
                         </TableRow>

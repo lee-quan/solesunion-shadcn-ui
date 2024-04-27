@@ -34,7 +34,7 @@ export default auth((request) => {
     return NextResponse.redirect(url);
   }
   // if not authenticated, redirect to login
-  // console.log
+
   return NextResponse.next({
     request: {
       ...request,
