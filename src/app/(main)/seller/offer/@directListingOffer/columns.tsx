@@ -14,9 +14,9 @@ export type Offer = {
     product_title: string;
     product_sku: string;
     slug: string;
-    images: {
+    image: {
       image_file: string;
-    }[];
+    };
   };
   id: number;
   offer_price: number;
@@ -166,7 +166,7 @@ export const soldOfferColumns: ColumnDef<Offer>[] = [
       return (
         <div className="flex items-center">
           <img
-            src={`${CLOUDFLARE_URL}/${offer.product.images[0].image_file}/thumbnail`}
+            src={`${CLOUDFLARE_URL}/${offer.product.image.image_file}/thumbnail`}
             alt={offer.product.product_title}
             className="w-10 h-10 object-cover rounded-lg hidden md:block"
           />
@@ -241,7 +241,7 @@ export const deletedOfferColumns: ColumnDef<Offer>[] = [
       return (
         <div className="flex items-center">
           <img
-            src={`${CLOUDFLARE_URL}/${offer.product.images[0].image_file}/thumbnail`}
+            src={`${CLOUDFLARE_URL}/${offer.product.image.image_file}/thumbnail`}
             alt={offer.product.product_title}
             className="w-10 h-10 object-cover rounded-lg hidden md:block"
           />

@@ -5,12 +5,12 @@ import { useQuery } from "@apollo/client";
 
 import { useState } from "react";
 import { DataTable } from "./data-table";
-import { Offer, columns } from "./columns";
+import { Product, columns } from "./columns";
 import useQParam from "@/hooks/useQParams";
 
 export default function SellerDashboardOfferPage() {
   const { status } = useQParam();
-  const [data, setData] = useState<Offer[]>([]);
+  const [data, setData] = useState<Product[]>([]);
 
   const { data: queryData, loading } = useQuery(
     SELLER_DASHBOARD__CONSIGNMENT_PRODUCT_OFFER,

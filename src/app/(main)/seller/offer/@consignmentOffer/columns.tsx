@@ -9,12 +9,12 @@ import { ArrowDownIcon, ArrowUpIcon } from "@radix-ui/react-icons";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 
-export type Offer = {
+export type Product = {
   product_title: string;
   product_sku: string;
   slug: string;
   lowest_price: number;
-  images: {
+  image: {
     image_file: string;
   };
   product_sizes: {
@@ -27,7 +27,7 @@ export type Offer = {
   }[];
 };
 
-export const columns: ColumnDef<Offer>[] = [
+export const columns: ColumnDef<Product>[] = [
   // {
   //   id: "select",
   //   header: ({ table }) => (
@@ -149,156 +149,5 @@ export const columns: ColumnDef<Offer>[] = [
        Edit
       </Button>
     ),
-  },
-];
-
-export const soldOfferColumns: ColumnDef<Offer>[] = [
-  {
-    id: "product",
-    header: "Product",
-    accessorKey: "product.product_title",
-    cell: ({ row }) => {
-      const offer = row.original;
-      return (
-        <div className="flex items-center">
-          <img
-            src={`${CLOUDFLARE_URL}/${offer.product.images[0].image_file}/thumbnail`}
-            alt={offer.product.product_title}
-            className="w-10 h-10 object-cover rounded-lg hidden md:block"
-          />
-          <div className="ml-2">
-            <p className="text-sm font-semibold">
-              {offer.product.product_title}
-            </p>
-          </div>
-        </div>
-      );
-    },
-    enableColumnFilter: true,
-  },
-  {
-    id: "product_sku",
-    header: "SKU",
-    accessorKey: "product.product_sku",
-    cell: ({ row }) => (
-      <p className="text-sm font-semibold">{row.getValue("product_sku")}</p>
-    ),
-    enableColumnFilter: true,
-  },
-  {
-    id: "payout",
-    accessorKey: "offer_price",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Payout
-          {/* arrowup, arrowdown, arrowupdown */}
-          {column.getIsSorted() === "asc" ? (
-            <ArrowUpIcon className="ml-2 h-4 w-4" />
-          ) : column.getIsSorted() === "desc" ? (
-            <ArrowDownIcon className="ml-2 h-4 w-4" />
-          ) : (
-            <ArrowUpDownIcon className="ml-2 h-4 w-4" />
-          )}
-        </Button>
-      );
-    },
-    cell: ({ row }: any) => (
-      <div className="">RM {price2d(row.original.offer_price * 0.8)}</div>
-    ),
-    filterFn: (row, columnId, filterValue) => {
-      // Convert values to numbers for comparison
-      const rowValue = Number(row.getValue(columnId));
-      const filterValueAsNumber = Number(filterValue);
-      return rowValue * 0.8 >= filterValueAsNumber;
-    },
-    enableColumnFilter: true,
-  },
-  {
-    id: "prod_size",
-    header: "Size",
-    accessorKey: "prod_size",
-    cell: ({ row }) => (
-      <p className="text-sm font-semibold">{row.getValue("prod_size")}</p>
-    ),
-    enableColumnFilter: true,
-  },
-];
-export const deletedOfferColumns: ColumnDef<Offer>[] = [
-  {
-    id: "product",
-    header: "Product",
-    accessorKey: "product.product_title",
-    cell: ({ row }) => {
-      const offer = row.original;
-      return (
-        <div className="flex items-center">
-          <img
-            src={`${CLOUDFLARE_URL}/${offer.product.images[0].image_file}/thumbnail`}
-            alt={offer.product.product_title}
-            className="w-10 h-10 object-cover rounded-lg hidden md:block"
-          />
-          <div className="ml-2">
-            <p className="text-sm font-semibold">
-              {offer.product.product_title}
-            </p>
-          </div>
-        </div>
-      );
-    },
-    enableColumnFilter: true,
-  },
-  {
-    id: "product_sku",
-    header: "SKU",
-    accessorKey: "product.product_sku",
-    cell: ({ row }) => (
-      <p className="text-sm font-semibold">{row.getValue("product_sku")}</p>
-    ),
-    enableColumnFilter: true,
-  },
-  {
-    id: "payout",
-    accessorKey: "offer_price",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Payout
-          {/* arrowup, arrowdown, arrowupdown */}
-          {column.getIsSorted() === "asc" ? (
-            <ArrowUpIcon className="ml-2 h-4 w-4" />
-          ) : column.getIsSorted() === "desc" ? (
-            <ArrowDownIcon className="ml-2 h-4 w-4" />
-          ) : (
-            <ArrowUpDownIcon className="ml-2 h-4 w-4" />
-          )}
-        </Button>
-      );
-    },
-    cell: ({ row }: any) => (
-      <div className="">RM {price2d(row.original.offer_price * 0.8)}</div>
-    ),
-    filterFn: (row, columnId, filterValue) => {
-      // Convert values to numbers for comparison
-      const rowValue = Number(row.getValue(columnId));
-      const filterValueAsNumber = Number(filterValue);
-      return rowValue * 0.8 >= filterValueAsNumber;
-    },
-    enableColumnFilter: true,
-  },
-  {
-    id: "prod_size",
-    header: "Size",
-    accessorKey: "prod_size",
-    cell: ({ row }) => (
-      <p className="text-sm font-semibold">{row.getValue("prod_size")}</p>
-    ),
-    enableColumnFilter: true,
   },
 ];
