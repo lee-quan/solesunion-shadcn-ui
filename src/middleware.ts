@@ -25,16 +25,19 @@ import type { NextRequest } from "next/server";
 import { auth } from "./lib/auth";
 
 export default auth((request) => {
+  const pathname = request.nextUrl.pathname;
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set("x-url", request.url);
 
-  if (request.nextUrl.pathname === "/seller") {
+  if (pathname === "/seller" || pathname === "/seller/offer") {
     const url = request.nextUrl.clone();
-    url.pathname = "/seller/offer";
+    url.pathname = "/seller/offer/active";
     return NextResponse.redirect(url);
-  }
-  // if not authenticated, redirect to login
 
+    
+  }
+
+  
   return NextResponse.next({
     request: {
       ...request,
