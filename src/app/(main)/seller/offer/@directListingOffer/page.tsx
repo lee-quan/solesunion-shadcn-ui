@@ -17,7 +17,7 @@ export default function SellerDashboardOfferPage() {
   const { status } = useQParam();
   const [data, setData] = useState<Offer[]>([]);
 
-  const { data: queryData, loading } = useQuery(GET_PRODUCT_OFFERS, {
+  const { loading } = useQuery(GET_PRODUCT_OFFERS, {
     variables: { status: status ?? "active" },
     onCompleted(data) {
       setData(data.ProductOffer);

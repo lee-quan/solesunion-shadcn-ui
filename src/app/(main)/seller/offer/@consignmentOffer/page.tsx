@@ -22,7 +22,6 @@ export default function SellerDashboardOfferPage() {
     }
   );
 
-  console.log("data", queryData);
   return (
     <div className="p-6 pt-0 overflow-x-auto max-w-full">
       <DataTable columns={columns} data={data} loading={loading} />

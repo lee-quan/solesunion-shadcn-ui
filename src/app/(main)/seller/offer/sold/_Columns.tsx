@@ -2,10 +2,8 @@
 
 import { ArrowUpDownIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { CLOUDFLARE_URL } from "@/lib/constants";
-import { encrypt, price2d } from "@/lib/utils";
-import { ArrowDownIcon, ArrowUpIcon } from "@radix-ui/react-icons";
+import { encrypt } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 
@@ -27,7 +25,28 @@ export type Product = {
   }[];
 };
 
-export const columns: ColumnDef<Product>[] = [
+export type Offer = {
+  product: {
+    product_title: string;
+    product_sku: string;
+    slug: string;
+    image: {
+      image_file: string;
+    };
+  };
+  id: number;
+  offer_price: number;
+  prod_size: string;
+  product_size_id: number;
+  in_store: number;
+};
+
+export type OrderDetail = {
+  quantity: number;
+  product_offer: Offer;
+};
+
+export const soldOfferColumns: ColumnDef<OrderDetail>[] = [
   // {
   //   id: "select",
   //   header: ({ table }) => (
@@ -57,13 +76,13 @@ export const columns: ColumnDef<Product>[] = [
     header: "Product",
     accessorKey: "product_title",
     cell: ({ row }) => {
-      const product = row.original;
+      const product = row.original.product_offer.product;
       return (
         <div className="flex items-center">
           <img
             src={`${CLOUDFLARE_URL}/${product.image.image_file}/thumbnail`}
             alt={product.product_title}
-            className="w-10 h-10 object-cover rounded-lg hidden md:block"
+            className="w-10 h-10 object-cover rounded-lg"
           />
           <div className="ml-2">
             <Link href={`/${product.slug}`} className="text-sm font-semibold">
@@ -82,9 +101,14 @@ export const columns: ColumnDef<Product>[] = [
     header: "SKU",
     accessorKey: "product_sku",
     cell: ({ row }) => (
-      <p className="text-sm font-semibold">{row.getValue("product_sku")}</p>
+      <p className="text-sm font-semibold">
+        {row.original.product_offer.product.product_sku}
+      </p>
     ),
     enableColumnFilter: true,
+    meta: {
+      className: "hidden md:table-cell",
+    },
   },
   {
     id: "lowest_offer",
@@ -106,7 +130,7 @@ export const columns: ColumnDef<Product>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div>RM {row.getValue("lowest_offer")}</div>,
+    cell: ({ row }) => <div>RM {row.original.product_offer.offer_price}</div>,
     filterFn: (row, columnId, filterValue) => {
       // Convert values to numbers for comparison
       const rowValue = Number(row.getValue(columnId));
@@ -121,27 +145,15 @@ export const columns: ColumnDef<Product>[] = [
   },
   {
     id: "quantity",
-    header: "Stock",
-    accessorKey: "product_sizes",
-    cell: ({ row }) => {
+    header: "Quantity",
+    accessorKey: "quantity",
+    cell: ({ row, cell }) => {
       return (
         <div className="flex items-center gap-[1px]">
-          {row.original.product_sizes.map((size) => (
-            <div key={size.size} className="outline outline-1 p-1">
-              <p className="text-sm font-semibold">{size.size}</p>
-              <p className="text-xs text-gray-500">{size.offer?.ready_stock || 0}</p>
-            </div>
-          ))}
+          {row.getValue("quantity")}
         </div>
       );
     },
     size: 50,
-    meta: {
-      className: "hidden md:table-cell",
-    },
   },
 ];
-
-export const soldOfferColumns: ColumnDef<Product>[] = [
-  
-]

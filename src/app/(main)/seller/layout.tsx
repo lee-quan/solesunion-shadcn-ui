@@ -29,7 +29,7 @@ const sellerDashboardNavigationLinks = [
     label: "Active Listings",
     icon: SneakerIcon,
     status: "active",
-    href: `/seller/offer?q=${encrypt({ status: "active" })}`,
+    href: `/seller/offer/active`,
     description:
       "This tab will show all sneakers currently listed by the seller that are either available online or have been shipped to and are held at Soles Union, GMBB, ready for purchase.",
   },
@@ -53,7 +53,7 @@ const sellerDashboardNavigationLinks = [
     label: "Past Listings",
     icon: HistoryIcon,
     status: "sold",
-    href: `/seller/offer?q=${encrypt({ status: "sold" })}`,
+    href: `/seller/offer/sold`,
     description:
       "This tab will display all completed transactions, including sneakers that have been sold and shipped to the buyer. It serves as a historical record for the seller.",
   },
@@ -82,7 +82,7 @@ export default function SellerDashboardLayout({
       <SellerDashboardMenu pathname={pathname} status={status} />
       <main className="flex flex-1 flex-col p-4 md:gap-8 md:p-6">
         {children}
-      </main> 
+      </main>
     </div>
   );
 }
@@ -103,19 +103,27 @@ function SellerDashboardSidebar({ pathname }: { pathname: string }) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-function SellerDashboardMenu({ pathname, status }: { pathname: string; status: string}) {
+function SellerDashboardMenu({
+  pathname,
+  status,
+}: {
+  pathname: string;
+  status: string;
+}) {
   return (
     <header className="lg:hidden flex h-14 items-center gap-4 border-b bg-gray-100/40 px-6">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button
-            className="lg:hidden border border-gray-200"
-            variant="ghost"
-          >
-            {sellerDashboardNavigationLinks.find((link) => link.status === status)?.label} <ChevronDownIcon className="h-4 w-4"/>
+          <Button className="lg:hidden border border-gray-200" variant="ghost">
+            {
+              sellerDashboardNavigationLinks.find(
+                (link) => link.status === status
+              )?.label
+            }{" "}
+            <ChevronDownIcon className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
