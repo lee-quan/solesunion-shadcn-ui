@@ -85,9 +85,9 @@ export default function SellerDashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const qParams = useQParam();
-  const status = qParams.status ? qParams.status : "active";
   const pathname = usePathname();
+  const status = pathname.split("/")?.pop();
+  console.log(status);
   const userRole = useUserRole();
   const links =
     userRole === "V"
@@ -142,7 +142,7 @@ function SellerDashboardMenu({
   links,
 }: {
   pathname: string;
-  status: string;
+  status?: string;
   links: {
     label: string;
     href: string;

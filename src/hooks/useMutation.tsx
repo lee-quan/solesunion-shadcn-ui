@@ -11,6 +11,7 @@ export default function useMutation(
 ) {
     const { toast } = useToast();
     return useApolloMutation(MUTATION, {
+        refetchQueries: ["SellerDashboard_PendingProductOffer"],
         onError: (error) => {
             if (showToast) {
                 toast({

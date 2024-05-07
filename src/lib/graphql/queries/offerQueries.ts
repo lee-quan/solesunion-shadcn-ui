@@ -21,6 +21,7 @@ export const GET_PRODUCT_OFFERS = gql`
     }
   }
 `;
+
 export const SELLER_DASHBOARD__DIRECT_LISTING_PRODUCT_OFFER = gql`
   query ProductOfferQuery($status: String) {
     SellerDashboard_DirectListingProductOffer(status: $status) {
@@ -82,6 +83,28 @@ export const SELLER_DASHBOARD__SOLD_PRODUCT_OFFER = gql`
           image {
             image_file
           }
+        }
+      }
+    }
+  }
+`;
+
+export const SELLER_DASHBOARD__PENDING_PRODUCT_OFFER = gql`
+  query SellerDashboardPendingProductOfferQuery($status: String) {
+    SellerDashboard_PendingProductOffer(status: $status) {
+      id
+      user_id
+      offer_price
+      prod_size
+      created_at
+      product_size_id
+      in_store
+      product {
+        slug
+        product_title
+        product_sku
+        image {
+          image_file
         }
       }
     }

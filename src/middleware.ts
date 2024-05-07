@@ -29,12 +29,14 @@ export default auth((request) => {
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set("x-url", request.url);
 
+
+  const userRole = request.auth?.user?.role;
+  const isAdmin = userRole === "A";
   if (pathname === "/seller" || pathname === "/seller/offer") {
     const url = request.nextUrl.clone();
-    url.pathname = "/seller/offer/active";
-    return NextResponse.redirect(url);
 
-    
+    url.pathname = isAdmin ? "/seller/offer/pending" :"/seller/offer/active";
+    return NextResponse.redirect(url);
   }
 
   

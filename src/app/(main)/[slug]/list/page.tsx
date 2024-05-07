@@ -24,7 +24,8 @@ export default function SellPage() {
   const qParam = useQParam();
 
   const [price, setPrice] = useState(qParam.price ?? 0);
-  const [listType, setListType] = useState(qParam.listType ?? "Online");
+  // const [listType, setListType] = useState(qParam.listType ?? "Online");
+  const [listType, setListType] = useState("Consignment");
 
   const { data } = useQuery(GET_LOWEST_ACTIVE_OFFER_AND_LAST_SALE, {
     variables: {
@@ -64,11 +65,11 @@ export default function SellPage() {
         </Button>
       </div>
       <div className="text-sm text-gray-500">
-        Estimated Payout: RM {price2d(price * 0.8)}
+        Estimated Payout: RM {price2d(price * 0.8)} (80% of the listing price)
       </div>
       {price < data?.lowestActiveOfferAndLastSale.lowest_offer && (
-        <div className="text-sm text-gray-500">
-          You are about to be the Lowest List.
+        <div className="text-sm text-yellow-500">
+          Note: Your listing price is lower than the current lowest offer.
         </div>
       )}
       <div className="space-y-2">
@@ -85,17 +86,19 @@ export default function SellPage() {
                 <strong>Online Listing:</strong>
               </p>
               <p>
-                List your sneakers online and keep them until they&apos;re sold.
-                Once sold, ship them to us for authentication. After
-                verification, we&apos;ll ship them to the buyer.
+                List your sneakers online and keep them with you until sold.
+                Once a buyer purchases, ship the sneakers to us for
+                authentication. After verification, we&apos;ll send them to the
+                buyer.
               </p>
               <p>
                 <strong>Consignment:</strong>
               </p>
               <p>
-                Ship your sneakers to us right away. We&apos;ll authenticate and
-                store them. When they sell, we ship directly to the buyer,
-                streamlining the process for you.
+                Ship your sneakers to us immediately. We will authenticate,
+                store, and handle the selling process. When your sneakers sell,
+                we&apos;ll ship them directly to the buyer, simplifying the
+                process for you.
               </p>
             </TooltipContent>
           </Tooltip>
@@ -108,10 +111,13 @@ export default function SellPage() {
           }}
         >
           <div className="flex flex-col space-y-2">
-            <Label className="flex items-center gap-2">
-              <RadioGroupItem value="Online" />
+            <p className="text-gray-500 text-sm italic">
+              Currently, only Consignment listings are supported.
+            </p>
+            {/* <Label className="flex items-center gap-2">
+              <RadioGroupItem value="Online" disabled/>
               Online Listing
-            </Label>
+            </Label> */}
             <Label className="flex items-center gap-2">
               <RadioGroupItem value="Consignment" />
               Consignment
@@ -122,7 +128,7 @@ export default function SellPage() {
       {data?.lowestActiveOfferAndLastSale.last_sale && (
         <div className="flex flex-col space-y-2">
           <div className="flex justify-between">
-            <div className="text-sm font-bold">LAST SALE</div>
+            <div className="text-sm font-bold">LAST SALE DETAILS</div>
           </div>
           <div className="flex justify-between">
             <div className="text-xs text-gray-500">
@@ -141,7 +147,7 @@ export default function SellPage() {
       )}
       <div className="flex space-x-4">
         <Button className="flex-1" variant="outline">
-          CANCEL
+          CANCEL LISTING
         </Button>
         <Button className="flex-1" asChild>
           <Link
@@ -157,7 +163,7 @@ export default function SellPage() {
                 : {}
             }
           >
-            REVIEW LIST
+            REVIEW AND CONFIRM
           </Link>
         </Button>
       </div>

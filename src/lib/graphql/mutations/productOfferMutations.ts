@@ -27,3 +27,12 @@ export const UPDATE_PRODUCT_OFFER = gql`
     }
   }
 `;
+
+export const SELLER_DASHBOARD__PUBLISH_PENDING_PRODUCT_OFFER = gql`
+ mutation SellerDashboard_PublishPendingProductOfferMutation($offer_ids: [Int!]!) {
+  SellerDashboard_PublishPendingProductOffer(offer_ids: $offer_ids) {
+    success
+    message
+  }
+ }
+`
