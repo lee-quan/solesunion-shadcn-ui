@@ -98,11 +98,14 @@ const productColumns: ColumnDef<Product>[] = [
         <div className="flex items-center">
           <img
             src={`${CLOUDFLARE_URL}/${product?.image?.image_file}/thumbnail`}
-            alt={product?.product_title}
+            alt={product?.product_title || ""}
             className="w-10 h-10 object-cover rounded-lg"
           />
           <div className="ml-2">
-            <Link href={`/dashboard/product/${product?.slug}`} className="text-sm font-semibold">
+            <Link
+              href={`/dashboard/product/${product?.slug}`}
+              className="text-sm font-semibold"
+            >
               {product?.product_title}
             </Link>
             {/* <p>({offer.id})</p> */}

@@ -71,8 +71,5 @@ export const createSlug = (title: string) => {
   // Remove multiple dashes
   slug = slug.replace(/-+/g, "-");
 
-  // Trim dashes from the beginning and end
-  slug = slug.trim("-");
-
   return slug;
 };
