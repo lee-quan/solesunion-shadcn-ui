@@ -118,7 +118,7 @@ function SellerNavigationItems({ pathname }: { pathname: string }) {
         Payout Information
       </Link>
       <Link
-        href={"/seller"}
+        href={"/dashboard"}
         className="flex items-center gap-3 rounded-lg px-3 py-2 transition-all text-gray-500 hover:text-gray-900"
         onClick={() => {}}
       >
