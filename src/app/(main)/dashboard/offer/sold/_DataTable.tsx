@@ -64,7 +64,6 @@ export default function Dataable<TData, TValue>({
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const table = useReactTable({
-    debugTable: true,
     defaultColumn: {
       meta: {
         editable: false,

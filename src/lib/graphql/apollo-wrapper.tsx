@@ -1,6 +1,7 @@
 "use client";
 
 import { ApolloLink, HttpLink, from } from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
 import {
   ApolloNextAppProvider,
@@ -8,13 +9,12 @@ import {
   NextSSRInMemoryCache,
   SSRMultipartLink,
 } from "@apollo/experimental-nextjs-app-support/ssr";
-import { BACKEND_URL } from "../constants";
-import { useMemo } from "react";
-import { setContext } from "@apollo/client/link/context";
 import { useSession } from "next-auth/react";
+import { useMemo } from "react";
+import { BACKEND_URL } from "../constants";
 
 function makeClient(session: any) {
-  let uri = `${BACKEND_URL}/graphql${session ? "/authenticated" : ""}`;
+  let uri = `${BACKEND_URL}/graphql`;
   const httpLink = new HttpLink({
     uri,
     headers: {

@@ -1,27 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-// export function middleware(request: NextRequest) {
-
-//   if (
-//     request.nextUrl.pathname.startsWith("/browse") ||
-//     request.nextUrl.pathname.startsWith("/sneakers") ||
-//     request.nextUrl.pathname.startsWith("/apparels")
-//   ) {
-//     return NextResponse.next({
-//       request: {
-//         headers: requestHeaders,
-//       },
-//     });
-//   }
-
-//   if (request.nextUrl.pathname === "/seller") {
-//     return NextResponse.redirect("http://localhost:3000/seller/offer", {
-//       status: 302,
-//     });
-//   }
-// }
-
 import { auth } from "./lib/auth";
 
 export default auth((request) => {
@@ -32,10 +11,10 @@ export default auth((request) => {
 
   const userRole = request.auth?.user?.role;
   const isAdmin = userRole === "A";
-  if (pathname === "/seller" || pathname === "/seller/offer") {
+  if (pathname === "/dashboard" || pathname === "/dashboard/offer") {
     const url = request.nextUrl.clone();
 
-    url.pathname = isAdmin ? "/seller/offer/pending" :"/seller/offer/active";
+    url.pathname = isAdmin ? "/dashboard/offer/pending" :"/dashboard/offer/active";
     return NextResponse.redirect(url);
   }
 

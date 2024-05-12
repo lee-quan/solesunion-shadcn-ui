@@ -10,7 +10,6 @@ export default function _SellerDashboard_SoldOfferPage() {
   const [data, setData] = useState<OrderDetail[]>([]);
   const { loading } = useQuery(SELLER_DASHBOARD__SOLD_PRODUCT_OFFER, {
     onCompleted(data) {
-      console.log(data);
       setData(data.SellerDashboard_SoldProductOffer);
     },
   });

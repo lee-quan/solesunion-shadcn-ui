@@ -57,3 +57,22 @@ export function decrypt(text: string | null | undefined) {
     return "/";
   }
 }
+
+export const createSlug = (title: string) => {
+  // Convert the string to lowercase
+  let slug = title.toLowerCase();
+
+  // Replace spaces with dashes
+  slug = slug.replace(/\s+/g, "-");
+
+  // Remove special characters
+  slug = slug.replace(/[^a-z0-9-]/g, "");
+
+  // Remove multiple dashes
+  slug = slug.replace(/-+/g, "-");
+
+  // Trim dashes from the beginning and end
+  slug = slug.trim("-");
+
+  return slug;
+};

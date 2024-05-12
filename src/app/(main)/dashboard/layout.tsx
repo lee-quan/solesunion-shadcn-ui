@@ -29,9 +29,9 @@ import { useUserRole } from "@/hooks/useUser";
 const vendorDashboardNavigationLinks = [
   {
     label: "Active Listings",
-    icon: SneakerIcon,
+    icon: <SneakerIcon />,
     status: "active",
-    href: `/seller/offer/active`,
+    href: `/dashboard/offer/active`,
     description:
       "This tab will show all sneakers currently listed by the seller that are either available online or have been shipped to and are held at Soles Union, GMBB, ready for purchase.",
   },
@@ -39,7 +39,7 @@ const vendorDashboardNavigationLinks = [
   //   label: "Pending Shipment to Store",
   //   icon: TruckIcon,
   //   status: "pending_store_shipment",
-  //   href: `/seller/offer?q=${encrypt({ status: "pending_store_shipment" })}`,
+  //   href: `/dashboard/offer?q=${encrypt({ status: "pending_store_shipment" })}`,
   //   description:
   //     "This tab includes listings where the seller has opted to sell the sneakers in-store but has not yet shipped them to Soles Union, GMBB. It's a reminder for sellers to ship their items.",
   // },
@@ -47,15 +47,15 @@ const vendorDashboardNavigationLinks = [
   //   label: "Pending Seller Shipment",
   //   icon: PackageIcon,
   //   status: "pending_seller_shipment",
-  //   href: `/seller/offer?q=${encrypt({ status: "pending_seller_shipment" })}`,
+  //   href: `/dashboard/offer?q=${encrypt({ status: "pending_seller_shipment" })}`,
   //   description:
   //     "Listings under this tab are those that have been purchased by a buyer but are still with the seller, awaiting shipment to Soles Union, GMBB for verification and onward delivery to the buyer.",
   // },
   {
     label: "Past Listings",
-    icon: HistoryIcon,
+    icon: <HistoryIcon />,
     status: "sold",
-    href: `/seller/offer/sold`,
+    href: `/dashboard/offer/sold`,
     description:
       "This tab will display all completed transactions, including sneakers that have been sold and shipped to the buyer. It serves as a historical record for the seller.",
   },
@@ -63,7 +63,7 @@ const vendorDashboardNavigationLinks = [
   //   label: "Deleted Listings",
   //   icon: TrashIcon,
   //   status: "deleted",
-  //   href: `/seller/offer?q=${encrypt({ status: "deleted" })}`,
+  //   href: `/dashboard/offer?q=${encrypt({ status: "deleted" })}`,
   //   description: "This tab will display all deleted listings.",
   // },
 ];
@@ -71,13 +71,24 @@ const vendorDashboardNavigationLinks = [
 const sellerDashboardNavigationLinks = [
   {
     label: "Pending Listings",
-    icon: ClockIcon,
+    icon: <ClockIcon />,
     status: "pending",
-    href: `/seller/offer/pending`,
+    href: `/dashboard/offer/pending`,
     description:
       "This tab will show all sneakers currently listed by the seller that are either available online or have been shipped to and are held at Soles Union, GMBB, ready for purchase.",
   },
   ...vendorDashboardNavigationLinks,
+];
+
+const adminDashboardNavigationLinks = [
+  {
+    label: "Products",
+    icon: <SneakerIcon />,
+    status: "",
+    href: "/dashboard/product",
+    description: "Product Management",
+  },
+  ...sellerDashboardNavigationLinks,
 ];
 
 export default function SellerDashboardLayout({
@@ -87,10 +98,11 @@ export default function SellerDashboardLayout({
 }) {
   const pathname = usePathname();
   const status = pathname.split("/")?.pop();
-  console.log(status);
   const userRole = useUserRole();
   const links =
-    userRole === "V"
+    userRole === "A"
+      ? adminDashboardNavigationLinks
+      : userRole === "V"
       ? vendorDashboardNavigationLinks
       : sellerDashboardNavigationLinks;
   return (
@@ -156,7 +168,7 @@ function SellerDashboardMenu({
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button className="lg:hidden border border-gray-200" variant="ghost">
-            {links.find((link) => link.status === status)?.label}{" "}
+            {links.find((link) => pathname.includes(link.href))?.label}{" "}
             <ChevronDownIcon className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
@@ -190,7 +202,7 @@ function SellerDashboardNavigationItems({
           link: {
             label: string;
             href: string;
-            icon: any;
+            icon?: any;
           },
           index
         ) => (
@@ -199,12 +211,12 @@ function SellerDashboardNavigationItems({
             href={link.href}
             className={cn(
               "flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-gray-900",
-              pathname === link.href
+              pathname.includes(link.href)
                 ? "bg-gray-100 text-gray-900"
                 : "text-gray-500"
             )}
           >
-            <link.icon className="h-4 w-4" />
+            {link.icon && link.icon}
             {link.label}
           </Link>
         )

@@ -3,7 +3,7 @@ import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
-import { LoadingDots } from "../icons";
+import { LoadingDots, Spinner } from "../icons";
 
 const buttonVariants = cva(
   "rounded-sm inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-colors focus-within:ring-0 focus-within:outline-none disabled:pointer-events-none disabled:opacity-50 select-none",
@@ -56,7 +56,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         {...props}
       >
-        {isSubmitting ? <LoadingDots /> : props.children}
+        {isSubmitting ? <Spinner /> : props.children}
       </Comp>
     );
   }

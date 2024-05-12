@@ -1,7 +1,8 @@
+import { graphql } from "@/gql";
 import gql from "graphql-tag";
 
 export const GET_PRODUCT_OFFERS = gql`
-  query ProductOfferQuery($status: String) {
+  query GetProductOffersQuery($status: String) {
     ProductOffer(status: $status) {
       id
       user_id

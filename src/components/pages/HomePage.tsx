@@ -6,6 +6,7 @@ import ProductCarousel from "@/components/carousel/ProductCarousel";
 import { Button } from "@/components/ui/button";
 import BestSellerCarousel from "@/components/carousel/BestSellerCarousel";
 import { useState } from "react";
+import { BACKEND_URL } from "@/lib/constants";
 
 export default function HomePage({
   data,

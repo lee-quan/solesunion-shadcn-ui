@@ -1,5 +1,5 @@
 {
-  "name": "test",
+  "name": "solesunion",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,7 +9,9 @@
     "lint": "next lint",
     "copy": "mv ./.next/static ./.next/standalone/; cp -r ./public ./.next/standalone/",
     "buildAndCopy": "next build && npm run copy",
-    "cleanup": "rm -r node_modules"
+    "cleanup": "rm -r node_modules",
+    "codegen": "graphql-codegen --watch --require dotenv/config --config codegen.ts dotenv_config_path=./.env.local",
+    "start:dev": "npx concurrently \"npm run dev\" \"npm run codegen\""
   },
   "dependencies": {
     "@apollo/client": "^3.9.11",
@@ -29,6 +31,7 @@
     "@radix-ui/react-separator": "^1.0.3",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-switch": "^1.0.3",
+    "@radix-ui/react-tabs": "^1.0.4",
     "@radix-ui/react-toast": "^1.1.5",
     "@radix-ui/react-tooltip": "^1.0.7",
     "@tanstack/react-table": "^8.16.0",
@@ -53,6 +56,9 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.2",
+    "@graphql-codegen/client-preset": "^4.2.5",
+    "@parcel/watcher": "^2.4.1",
     "@types/crypto-js": "^4.2.2",
     "@types/node": "^20",
     "@types/react": "^18",
@@ -61,6 +67,7 @@
     "eslint-config-next": "14.2.1",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
   }
 }

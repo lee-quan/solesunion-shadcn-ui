@@ -5,12 +5,8 @@ import {
   SELLER_DASHBOARD__DIRECT_LISTING_PRODUCT_OFFER,
 } from "@/lib/graphql/queries/offerQueries";
 import { useQuery } from "@apollo/client";
-
-import { useState } from "react";
 import DataTable from "./_DataTable";
 import {
-  Product,
-  Offer,
   directListing_ActiveOfferColumn,
   consignment_ActiveOfferColumn,
 } from "./_Columns";
@@ -30,34 +26,37 @@ export default function _SellerDashboard_ActiveOfferPage() {
 }
 
 const DirectListingActiveTable = () => {
-  const [data, setData] = useState<Offer[]>([]);
-  const { loading } = useQuery(SELLER_DASHBOARD__DIRECT_LISTING_PRODUCT_OFFER, {
-    variables: { status: "active" },
-    onCompleted(data) {
-      setData(data.SellerDashboard_DirectListingProductOffer);
-    },
-  });
+  const { data, loading } = useQuery(
+    SELLER_DASHBOARD__DIRECT_LISTING_PRODUCT_OFFER,
+    {
+      variables: { status: "active" },
+    }
+  );
+  if (!data) return null;
+
+  console.log(data);
   return (
     <DataTable
       columns={directListing_ActiveOfferColumn}
-      data={data}
+      data={data?.SellerDashboard_DirectListingProductOffer}
       loading={loading}
     />
   );
 };
 
 const ConsignmentActiveTable = () => {
-  const [data, setData] = useState<Product[]>([]);
-  const { loading } = useQuery(SELLER_DASHBOARD__CONSIGNMENT_PRODUCT_OFFER, {
-    variables: { status: "active" },
-    onCompleted(data) {
-      setData(data.SellerDashboard_ConsignmentProductOffer);
-    },
-  });
+  const { data, loading } = useQuery(
+    SELLER_DASHBOARD__CONSIGNMENT_PRODUCT_OFFER,
+    {
+      variables: { status: "active" },
+    }
+  );
+  if (!data) return null;
+
   return (
     <DataTable
       columns={consignment_ActiveOfferColumn}
-      data={data}
+      data={data?.SellerDashboard_ConsignmentProductOffer}
       loading={loading}
     />
   );

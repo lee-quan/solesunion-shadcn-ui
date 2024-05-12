@@ -22,7 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Fragment, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -41,18 +41,30 @@ import {
 import { LoaderIcon } from "@/components/icons";
 import { cn, encrypt, price2d } from "@/lib/utils";
 import { CLOUDFLARE_URL } from "@/lib/constants";
+import { useUserRole } from "@/hooks/useUser";
+import { Offer } from "./_Columns";
+import useMutation from "@/hooks/useMutation";
+import { SELLER_DASHBOARD__PUBLISH_PENDING_PRODUCT_OFFER } from "@/lib/graphql/mutations/productOfferMutations";
+import {
+  SELLER_DASHBOARD__DIRECT_LISTING_PRODUCT_OFFER,
+  SELLER_DASHBOARD__PENDING_PRODUCT_OFFER,
+} from "@/lib/graphql/queries/offerQueries";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   loading: boolean;
+  onFetchData: () => void;
 }
 
 export default function Dataable<TData, TValue>({
   columns,
   data,
   loading,
+  onFetchData,
 }: DataTableProps<TData, TValue>) {
+  const userRole = useUserRole();
+  const isAdmin = userRole === "A";
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 10,
@@ -61,10 +73,10 @@ export default function Dataable<TData, TValue>({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
+  const [selectedIds, setSelectedIds] = useState({});
   const [sorting, setSorting] = useState<SortingState>([]);
-
+  const [pendingOfferData, setPendingOfferData] = useState<Offer[]>([]);
   const table = useReactTable({
-    debugTable: true,
     defaultColumn: {
       meta: {
         editable: false,
@@ -90,30 +102,73 @@ export default function Dataable<TData, TValue>({
       pagination,
     },
   });
-  const visibleColumns = table.getVisibleLeafColumns();
+
+  const selectedOfferIds = table
+    .getSelectedRowModel()
+    .rows.map(({ original }) => (original as Offer).id);
+  const [_selectedOfferIds, _setSelectedOfferIds] = useState(selectedOfferIds);
   const tableContainerRef = useRef<HTMLDivElement>(null);
-  const columnVirtualizer = useVirtualizer({
-    count: visibleColumns.length,
-    estimateSize: (index) => visibleColumns[index].getSize(), //estimate width of each column for accurate scrollbar dragging
-    getScrollElement: () => tableContainerRef.current,
-    horizontal: true,
-  });
-  const virtualColumns = columnVirtualizer.getVirtualItems();
 
-  let virtualPaddingLeft: number | undefined;
-  let virtualPaddingRight: number | undefined;
+  const [publishProductOffer, { loading: isPublishingProductOffer }] =
+    useMutation(SELLER_DASHBOARD__PUBLISH_PENDING_PRODUCT_OFFER, {
+      update: (cache, { SellerDashboard_PublishPendingProductOffer }) => {
+        console.log(SellerDashboard_PublishPendingProductOffer);
+        const activeOfferData = cache.readQuery({
+          query: SELLER_DASHBOARD__DIRECT_LISTING_PRODUCT_OFFER,
+          variables: { status: "active" },
+        });
+        if (activeOfferData) {
+          cache.writeQuery({
+            query: SELLER_DASHBOARD__DIRECT_LISTING_PRODUCT_OFFER,
+            variables: { status: "active" },
+            data: {
+              ...activeOfferData,
+              SellerDashboard_DirectListingProductOffer: [
+                ...SellerDashboard_PublishPendingProductOffer.product_offers,
+                ...activeOfferData.SellerDashboard_DirectListingProductOffer,
+              ],
+            },
+          });
+        }
+      },
+      refetchQueries: [
+        {
+          query: SELLER_DASHBOARD__PENDING_PRODUCT_OFFER,
+          variables: { status: "pending" },
+        },
+      ],
+    });
 
-  if (columnVirtualizer && virtualColumns?.length) {
-    virtualPaddingLeft = virtualColumns[0]?.start ?? 0;
-    virtualPaddingRight =
-      columnVirtualizer.getTotalSize() -
-      (virtualColumns[virtualColumns.length - 1]?.end ?? 0);
-  }
+  const handlePublish = useCallback(
+    (offer_ids: number[]) => {
+      _setSelectedOfferIds(offer_ids);
+      publishProductOffer({
+        variables: {
+          offer_ids,
+        },
+      });
+    },
+    [publishProductOffer]
+  );
 
   return (
-    <div className="rounded-md border overflow-x-auto">
+    <div className="rounded-md overflow-x-auto space-y-2">
+      <div>
+        {selectedOfferIds.length > 0 && (
+          <Button
+            onClick={async () => {
+              await handlePublish(selectedOfferIds);
+              table.toggleAllRowsSelected(false);
+            }}
+          >
+            Publish {selectedOfferIds.length} offer
+            {selectedOfferIds.length > 1 && "s"}
+          </Button>
+        )}
+      </div>
       <div
         ref={tableContainerRef}
+        className="border"
         style={{
           overflow: "auto", //our scrollable table container
           position: "relative", //needed for sticky header
@@ -159,6 +214,7 @@ export default function Dataable<TData, TValue>({
                     </TableHead>
                   );
                 })}
+                {isAdmin && <TableHead>Action</TableHead>}
               </TableRow>
             ))}
           </TableHeader>
@@ -176,7 +232,7 @@ export default function Dataable<TData, TValue>({
               <>
                 {table.getRowModel().rows?.length ? (
                   table.getRowModel().rows.map((row) => {
-                    const product: any = row.original;
+                    const offer: any = row.original;
                     return (
                       <Fragment key={row.id}>
                         <TableRow
@@ -196,6 +252,21 @@ export default function Dataable<TData, TValue>({
                               </TableCell>
                             );
                           })}
+                          {isAdmin && (
+                            <TableCell>
+                              <Button
+                                variant="outline"
+                                onClick={() => {
+                                  handlePublish([offer.id]);
+                                }}
+                                disabled={isPublishingProductOffer}
+                                isSubmitting={isPublishingProductOffer}
+                                className="text-black w-[75.59px]"
+                              >
+                                Publish
+                              </Button>
+                            </TableCell>
+                          )}
                         </TableRow>
                       </Fragment>
                     );

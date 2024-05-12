@@ -1,3 +1,4 @@
+import { graphql } from "@/gql";
 import gql from "graphql-tag";
 
 export const CREATE_PRODUCT_OFFER = gql`
@@ -28,11 +29,34 @@ export const UPDATE_PRODUCT_OFFER = gql`
   }
 `;
 
-export const SELLER_DASHBOARD__PUBLISH_PENDING_PRODUCT_OFFER = gql`
- mutation SellerDashboard_PublishPendingProductOfferMutation($offer_ids: [Int!]!) {
-  SellerDashboard_PublishPendingProductOffer(offer_ids: $offer_ids) {
-    success
-    message
+// export const SELLER_DASHBOARD__PUBLISH_PENDING_PRODUCT_OFFER = gql`
+
+// `;
+
+export const SELLER_DASHBOARD__PUBLISH_PENDING_PRODUCT_OFFER = graphql(`
+  mutation SellerDashboard_PublishPendingProductOfferMutation(
+    $offer_ids: [Int!]!
+  ) {
+    SellerDashboard_PublishPendingProductOffer(offer_ids: $offer_ids) {
+      success
+      message
+      product_offers {
+        id
+        user_id
+        offer_price
+        prod_size
+        created_at
+        product_size_id
+        in_store
+        product {
+          slug
+          product_title
+          product_sku
+          image {
+            image_file
+          }
+        }
+      }
+    }
   }
- }
-`
+`);
