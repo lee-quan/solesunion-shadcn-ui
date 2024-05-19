@@ -39,9 +39,9 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { ArrowUpDownIcon, LoaderIcon } from "@/components/icons";
-import { cn, encrypt, price2d } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { CLOUDFLARE_URL } from "@/lib/constants";
-import { FragmentType, graphql, useFragment } from "@/gql";
+import { graphql, useFragment } from "@/gql";
 import Link from "next/link";
 import { Product } from "@/gql/graphql";
 
@@ -125,42 +125,7 @@ const productColumns: ColumnDef<Product>[] = [
     ),
     enableColumnFilter: true,
   },
-  {
-    id: "lowest_offer",
-    accessorKey: "lowest_offer",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Price
-          {/* arrowup, arrowdown, arrowupdown */}
-          {{
-            asc: " 🔼",
-            desc: " 🔽",
-          }[column.getIsSorted() as string] ?? (
-            <ArrowUpDownIcon className="ml-2 h-4" />
-          )}
-        </Button>
-      );
-    },
-    cell: ({ row }) => <div>RM {row.getValue("lowest_offer")}</div>,
-    filterFn: (row, columnId, filterValue) => {
-      // Convert values to numbers for comparison
-      const rowValue = Number(row.getValue(columnId));
-      const filterValueAsNumber = Number(filterValue);
-      return rowValue >= filterValueAsNumber;
-    },
-    enableColumnFilter: true,
-    meta: {
-      className: "hidden md:table-cell",
-    },
-    size: 80,
-  },
 ];
-
-console.log(typeof SELLER_DASHBOARD__PRODUCT_FRAGMENT);
 
 export default function Dataable<TData, TValue>({
   data,
@@ -229,8 +194,8 @@ export default function Dataable<TData, TValue>({
       <div
         ref={tableContainerRef}
         style={{
-          overflow: "auto", //our scrollable table container
-          position: "relative", //needed for sticky header
+          overflow: "auto",
+          position: "relative",
         }}
       >
         <Table className="!w-full border-collapse">

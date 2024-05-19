@@ -163,6 +163,8 @@ export type Mutation = {
   LoginMutation?: Maybe<LoginResponse>;
   OnboardSeller?: Maybe<UrlResponse>;
   SellerDashboard_PublishPendingProductOffer?: Maybe<SellerDashboard_PublishPendingOffer>;
+  SellerDashboard_UpdateProductInformation?: Maybe<SellerDashboard_UpdateProductInformation>;
+  SellerDashboard_UpdateStock?: Maybe<GenericResponse>;
   UpdateProductOffer?: Maybe<GenericResponse>;
   applyPromoCode?: Maybe<PromoCode>;
   createProductOffer?: Maybe<GenericResponse>;
@@ -183,6 +185,25 @@ export type MutationLoginMutationArgs = {
 
 export type MutationSellerDashboard_PublishPendingProductOfferArgs = {
   offer_ids?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+};
+
+
+export type MutationSellerDashboard_UpdateProductInformationArgs = {
+  brand_id?: InputMaybe<Scalars['Int']['input']>;
+  category_id?: InputMaybe<Scalars['Int']['input']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
+  lowest_offer?: InputMaybe<Scalars['Float']['input']>;
+  new_brand?: InputMaybe<Scalars['String']['input']>;
+  new_category?: InputMaybe<Scalars['String']['input']>;
+  product_description?: InputMaybe<Scalars['String']['input']>;
+  product_sku?: InputMaybe<Scalars['String']['input']>;
+  product_title?: InputMaybe<Scalars['String']['input']>;
+  slug?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type MutationSellerDashboard_UpdateStockArgs = {
+  array?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -375,6 +396,8 @@ export type Product = {
   product_sku?: Maybe<Scalars['String']['output']>;
   /** The title of the product */
   product_title?: Maybe<Scalars['String']['output']>;
+  /** The stock of the product */
+  seller_dashboard_product_sizes?: Maybe<Array<Maybe<ProductSize>>>;
   /** The sizes of the product */
   sizes?: Maybe<Array<Maybe<ProductSize>>>;
   /** The slug of the product */
@@ -454,6 +477,10 @@ export type ProductSize = {
   product_id?: Maybe<Scalars['Int']['output']>;
   /** The size of the product */
   product_size?: Maybe<Size>;
+  /** The offer of the product size */
+  seller_dashboard_offer?: Maybe<ProductOffer>;
+  /** The size of the product */
+  seller_dashboard_size?: Maybe<Size>;
   /** The size of the product */
   size?: Maybe<Scalars['String']['output']>;
   /** The size id of the product size */
@@ -511,9 +538,11 @@ export type Query = {
   SellerDashboard_DirectListingProductOffer?: Maybe<Array<Maybe<ProductOffer>>>;
   SellerDashboard_GetProductDetails?: Maybe<Product>;
   SellerDashboard_GetProductIsConsignment?: Maybe<Scalars['Int']['output']>;
+  SellerDashboard_Image?: Maybe<Array<Maybe<ProductImage>>>;
   SellerDashboard_PendingProductOffer?: Maybe<Array<Maybe<ProductOffer>>>;
   SellerDashboard_Products?: Maybe<Array<Maybe<Product>>>;
   SellerDashboard_SoldProductOffer?: Maybe<Array<Maybe<OrderDetail>>>;
+  SellerDashboard_Stock?: Maybe<Product>;
   brandAndSize?: Maybe<BrandAndSize>;
   browseProduct?: Maybe<BrowseProduct>;
   lowestActiveOfferAndLastSale?: Maybe<Product>;
@@ -561,10 +590,20 @@ export type QuerySellerDashboard_GetProductIsConsignmentArgs = {
 };
 
 
+export type QuerySellerDashboard_ImageArgs = {
+  slug?: InputMaybe<Scalars['String']['input']>;
+};
+
+
 export type QuerySellerDashboard_PendingProductOfferArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   page?: InputMaybe<Scalars['Int']['input']>;
   status?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QuerySellerDashboard_StockArgs = {
+  slug?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -633,6 +672,13 @@ export type SellerDashboard_PublishPendingOffer = {
   __typename?: 'SellerDashboard_PublishPendingOffer';
   message?: Maybe<Scalars['String']['output']>;
   product_offers?: Maybe<Array<Maybe<ProductOffer>>>;
+  success?: Maybe<Scalars['Boolean']['output']>;
+};
+
+export type SellerDashboard_UpdateProductInformation = {
+  __typename?: 'SellerDashboard_UpdateProductInformation';
+  message?: Maybe<Scalars['String']['output']>;
+  product?: Maybe<Product>;
   success?: Maybe<Scalars['Boolean']['output']>;
 };
 
@@ -710,11 +756,6 @@ export type UserAddress = {
 
 export type SellerDashboard_GetProductDetails_SizesFragmentFragment = { __typename?: 'ProductSize', id: number, size?: string | null } & { ' $fragmentName'?: 'SellerDashboard_GetProductDetails_SizesFragmentFragment' };
 
-export type SellerDashboard_GetProductDetails_ProductFragmentFragment = { __typename?: 'Product', id: number, product_title?: string | null, slug?: string | null, product_sku?: string | null, category_id?: number | null, brand_id?: number | null, product_description?: string | null, lowest_offer?: number | null, consignment?: number | null, product_sizes?: Array<(
-    { __typename?: 'ProductSize', id: number, size?: string | null }
-    & { ' $fragmentRefs'?: { 'SellerDashboard_GetProductDetails_SizesFragmentFragment': SellerDashboard_GetProductDetails_SizesFragmentFragment } }
-  ) | null> | null } & { ' $fragmentName'?: 'SellerDashboard_GetProductDetails_ProductFragmentFragment' };
-
 export type SellerDashboard_ProductDetailsQueryQueryVariables = Exact<{
   slug: Scalars['String']['input'];
 }>;
@@ -730,12 +771,49 @@ export type SellerDashboard_GetBrandsAndCategoriesQueryVariables = Exact<{ [key:
 
 export type SellerDashboard_GetBrandsAndCategoriesQuery = { __typename?: 'Query', SellerDashboard_BrandsAndCategories?: { __typename?: 'SellerDashboard_BrandsAndCategories', brands?: Array<{ __typename?: 'Brand', id: number, brand_name?: string | null } | null> | null, categories?: Array<{ __typename?: 'Category', id: number, cat_name?: string | null } | null> | null } | null };
 
+export type SellerDashboard_UpdateProductInformationMutationMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+  product_title: Scalars['String']['input'];
+  slug: Scalars['String']['input'];
+  product_sku: Scalars['String']['input'];
+  category_id: Scalars['Int']['input'];
+  new_category?: InputMaybe<Scalars['String']['input']>;
+  brand_id: Scalars['Int']['input'];
+  new_brand?: InputMaybe<Scalars['String']['input']>;
+  product_description?: InputMaybe<Scalars['String']['input']>;
+  lowest_offer: Scalars['Float']['input'];
+}>;
+
+
+export type SellerDashboard_UpdateProductInformationMutationMutation = { __typename?: 'Mutation', SellerDashboard_UpdateProductInformation?: { __typename?: 'SellerDashboard_UpdateProductInformation', success?: boolean | null, message?: string | null, product?: { __typename?: 'Product', id: number, product_title?: string | null, slug?: string | null, product_sku?: string | null, category_id?: number | null, brand_id?: number | null, product_description?: string | null, lowest_offer?: number | null } | null } | null };
+
+export type SellerDashboard_ImageQueryQueryVariables = Exact<{
+  slug: Scalars['String']['input'];
+}>;
+
+
+export type SellerDashboard_ImageQueryQuery = { __typename?: 'Query', SellerDashboard_Image?: Array<{ __typename?: 'ProductImage', image_file?: string | null } | null> | null };
+
+export type SellerDashboard_UpdateStockMutationMutationVariables = Exact<{
+  array: Scalars['String']['input'];
+}>;
+
+
+export type SellerDashboard_UpdateStockMutationMutation = { __typename?: 'Mutation', SellerDashboard_UpdateStock?: { __typename?: 'GenericResponse', success: boolean, message?: string | null } | null };
+
 export type Seller_Dashboard__Get_Product_Is_ConsignmentQueryVariables = Exact<{
   slug: Scalars['String']['input'];
 }>;
 
 
 export type Seller_Dashboard__Get_Product_Is_ConsignmentQuery = { __typename?: 'Query', SellerDashboard_GetProductIsConsignment?: number | null };
+
+export type SellerDashboard_StockQueryQueryVariables = Exact<{
+  slug: Scalars['String']['input'];
+}>;
+
+
+export type SellerDashboard_StockQueryQuery = { __typename?: 'Query', SellerDashboard_Stock?: { __typename?: 'Product', seller_dashboard_product_sizes?: Array<{ __typename?: 'ProductSize', id: number, seller_dashboard_size?: { __typename?: 'Size', size?: string | null } | null, seller_dashboard_offer?: { __typename?: 'ProductOffer', prod_size?: string | null, ready_stock?: number | null } | null } | null> | null } | null };
 
 export type SellerDashboard_ProductFragmentFragment = { __typename?: 'Product', id: number, product_title?: string | null, product_sku?: string | null, slug?: string | null, image?: { __typename?: 'ProductImage', image_file?: string | null } | null } & { ' $fragmentName'?: 'SellerDashboard_ProductFragmentFragment' };
 
@@ -969,11 +1047,14 @@ export type GetOrderDetailsQueryVariables = Exact<{
 export type GetOrderDetailsQuery = { __typename?: 'Query', userOrderDetail?: { __typename?: 'Order', order_total?: number | null, address?: string | null, created_at?: string | null, order_details?: Array<{ __typename?: 'OrderDetail', quantity?: number | null, unit_price?: number | null, total_price?: number | null, price?: number | null, size?: string | null, product?: { __typename?: 'Product', product_title?: string | null, slug?: string | null } | null } | null> | null } | null };
 
 export const SellerDashboard_GetProductDetails_SizesFragmentFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"SellerDashboard_GetProductDetails_SizesFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ProductSize"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"size"}}]}}]} as unknown as DocumentNode<SellerDashboard_GetProductDetails_SizesFragmentFragment, unknown>;
-export const SellerDashboard_GetProductDetails_ProductFragmentFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"SellerDashboard_GetProductDetails_ProductFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Product"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"product_title"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"product_sku"}},{"kind":"Field","name":{"kind":"Name","value":"category_id"}},{"kind":"Field","name":{"kind":"Name","value":"brand_id"}},{"kind":"Field","name":{"kind":"Name","value":"product_description"}},{"kind":"Field","name":{"kind":"Name","value":"lowest_offer"}},{"kind":"Field","name":{"kind":"Name","value":"consignment"}},{"kind":"Field","name":{"kind":"Name","value":"product_sizes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"size"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"SellerDashboard_GetProductDetails_SizesFragment"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"SellerDashboard_GetProductDetails_SizesFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ProductSize"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"size"}}]}}]} as unknown as DocumentNode<SellerDashboard_GetProductDetails_ProductFragmentFragment, unknown>;
 export const SellerDashboard_ProductFragmentFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"SellerDashboard_ProductFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Product"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"product_title"}},{"kind":"Field","name":{"kind":"Name","value":"product_sku"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"image_file"}}]}}]}}]} as unknown as DocumentNode<SellerDashboard_ProductFragmentFragment, unknown>;
 export const SellerDashboard_ProductDetailsQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SellerDashboard_ProductDetailsQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"slug"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"SellerDashboard_GetProductDetails"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"slug"},"value":{"kind":"Variable","name":{"kind":"Name","value":"slug"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"product_title"}},{"kind":"Field","name":{"kind":"Name","value":"product_sku"}},{"kind":"Field","name":{"kind":"Name","value":"category_id"}},{"kind":"Field","name":{"kind":"Name","value":"brand_id"}},{"kind":"Field","name":{"kind":"Name","value":"product_description"}},{"kind":"Field","name":{"kind":"Name","value":"lowest_offer"}},{"kind":"Field","name":{"kind":"Name","value":"consignment"}},{"kind":"Field","name":{"kind":"Name","value":"product_sizes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"size"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"SellerDashboard_GetProductDetails_SizesFragment"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"SellerDashboard_GetProductDetails_SizesFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ProductSize"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"size"}}]}}]} as unknown as DocumentNode<SellerDashboard_ProductDetailsQueryQuery, SellerDashboard_ProductDetailsQueryQueryVariables>;
 export const SellerDashboard_GetBrandsAndCategoriesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SellerDashboard_GetBrandsAndCategories"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"SellerDashboard_BrandsAndCategories"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"brands"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"brand_name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"categories"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"cat_name"}}]}}]}}]}}]} as unknown as DocumentNode<SellerDashboard_GetBrandsAndCategoriesQuery, SellerDashboard_GetBrandsAndCategoriesQueryVariables>;
+export const SellerDashboard_UpdateProductInformationMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SellerDashboard_UpdateProductInformationMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"product_title"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"slug"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"product_sku"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"category_id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"new_category"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"brand_id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"new_brand"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"product_description"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"lowest_offer"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"SellerDashboard_UpdateProductInformation"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"product_title"},"value":{"kind":"Variable","name":{"kind":"Name","value":"product_title"}}},{"kind":"Argument","name":{"kind":"Name","value":"slug"},"value":{"kind":"Variable","name":{"kind":"Name","value":"slug"}}},{"kind":"Argument","name":{"kind":"Name","value":"product_sku"},"value":{"kind":"Variable","name":{"kind":"Name","value":"product_sku"}}},{"kind":"Argument","name":{"kind":"Name","value":"category_id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"category_id"}}},{"kind":"Argument","name":{"kind":"Name","value":"new_category"},"value":{"kind":"Variable","name":{"kind":"Name","value":"new_category"}}},{"kind":"Argument","name":{"kind":"Name","value":"brand_id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"brand_id"}}},{"kind":"Argument","name":{"kind":"Name","value":"new_brand"},"value":{"kind":"Variable","name":{"kind":"Name","value":"new_brand"}}},{"kind":"Argument","name":{"kind":"Name","value":"product_description"},"value":{"kind":"Variable","name":{"kind":"Name","value":"product_description"}}},{"kind":"Argument","name":{"kind":"Name","value":"lowest_offer"},"value":{"kind":"Variable","name":{"kind":"Name","value":"lowest_offer"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"product"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"product_title"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"product_sku"}},{"kind":"Field","name":{"kind":"Name","value":"category_id"}},{"kind":"Field","name":{"kind":"Name","value":"brand_id"}},{"kind":"Field","name":{"kind":"Name","value":"product_description"}},{"kind":"Field","name":{"kind":"Name","value":"lowest_offer"}}]}},{"kind":"Field","name":{"kind":"Name","value":"success"}},{"kind":"Field","name":{"kind":"Name","value":"message"}}]}}]}}]} as unknown as DocumentNode<SellerDashboard_UpdateProductInformationMutationMutation, SellerDashboard_UpdateProductInformationMutationMutationVariables>;
+export const SellerDashboard_ImageQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SellerDashboard_ImageQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"slug"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"SellerDashboard_Image"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"slug"},"value":{"kind":"Variable","name":{"kind":"Name","value":"slug"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"image_file"}}]}}]}}]} as unknown as DocumentNode<SellerDashboard_ImageQueryQuery, SellerDashboard_ImageQueryQueryVariables>;
+export const SellerDashboard_UpdateStockMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SellerDashboard_UpdateStockMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"array"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"SellerDashboard_UpdateStock"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"array"},"value":{"kind":"Variable","name":{"kind":"Name","value":"array"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}},{"kind":"Field","name":{"kind":"Name","value":"message"}}]}}]}}]} as unknown as DocumentNode<SellerDashboard_UpdateStockMutationMutation, SellerDashboard_UpdateStockMutationMutationVariables>;
 export const Seller_Dashboard__Get_Product_Is_ConsignmentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SELLER_DASHBOARD__GET_PRODUCT_IS_CONSIGNMENT"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"slug"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"SellerDashboard_GetProductIsConsignment"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"slug"},"value":{"kind":"Variable","name":{"kind":"Name","value":"slug"}}}]}]}}]} as unknown as DocumentNode<Seller_Dashboard__Get_Product_Is_ConsignmentQuery, Seller_Dashboard__Get_Product_Is_ConsignmentQueryVariables>;
+export const SellerDashboard_StockQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SellerDashboard_StockQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"slug"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"SellerDashboard_Stock"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"slug"},"value":{"kind":"Variable","name":{"kind":"Name","value":"slug"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"seller_dashboard_product_sizes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"seller_dashboard_size"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"size"}}]}},{"kind":"Field","name":{"kind":"Name","value":"seller_dashboard_offer"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"prod_size"}},{"kind":"Field","name":{"kind":"Name","value":"ready_stock"}}]}}]}}]}}]}}]} as unknown as DocumentNode<SellerDashboard_StockQueryQuery, SellerDashboard_StockQueryQueryVariables>;
 export const SellerDashboard_ProductsQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SellerDashboard_ProductsQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"SellerDashboard_Products"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"SellerDashboard_ProductFragment"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"SellerDashboard_ProductFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Product"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"product_title"}},{"kind":"Field","name":{"kind":"Name","value":"product_sku"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"image_file"}}]}}]}}]} as unknown as DocumentNode<SellerDashboard_ProductsQueryQuery, SellerDashboard_ProductsQueryQueryVariables>;
 export const LoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Login"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"password"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"LoginMutation"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}},{"kind":"Argument","name":{"kind":"Name","value":"password"},"value":{"kind":"Variable","name":{"kind":"Name","value":"password"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"role"}}]}},{"kind":"Field","name":{"kind":"Name","value":"success"}},{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"access_token"}}]}}]}}]} as unknown as DocumentNode<LoginMutation, LoginMutationVariables>;
 export const RegisterDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Register"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"password"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"mobile"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"birthdate"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"name"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"referral_code"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"register"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}},{"kind":"Argument","name":{"kind":"Name","value":"password"},"value":{"kind":"Variable","name":{"kind":"Name","value":"password"}}},{"kind":"Argument","name":{"kind":"Name","value":"mobile"},"value":{"kind":"Variable","name":{"kind":"Name","value":"mobile"}}},{"kind":"Argument","name":{"kind":"Name","value":"birthdate"},"value":{"kind":"Variable","name":{"kind":"Name","value":"birthdate"}}},{"kind":"Argument","name":{"kind":"Name","value":"name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"name"}}},{"kind":"Argument","name":{"kind":"Name","value":"referral_code"},"value":{"kind":"Variable","name":{"kind":"Name","value":"referral_code"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}},{"kind":"Field","name":{"kind":"Name","value":"message"}}]}}]}}]} as unknown as DocumentNode<RegisterMutation, RegisterMutationVariables>;

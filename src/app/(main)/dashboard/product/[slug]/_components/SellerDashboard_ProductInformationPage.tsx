@@ -22,37 +22,19 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { FragmentType, graphql, useFragment } from "@/gql";
 import { ProductSize } from "@/gql/graphql";
+import useMutation from "@/hooks/useMutation";
 import { createSlug } from "@/lib/utils";
 import { useQuery } from "@apollo/client";
 import { MinusIcon, PlusIcon } from "@radix-ui/react-icons";
 import { Label } from "@radix-ui/react-label";
 import { Field, Form, Formik, useField } from "formik";
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const SELLER_DASHBOARD__GET_PRODUCT_DETAILS_SIZES_FRAGMENT = graphql(`
   fragment SellerDashboard_GetProductDetails_SizesFragment on ProductSize {
     id
     size
-  }
-`);
-
-const SELLER_DASHBOARD__GET_PRODUCT_DETAILS_PRODUCT_FRAGMENT = graphql(`
-  fragment SellerDashboard_GetProductDetails_ProductFragment on Product {
-    id
-    product_title
-    slug
-    product_sku
-    category_id
-    brand_id
-    product_description
-    lowest_offer
-    consignment
-    product_sizes {
-      id
-      size
-      ...SellerDashboard_GetProductDetails_SizesFragment
-    }
   }
 `);
 
@@ -92,6 +74,47 @@ const SELLER_DASHBOARD__GET_BRANDS_AND_CATEGORIES = graphql(`
   }
 `);
 
+const SELLER_DASHBOARD__UPDATE_PRODUCT_INFORMATION = graphql(`
+  mutation SellerDashboard_UpdateProductInformationMutation(
+    $id: Int!
+    $product_title: String!
+    $slug: String!
+    $product_sku: String!
+    $category_id: Int!
+    $new_category: String
+    $brand_id: Int!
+    $new_brand: String
+    $product_description: String
+    $lowest_offer: Float!
+  ) {
+    SellerDashboard_UpdateProductInformation(
+      id: $id
+      product_title: $product_title
+      slug: $slug
+      product_sku: $product_sku
+      category_id: $category_id
+      new_category: $new_category
+      brand_id: $brand_id
+      new_brand: $new_brand
+      product_description: $product_description
+      lowest_offer: $lowest_offer
+    ) {
+      product {
+        id
+        product_title
+        slug
+        product_sku
+        category_id
+        brand_id
+        product_description
+        lowest_offer
+      }
+      success
+      message
+    }
+  }
+`);
+
 export default function SellerDashboard_ProductInformationPage() {
   const { slug }: { slug: string } = useParams();
   const [editSizeMode, setEditSizeMode] = useState(false);
@@ -99,27 +122,42 @@ export default function SellerDashboard_ProductInformationPage() {
     remove: [],
     add: [],
   });
-  const { data: productDetailsData, loading: isGettingProductDetails } =
-    useQuery(SELLER_DASHBOARD__GET_PRODUCT_DETAILS, {
-      variables: {
-        slug,
-      },
-    });
+  const [isAddingNewCategory, setIsAddingNewCategory] = useState(false);
+  const [isAddingNewBrand, setIsAddingNewBrand] = useState(false);
+
+  const {
+    data: productDetailsData,
+    loading: isGettingProductDetails,
+    refetch,
+  } = useQuery(SELLER_DASHBOARD__GET_PRODUCT_DETAILS, {
+    variables: {
+      slug,
+    },
+  });
 
   const product = productDetailsData?.SellerDashboard_GetProductDetails;
 
-  const { data: brandsAndCategoriesData } = useQuery(
-    SELLER_DASHBOARD__GET_BRANDS_AND_CATEGORIES,
-    {
-      skip: !product,
-    }
-  );
+  const {
+    data: brandsAndCategoriesData,
+    loading: isGettingBrandsAndCategories,
+  } = useQuery(SELLER_DASHBOARD__GET_BRANDS_AND_CATEGORIES, {
+    skip: !product,
+  });
 
   const brands =
     brandsAndCategoriesData?.SellerDashboard_BrandsAndCategories?.brands || [];
   const categories =
     brandsAndCategoriesData?.SellerDashboard_BrandsAndCategories?.categories ||
     [];
+
+  const [updateProductInformation, { loading: isUpdatingProductInformation }] =
+    useMutation(SELLER_DASHBOARD__UPDATE_PRODUCT_INFORMATION, {
+      refetchQueries: [
+        {
+          query: SELLER_DASHBOARD__GET_BRANDS_AND_CATEGORIES,
+        },
+      ],
+    });
 
   return (
     <>
@@ -146,12 +184,35 @@ export default function SellerDashboard_ProductInformationPage() {
               brand_id: `${product?.brand_id}`,
               product_description: product?.product_description,
               lowest_offer: product?.lowest_offer,
+              new_category: "",
+              new_brand: "",
             }}
-            onSubmit={(data) => {
-              console.log(data);
+            onSubmit={async (data, { setSubmitting, setFieldValue }) => {
+              const response = await updateProductInformation({
+                variables: {
+                  id: product?.id,
+                  product_title: data.product_title,
+                  slug: createSlug(data.product_title || ""),
+                  product_sku: data.sku,
+                  category_id: parseInt(data.category_id),
+                  new_category: data.new_category,
+                  brand_id: parseInt(data.brand_id),
+                  new_brand: data.new_brand,
+                  product_description: data.product_description,
+                  lowest_offer: data.lowest_offer,
+                },
+              });
+              console.log(response)
+              if (response?.data?.SellerDashboard_UpdateProductInformation?.success) {
+                const updatedData =
+                  response?.data?.SellerDashboard_UpdateProductInformation?.product;
+                if (data.brand_id === "-1" || data.category_id === "-1") {
+                  window.location.reload();
+                }
+              }
             }}
           >
-            {({ isSubmitting, values, setFieldValue }) => {
+            {({ values, setFieldValue, isSubmitting }) => {
               const slug = createSlug(values.product_title || "");
               return (
                 <Form>
@@ -176,39 +237,59 @@ export default function SellerDashboard_ProductInformationPage() {
                         </div>
                         <div className="grid grid-cols-1 items-center gap-2">
                           <Label htmlFor="category">Category</Label>
-                          {!!categories ? (
-                            <Select
-                              value={values.category_id}
-                              onValueChange={(value) =>
-                                setFieldValue("category", value)
-                              }
-                            >
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select a category" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {categories.map((category) => (
-                                  <SelectItem
-                                    key={category?.id}
-                                    value={`${category?.id || 0}`}
-                                  >
-                                    {category?.cat_name}
+                          <Select
+                            value={values.category_id}
+                            onValueChange={(value) => {
+                              setFieldValue("category_id", value);
+                              setIsAddingNewCategory(value === "-1");
+                            }}
+                          >
+                            <SelectTrigger>
+                              <SelectValue>
+                                {categories.find(
+                                  (category) =>
+                                    category?.id.toString() ===
+                                    values.category_id
+                                )?.cat_name || "Select a category"}
+                              </SelectValue>
+                            </SelectTrigger>
+                            <SelectContent>
+                              {!isGettingBrandsAndCategories ? (
+                                <>
+                                  {categories.map((category) => (
+                                    <SelectItem
+                                      key={category?.id}
+                                      value={category?.id.toString() || ""}
+                                    >
+                                      {category?.cat_name}
+                                    </SelectItem>
+                                  ))}
+                                  <SelectItem value={"-1"}>
+                                    Add new category
                                   </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          ) : (
-                            <Spinner />
+                                </>
+                              ) : (
+                                <Spinner />
+                              )}
+                            </SelectContent>
+                          </Select>
+                          {isAddingNewCategory && (
+                            <Field
+                              name="new_category"
+                              as={Input}
+                              placeholder="New category name"
+                            />
                           )}
                         </div>
                         <div className="grid grid-cols-1 items-center gap-2">
                           <Label htmlFor="brand">Brand</Label>
-                          {!!brands ? (
+                          {!isGettingBrandsAndCategories ? (
                             <Select
                               value={values.brand_id}
-                              onValueChange={(value) =>
-                                setFieldValue("category", value)
-                              }
+                              onValueChange={(value) => {
+                                setFieldValue("brand_id", value);
+                                setIsAddingNewBrand(value === "-1");
+                              }}
                             >
                               <SelectTrigger>
                                 <SelectValue placeholder="Select a brand" />
@@ -217,15 +298,25 @@ export default function SellerDashboard_ProductInformationPage() {
                                 {brands.map((brand) => (
                                   <SelectItem
                                     key={brand?.id}
-                                    value={`${brand?.id || 0}`}
+                                    value={brand?.id.toString() || ""}
                                   >
                                     {brand?.brand_name}
                                   </SelectItem>
                                 ))}
+                                <SelectItem value={"-1"}>
+                                  Add new brand
+                                </SelectItem>
                               </SelectContent>
                             </Select>
                           ) : (
                             <Spinner />
+                          )}
+                          {isAddingNewBrand && (
+                            <Field
+                              name="new_brand"
+                              as={Input}
+                              placeholder="New brand name"
+                            />
                           )}
                         </div>
                         <div className="grid grid-cols-1 items-center gap-2">
@@ -258,7 +349,14 @@ export default function SellerDashboard_ProductInformationPage() {
                       </div>
                     </CardContent>
                     <CardFooter>
-                      <Button type="submit">Save Changes</Button>
+                      <Button
+                        type="submit"
+                        isSubmitting={isSubmitting}
+                        disabled={isSubmitting}
+                        className="w-[110.09px]"
+                      >
+                        Save Changes
+                      </Button>
                     </CardFooter>
                   </Card>
                 </Form>
@@ -339,6 +437,8 @@ export default function SellerDashboard_ProductInformationPage() {
                         <Button
                           variant="ghost"
                           className="p-0 h-auto"
+                          isSubmitting={isUpdatingProductInformation}
+                          disabled={isUpdatingProductInformation}
                           onClick={() => {
                             setChangeSize({
                               remove: changeSize.remove.filter(
