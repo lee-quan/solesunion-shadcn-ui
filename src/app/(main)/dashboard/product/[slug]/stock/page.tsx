@@ -75,7 +75,6 @@ export default function _SellerDashboard_Product_StockPage() {
                     array: JSON.stringify(values),
                   },
                 });
-                console.log(values);
               }}
             >
               {({ values, handleChange, handleSubmit }) => {

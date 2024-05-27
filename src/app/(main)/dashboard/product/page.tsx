@@ -22,7 +22,6 @@ export default function _SellerDashboard_ProductsPage() {
   const { data, loading } = useQuery(SELLER_DASHBOARD__PRODUCTS);
   if (!data) return null;
   const productData = data.SellerDashboard_Products || [];
-  console.log(productData);
   return (
     <div className="p-6 pt-0 overflow-x-auto max-w-full">
       <DataTable data={productData} loading={loading} />

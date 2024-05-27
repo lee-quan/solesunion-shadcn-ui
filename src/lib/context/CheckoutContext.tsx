@@ -130,8 +130,8 @@ export const useCheckout = (): {
   fulfillmentMethod: string;
   updateFullfillmentMethod: (method: string) => void;
 
-  paymentMethod: string;
-  updatePaymentMethod: (method: string) => void;
+  paymentMethod: any;
+  updatePaymentMethod: (method: any) => void;
 } => {
   const context = useContext(CheckoutContext);
   if (context === undefined) {

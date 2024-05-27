@@ -3,7 +3,8 @@ import { useMutation as useApolloMutation } from "@apollo/client";
 
 interface UseMutationOptions {
   showToast?: boolean;
-  onSuccess?: () => void;
+  onSuccess?: (data?: any) => void;
+  onError?: (error: any) => void;
   update?: (cache: any, data: any) => void;
   refetchQueries?: any[];
 }
@@ -12,6 +13,7 @@ export default function useMutation(
   {
     showToast = true,
     onSuccess,
+    onError,
     update,
     refetchQueries,
   }: UseMutationOptions = {
@@ -28,6 +30,10 @@ export default function useMutation(
           variant: "destructive",
         });
       }
+
+      if (onError) {
+        onError(error);
+      }
     },
     onCompleted: (data) => {
       let value: any = Object.values(data)[0];
@@ -40,7 +46,9 @@ export default function useMutation(
         });
       }
       if (success) {
-        onSuccess && onSuccess();
+        if (onSuccess) {
+          onSuccess(data);
+        }
       }
     },
     update: (cache, { data }) => {

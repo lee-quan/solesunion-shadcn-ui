@@ -19,6 +19,7 @@ function makeClient(session: any) {
     uri,
     headers: {
       "Content-Type": "application/json",
+      "X-Frontend-URL": window.location.href,
     },
   });
 

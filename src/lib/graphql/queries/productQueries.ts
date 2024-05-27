@@ -101,6 +101,9 @@ export const GET_PRODUCT = gql`
           id
           offer_price
           ready_stock
+          is_active
+          deleted
+          ready_stock
         }
         online_offer {
           id

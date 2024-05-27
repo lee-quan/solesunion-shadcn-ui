@@ -34,7 +34,6 @@ const DirectListingActiveTable = () => {
   );
   if (!data) return null;
 
-  console.log(data);
   return (
     <DataTable
       columns={directListing_ActiveOfferColumn}

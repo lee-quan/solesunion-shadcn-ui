@@ -56,6 +56,7 @@ export default function ProductDetailPageDirectListing({
     },
   });
 
+  console.log(product);
   const isConsignment = product.consignment == 1;
   function createSizePanel() {
     return (

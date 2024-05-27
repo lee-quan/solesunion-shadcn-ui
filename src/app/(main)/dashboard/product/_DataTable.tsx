@@ -93,7 +93,6 @@ const productColumns: ColumnDef<Product>[] = [
     accessorKey: "product_title",
     cell: ({ row }) => {
       const product = row.original;
-      // console.log(product);
       return (
         <div className="flex items-center">
           <img

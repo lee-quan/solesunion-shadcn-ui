@@ -112,7 +112,6 @@ export default function Dataable<TData, TValue>({
   const [publishProductOffer, { loading: isPublishingProductOffer }] =
     useMutation(SELLER_DASHBOARD__PUBLISH_PENDING_PRODUCT_OFFER, {
       update: (cache, { SellerDashboard_PublishPendingProductOffer }) => {
-        console.log(SellerDashboard_PublishPendingProductOffer);
         const activeOfferData = cache.readQuery({
           query: SELLER_DASHBOARD__DIRECT_LISTING_PRODUCT_OFFER,
           variables: { status: "active" },

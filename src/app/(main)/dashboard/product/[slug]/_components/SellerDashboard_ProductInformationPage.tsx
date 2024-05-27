@@ -202,7 +202,6 @@ export default function SellerDashboard_ProductInformationPage() {
                   lowest_offer: data.lowest_offer,
                 },
               });
-              console.log(response)
               if (response?.data?.SellerDashboard_UpdateProductInformation?.success) {
                 const updatedData =
                   response?.data?.SellerDashboard_UpdateProductInformation?.product;

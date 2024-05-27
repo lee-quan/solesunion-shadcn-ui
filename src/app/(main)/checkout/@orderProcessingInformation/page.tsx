@@ -30,6 +30,7 @@ const paymentMethods: {
   description: string;
   logo: string;
   paymentGateway: "eGHL" | "Stripe" | "Atome";
+  processingFeePercentage?: number;
 }[] = [
   {
     id: "eghl",
@@ -37,6 +38,7 @@ const paymentMethods: {
     description: "Fast and secure online payment",
     logo: "/image/logo-eghl.png",
     paymentGateway: "eGHL",
+    processingFeePercentage: 0.03,
   },
   {
     id: "stripe",
@@ -44,6 +46,7 @@ const paymentMethods: {
     description: "Safe and reliable payment gateway (Stripe)",
     logo: "/image/logo-stripe.png",
     paymentGateway: "Stripe",
+    processingFeePercentage: 0.03,
   },
   {
     id: "atome",
@@ -51,6 +54,7 @@ const paymentMethods: {
     description: "Flexible payment with 0% interest (Atome)",
     logo: "/image/logo-atome.png",
     paymentGateway: "Atome",
+    processingFeePercentage: 0.05,
   },
 ];
 
@@ -142,15 +146,14 @@ function PaymentMethodSection() {
   });
 
   const { paymentMethod, updatePaymentMethod } = useCheckout();
-
   return (
     <div className="space-y-2">
       <h2 className="text-xs font-bold">PAYMENT METHOD</h2>
       <RadioGroup
         className="space-y-1"
-        value={paymentMethod}
+        value={paymentMethod.id}
         onValueChange={(value) => {
-          updatePaymentMethod(value);
+          updatePaymentMethod(paymentMethods.find((m) => m.id === value));
         }}
       >
         {paymentMethods.map((method) => (
