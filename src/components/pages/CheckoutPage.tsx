@@ -89,8 +89,8 @@ export default function CheckoutPage({
       onSuccess: (data) => {
         setIsCreatingOrder(false);
         // wait for 2 seconds before redirecting
-        // setTimeout(() => {},2000);
-        // router.push(data.CreateOrder.url);
+        setTimeout(() => {},1000);
+        router.push(data.CreateOrder.url);
       },
       onError: () => {
         setIsCreatingOrder(false);
