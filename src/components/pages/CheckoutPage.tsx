@@ -5,12 +5,10 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useCheckout } from "@/lib/context/CheckoutContext";
-import { useRouter, useSearchParams } from "next/navigation";
-import { cn, decrypt, price2d } from "@/lib/utils";
-import { useQuery } from "@apollo/client";
-import { GET_ORDER_SUMMARY } from "@/lib/graphql/queries/orderQueries";
-import { Separator } from "@/components/ui/separator";
-import { ChevronUpIcon, Spinner } from "@/components/icons";
+import { useRouter } from "next/navigation";
+import { cn, price2d } from "@/lib/utils";
+  import { Separator } from "@/components/ui/separator";
+import { Spinner } from "@/components/icons";
 import { Form, Formik } from "formik";
 import { FormField } from "@/components/form-field";
 import useMutation from "@/hooks/useMutation";
@@ -83,12 +81,11 @@ export default function CheckoutPage({
   } = useCheckout();
   const [isCreatingOrder, setIsCreatingOrder] = useState(false);
   const router = useRouter();
-  const [createOrder, { data: createOrderResponse }] = useMutation(
+  const [createOrder] = useMutation(
     CHECKOUT_PAGE__CREATE_ORDER,
     {
       onSuccess: (data) => {
         setIsCreatingOrder(false);
-        // wait for 2 seconds before redirecting
         setTimeout(() => {},1000);
         router.push(data.CreateOrder.url);
       },

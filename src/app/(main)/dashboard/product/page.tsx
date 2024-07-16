@@ -1,14 +1,8 @@
 "use client";
 
-import {
-  SELLER_DASHBOARD__CONSIGNMENT_PRODUCT_OFFER,
-  SELLER_DASHBOARD__DIRECT_LISTING_PRODUCT_OFFER,
-} from "@/lib/graphql/queries/offerQueries";
 import { useQuery } from "@apollo/client";
 import DataTable from "./_DataTable";
-import { useUserRole } from "@/hooks/useUser";
-import { FragmentType, graphql } from "@/gql";
-import { ColumnDef } from "@tanstack/react-table";
+import { graphql } from "@/gql";
 
 const SELLER_DASHBOARD__PRODUCTS = graphql(`
   query SellerDashboard_ProductsQuery {

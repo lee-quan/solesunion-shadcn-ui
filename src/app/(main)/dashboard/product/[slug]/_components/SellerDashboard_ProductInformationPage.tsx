@@ -21,15 +21,14 @@ import {
 
 import { Textarea } from "@/components/ui/textarea";
 import { FragmentType, graphql, useFragment } from "@/gql";
-import { ProductSize } from "@/gql/graphql";
 import useMutation from "@/hooks/useMutation";
 import { createSlug } from "@/lib/utils";
 import { useQuery } from "@apollo/client";
 import { MinusIcon, PlusIcon } from "@radix-ui/react-icons";
 import { Label } from "@radix-ui/react-label";
-import { Field, Form, Formik, useField } from "formik";
+import { Field, Form, Formik } from "formik";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const SELLER_DASHBOARD__GET_PRODUCT_DETAILS_SIZES_FRAGMENT = graphql(`
   fragment SellerDashboard_GetProductDetails_SizesFragment on ProductSize {
