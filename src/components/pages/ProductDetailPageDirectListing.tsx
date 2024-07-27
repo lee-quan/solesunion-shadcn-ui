@@ -203,47 +203,16 @@ export default function ProductDetailPageDirectListing({
             </div>
           </Link>
         )}
-        <ScrollArea className="min-h-[60px] max-h-[320px] w-full hidden md:block">
+        <ScrollArea className="min-h-[60px] max-h-[320px] w-full">
           {createSizePanel()}
         </ScrollArea>
-        <div className="flex items-center gap-4">
-          <SizeDrawer>
-            {createSizePanel()}
-            {createButton()}
-          </SizeDrawer>
-
-          {/* <div className="text-4xl font-bold ml-auto">$150</div> */}
-        </div>
+        
         {selectedSize.size != "" && (
-          <div className="hidden md:block sticky bottom-0 bg-white p-4">
+          <div className="sticky bottom-0 bg-white p-4">
             {createButton()}
           </div>
         )}
       </div>
-      {/* <div className="grid gap-2">
-        <Label className="text-base" htmlFor="quantity">
-          Quantity
-        </Label>
-        <div className="flex items-center gap-2">
-          <Button size="icon" variant="outline">
-            <MinusIcon className="w-4 h-4" />
-          </Button>
-          <Input
-            className="w-16 text-center"
-            defaultValue="1"
-            id="quantity"
-            min="1"
-            type="number"
-          />
-          <Button size="icon" variant="outline">
-            <PlusIcon className="w-4 h-4" />
-          </Button>
-        </div>
-      </div> */}
-      <form className="grid gap-4 md:gap-10">
-        <div className="grid gap-2"></div>
-        <div className="grid gap-2"></div>
-      </form>
     </div>
   );
 }

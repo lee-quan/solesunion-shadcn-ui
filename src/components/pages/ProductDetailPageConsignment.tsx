@@ -129,19 +129,12 @@ export default function ProductDetailPageConsignment({
             </div>
           </Link>
         )}
-        <ScrollArea className="min-h-[60px] max-h-[320px] w-full hidden md:block">
+        <ScrollArea className="min-h-[100px] max-h-[320px] w-full">
+          <p>Select Size</p>
           {createSizePanel()}
         </ScrollArea>
-        <div className="flex items-center gap-4">
-          <SizeDrawer>
-            {createSizePanel()}
-            {createButton()}
-          </SizeDrawer>
-
-          {/* <div className="text-4xl font-bold ml-auto">$150</div> */}
-        </div>
         {selectedSize.size != "" && !!selectedSize.offer && (
-          <div className="hidden md:block sticky bottom-0 bg-white p-4 space-y-3">
+          <div className="sticky bottom-0 bg-white p-4 space-y-3">
             <div className="grid gap-2">
               <Label className="text-base" htmlFor="quantity">
                 Quantity
